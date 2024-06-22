@@ -25,10 +25,6 @@ const validateSignup = [
 	handleValidationErrors,
 ];
 
-router.get("/", async (req, res) => {
-	res.send("Hello World");
-});
-
 // Sign up
 router.post("/", validateSignup, async (req, res) => {
 	const { firstName, lastName, email, password, username } = req.body;
