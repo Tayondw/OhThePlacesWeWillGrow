@@ -70,4 +70,26 @@ const requireAuth = function (req, _res, next) {
 	return next(err);
 };
 
-module.exports = { setTokenCookie, restoreUser, requireAuth };
+// If the current user does not have correct roles or permissions
+const hasAuthorization = (user) => {
+      // logic to check if the user has correct roles or permissions
+};
+
+const requireAuthorization = (req, res, next) => {
+	if (!req.user || !hasAuthorization(req.user)) {
+		const err = new Error("Forbidden");
+		err.title = "Forbidden";
+		err.errors = { message: "Forbidden" };
+		err.status = 403;
+		return next(err);
+	}
+
+	next();
+};
+
+module.exports = {
+	setTokenCookie,
+	restoreUser,
+	requireAuth,
+	requireAuthorization,
+};
