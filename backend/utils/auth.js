@@ -72,7 +72,8 @@ const requireAuth = function (req, _res, next) {
 
 // If the current user does not have correct roles or permissions
 const hasAuthorization = (user) => {
-      // logic to check if the user has correct roles or permissions
+	// logic to check if the user has correct roles or permissions
+	const permissions = ["co-host"];
 };
 
 const requireAuthorization = (req, res, next) => {

@@ -9,30 +9,52 @@ module.exports = (sequelize, DataTypes) => {
 		 */
 		static associate(models) {
 			// define association here
+			Group.hasMany(models.GroupImage, {
+				foreignKey: "groupId",
+			});
+			Group.hasMany(models.Venue, {
+				foreignKey: "groupId",
+			});
+			Group.hasMany(models.Event, {
+				foreignKey: "groupId",
+			});
+			Group.hasMany(models.Membership, {
+				foreignKey: "groupId",
+			});
+			Group.belongsTo(models.User, {
+				foreignKey: "organizerId",
+			});
 		}
 	}
 	Group.init(
 		{
 			organizerId: {
 				type: DataTypes.INTEGER,
+				allowNull: false,
 			},
 			name: {
 				type: DataTypes.STRING,
+				allowNull: false,
 			},
 			about: {
 				type: DataTypes.TEXT,
+				allowNull: false,
 			},
 			type: {
 				type: DataTypes.ENUM,
+				allowNull: false,
 			},
 			private: {
 				type: DataTypes.BOOLEAN,
+				allowNull: false,
 			},
 			city: {
 				type: DataTypes.STRING,
+				allowNull: false,
 			},
 			state: {
 				type: DataTypes.STRING,
+				allowNull: false,
 			},
 		},
 		{

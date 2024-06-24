@@ -9,36 +9,56 @@ module.exports = (sequelize, DataTypes) => {
 		 */
 		static associate(models) {
 			// define association here
+			Event.belongsTo(models.Group, {
+				foreignKey: "groupId",
+			});
+			Event.belongsTo(models.Venue, {
+				foreignKey: "venueId",
+			});
+			Event.hasMany(models.EventImage, {
+				foreignKey: "eventId",
+			});
+			Event.hasMany(models.Attendance, {
+				foreignKey: "eventId",
+			});
 		}
 	}
 	Event.init(
 		{
 			venueId: {
 				type: DataTypes.INTEGER,
+				allowNull: false,
 			},
 			groupId: {
 				type: DataTypes.INTEGER,
+				allowNull: false,
 			},
 			name: {
 				type: DataTypes.STRING,
 			},
 			description: {
 				type: DataTypes.TEXT,
+				allowNull: false,
 			},
 			type: {
 				type: DataTypes.ENUM,
+				allowNull: false,
 			},
 			capacity: {
 				type: DataTypes.INTEGER,
+				allowNull: false,
 			},
 			price: {
 				type: DataTypes.INTEGER,
+				allowNull: false,
 			},
 			startDate: {
 				type: DataTypes.DATE,
+				allowNull: false,
 			},
 			endDate: {
 				type: DataTypes.DATE,
+				allowNull: false,
 			},
 		},
 		{
