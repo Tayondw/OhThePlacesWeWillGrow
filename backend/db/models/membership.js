@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
 				allowNull: false,
 			},
 			status: {
-				type: DataTypes.ENUM,
+				type: DataTypes.STRING,
 				allowNull: false,
 				validate: {
 					permissions(value) {

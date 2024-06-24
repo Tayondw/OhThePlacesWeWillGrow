@@ -31,6 +31,14 @@ module.exports = (sequelize, DataTypes) => {
 			venueId: {
 				type: DataTypes.INTEGER,
 				allowNull: false,
+				validate: {
+					type(value) {
+						if (this.type === "In person" && !value)
+							throw new Error(
+								"Not a valid value. Need venue for in person event"
+							);
+					},
+				},
 			},
 			groupId: {
 				type: DataTypes.INTEGER,
@@ -38,30 +46,69 @@ module.exports = (sequelize, DataTypes) => {
 			},
 			name: {
 				type: DataTypes.STRING,
+				allowNull: false,
+				validate: {
+					properLength(value) {
+						if (value.length < 5)
+							throw new Error("Name must be at least 5 characters");
+					},
+				},
 			},
 			description: {
 				type: DataTypes.TEXT,
 				allowNull: false,
+				validate: {
+					notEmpty: {
+						msg: "Description is required",
+					},
+				},
 			},
 			type: {
-				type: DataTypes.ENUM,
+				type: DataTypes.STRING,
 				allowNull: false,
+				validate: {
+					whichType(value) {
+						const types = ["Online", "In person"];
+						if (!types.includes(value))
+							throw new Error("Type must be Online or In person");
+					},
+				},
 			},
 			capacity: {
 				type: DataTypes.INTEGER,
 				allowNull: false,
+				validate: {
+					isInt: {
+						args: true,
+						msg: "Capacity must be an integer",
+					},
+				},
 			},
 			price: {
 				type: DataTypes.INTEGER,
 				allowNull: false,
+				validate: {
+					isDecimal: true,
+					priceValidation(value) {
+						if (value < 0.0) throw new Error("Price is invalid");
+					},
+				},
 			},
 			startDate: {
 				type: DataTypes.DATE,
 				allowNull: false,
+				// validate: {
+				// 	isDate: true,
+				// 	isBefore: this.endDate,
+				// },
 			},
 			endDate: {
 				type: DataTypes.DATE,
 				allowNull: false,
+				// validate: {
+				// 	isDate: true,
+				// 	isAfter: this.startDate,
+				// },
 			},
 		},
 		{

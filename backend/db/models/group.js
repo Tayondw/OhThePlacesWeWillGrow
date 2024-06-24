@@ -40,26 +40,71 @@ module.exports = (sequelize, DataTypes) => {
 			name: {
 				type: DataTypes.STRING,
 				allowNull: false,
+				validate: {
+					properLength(value) {
+						if (value.length > 60)
+							throw new Error("Name must be 60 characters or less");
+					},
+				},
 			},
 			about: {
 				type: DataTypes.TEXT,
 				allowNull: false,
+				validate: {
+					properLength(value) {
+						if (value.length < 50)
+							throw new Error("About must be 50 characters or more");
+					},
+				},
 			},
 			type: {
-				type: DataTypes.ENUM,
+				type: DataTypes.STRING,
 				allowNull: false,
+				validate: {
+					checkType(value) {
+						const types = ["Online", "In person"];
+						if (!types.includes(value))
+							throw new Error("Type must be 'Online' or 'In person'");
+					},
+				},
 			},
 			private: {
 				type: DataTypes.BOOLEAN,
 				allowNull: false,
+				validate: {
+					isPrivate(value) {
+						if (value !== true && value !== false)
+							throw new Error("Private must be a boolean");
+					},
+				},
 			},
 			city: {
 				type: DataTypes.STRING,
 				allowNull: false,
+				validate: {
+					notEmpty: {
+						args: true,
+						msg: "City is required",
+					},
+					notNull: {
+						args: true,
+						msg: "City is required",
+					},
+				},
 			},
 			state: {
 				type: DataTypes.STRING,
 				allowNull: false,
+				validate: {
+					notEmpty: {
+						args: true,
+						msg: "State is required",
+					},
+					notNull: {
+						args: true,
+						msg: "City is required",
+					},
+				},
 			},
 		},
 		{

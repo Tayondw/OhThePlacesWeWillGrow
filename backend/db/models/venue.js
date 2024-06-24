@@ -27,22 +27,64 @@ module.exports = (sequelize, DataTypes) => {
 			address: {
 				type: DataTypes.STRING,
 				allowNull: false,
+				validate: {
+					notNull: {
+						args: true,
+						msg: "Street address is required",
+					},
+					notEmpty: {
+						args: true,
+						msg: "Street address is required",
+					},
+				},
 			},
 			city: {
 				type: DataTypes.STRING,
 				allowNull: false,
+				validate: {
+					notNull: {
+						args: true,
+						msg: "City is required",
+					},
+					notEmpty: {
+						args: true,
+						msg: "City is required",
+					},
+				},
 			},
 			state: {
 				type: DataTypes.STRING,
 				allowNull: false,
+				validate: {
+					notNull: {
+						args: true,
+						msg: "State is required",
+					},
+					notEmpty: {
+						args: true,
+						msg: "State is required",
+					},
+				},
 			},
 			lat: {
-				type: DataTypes.DECIMAL,
+				type: DataTypes.FLOAT,
 				allowNull: false,
+				validate: {
+					checkLatitude(value) {
+						if (value < -90 || value > 90)
+							throw new Error("Latitude must be within -90 and 90");
+					},
+				},
 			},
 			lng: {
-				type: DataTypes.DECIMAL,
+				type: DataTypes.FLOAT,
 				allowNull: false,
+				validate: {
+					checkLongitude(value) {
+						if (value < -180 || value > 180)
+							throw new Error("Longitude must be within -180 and 180");
+					},
+				},
 			},
 		},
 		{
