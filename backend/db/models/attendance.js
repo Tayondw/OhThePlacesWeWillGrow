@@ -20,24 +20,26 @@ module.exports = (sequelize, DataTypes) => {
 	Attendance.init(
 		{
 			eventId: {
-                        type: DataTypes.INTEGER,
-                        allowNull: false,
-                        
+				type: DataTypes.INTEGER,
+				allowNull: false,
 			},
 			userId: {
-                        type: DataTypes.INTEGER,
-                        allowNull: false,
-                        
+				type: DataTypes.INTEGER,
+				allowNull: false,
 			},
 			status: {
-                        type: DataTypes.ENUM,
-                        allowNull: false,
-                        
+				type: DataTypes.ENUM,
+				allowNull: false,
 			},
 		},
 		{
 			sequelize,
 			modelName: "Attendance",
+			defaultScope: {
+				attributes: {
+					exclude: ["createdAt", "updatedAt"],
+				},
+			},
 		}
 	);
 	return Attendance;

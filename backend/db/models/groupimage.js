@@ -23,6 +23,12 @@ module.exports = (sequelize, DataTypes) => {
 			url: {
 				type: DataTypes.STRING,
 				allowNull: false,
+				validate: {
+					isUrl: {
+						args: true,
+						msg: "Must be a valid url",
+					},
+				},
 			},
 			preview: {
 				type: DataTypes.BOOLEAN,
@@ -32,6 +38,11 @@ module.exports = (sequelize, DataTypes) => {
 		{
 			sequelize,
 			modelName: "GroupImage",
+			defaultScope: {
+				attributes: {
+					exclude: ["createdAt", "updatedAt"],
+				},
+			},
 		}
 	);
 	return GroupImage;

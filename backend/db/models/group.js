@@ -11,18 +11,23 @@ module.exports = (sequelize, DataTypes) => {
 			// define association here
 			Group.hasMany(models.GroupImage, {
 				foreignKey: "groupId",
+				onDelete: "CASCADE",
 			});
 			Group.hasMany(models.Venue, {
 				foreignKey: "groupId",
+				onDelete: "CASCADE",
 			});
 			Group.hasMany(models.Event, {
 				foreignKey: "groupId",
-			});
-			Group.hasMany(models.Membership, {
-				foreignKey: "groupId",
+				onDelete: "CASCADE",
 			});
 			Group.belongsTo(models.User, {
 				foreignKey: "organizerId",
+			});
+			Group.belongsToMany(models.User, {
+				through: "Memberships",
+				foreignKey: "userId",
+				otherKey: "groupId",
 			});
 		}
 	}
@@ -60,6 +65,11 @@ module.exports = (sequelize, DataTypes) => {
 		{
 			sequelize,
 			modelName: "Group",
+			defaultScope: {
+				attributes: {
+					exclude: ["createdAt", "updatedAt"],
+				},
+			},
 		}
 	);
 	return Group;
