@@ -87,10 +87,9 @@ module.exports = (sequelize, DataTypes) => {
 				},
 			},
 			price: {
-				type: DataTypes.INTEGER,
+				type: DataTypes.FLOAT,
 				allowNull: false,
 				validate: {
-					isDecimal: true,
 					priceValidation(value) {
 						if (value < 0.0) throw new Error("Price is invalid");
 					},
