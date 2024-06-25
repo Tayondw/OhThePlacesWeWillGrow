@@ -35,10 +35,11 @@ module.exports = (sequelize, DataTypes) => {
 		{
 			organizerId: {
 				type: DataTypes.INTEGER,
-				allowNull: false,
+                        allowNull: false,
+                        onDelete: "CASCADE"
 			},
 			name: {
-				type: DataTypes.STRING,
+				type: DataTypes.TEXT,
 				allowNull: false,
 				validate: {
 					properLength(value) {
@@ -52,13 +53,13 @@ module.exports = (sequelize, DataTypes) => {
 				allowNull: false,
 				validate: {
 					properLength(value) {
-						if (value.length < 50)
+						if (value.length < 30)
 							throw new Error("About must be 50 characters or more");
 					},
 				},
 			},
 			type: {
-				type: DataTypes.STRING,
+				type: DataTypes.TEXT,
 				allowNull: false,
 				validate: {
 					checkType(value) {
@@ -79,7 +80,7 @@ module.exports = (sequelize, DataTypes) => {
 				},
 			},
 			city: {
-				type: DataTypes.STRING,
+				type: DataTypes.TEXT,
 				allowNull: false,
 				validate: {
 					notEmpty: {
@@ -93,7 +94,7 @@ module.exports = (sequelize, DataTypes) => {
 				},
 			},
 			state: {
-				type: DataTypes.STRING,
+				type: DataTypes.TEXT,
 				allowNull: false,
 				validate: {
 					notEmpty: {

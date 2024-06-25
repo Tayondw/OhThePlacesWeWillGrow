@@ -1,11 +1,11 @@
 "use strict";
+/** @type {import('sequelize-cli').Migration} */
 
 let options = {};
 if (process.env.NODE_ENV === "production") {
 	options.schema = process.env.SCHEMA; // define your schema in options object
 }
 
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
 	async up(queryInterface, Sequelize) {
 		await queryInterface.createTable(
@@ -20,21 +20,13 @@ module.exports = {
 				venueId: {
 					type: Sequelize.INTEGER,
 					allowNull: true,
-					references: {
-						model: "Venues",
-					},
-					onDelete: "CASCADE",
 				},
 				groupId: {
 					type: Sequelize.INTEGER,
 					allowNull: false,
-					references: {
-						model: "Groups",
-					},
-					onDelete: "CASCADE",
 				},
 				name: {
-					type: Sequelize.STRING,
+					type: Sequelize.TEXT,
 					allowNull: false,
 				},
 				description: {
@@ -42,7 +34,7 @@ module.exports = {
 					allowNull: false,
 				},
 				type: {
-					type: Sequelize.STRING,
+					type: Sequelize.TEXT,
 					allowNull: false,
 				},
 				capacity: {
@@ -76,7 +68,7 @@ module.exports = {
 		);
 	},
 	async down(queryInterface, Sequelize) {
-		options.tableName = "Events";
-		await queryInterface.dropTable("Events");
+		// options.tableName = "Events";
+		await queryInterface.dropTable("Events", options);
 	},
 };

@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
 				foreignKey: "venueId",
 			});
 			Event.belongsToMany(models.User, {
-				through: "Attendances",
+				through: models.Attendance,
 				foreignKey: "userId",
 				otherKey: "eventId",
 			});
@@ -31,6 +31,7 @@ module.exports = (sequelize, DataTypes) => {
 			venueId: {
 				type: DataTypes.INTEGER,
 				allowNull: true,
+				onDelete: "CASCADE",
 				validate: {
 					type(value) {
 						if (this.type === "In person" && !value)
@@ -43,9 +44,10 @@ module.exports = (sequelize, DataTypes) => {
 			groupId: {
 				type: DataTypes.INTEGER,
 				allowNull: false,
+				onDelete: "CASCADE",
 			},
 			name: {
-				type: DataTypes.STRING,
+				type: DataTypes.TEXT,
 				allowNull: false,
 				validate: {
 					properLength(value) {
@@ -64,7 +66,7 @@ module.exports = (sequelize, DataTypes) => {
 				},
 			},
 			type: {
-				type: DataTypes.STRING,
+				type: DataTypes.TEXT,
 				allowNull: false,
 				validate: {
 					whichType(value) {
@@ -97,24 +99,24 @@ module.exports = (sequelize, DataTypes) => {
 			startDate: {
 				type: DataTypes.DATE,
 				allowNull: false,
-				validate: {
-					isDate: true,
-					isBefore(value) {
-						if (value > this.endDate)
-							throw new Error("Start date must be in the future");
-					},
-				},
+				// validate: {
+				// 	isDate: true,
+				// 	isBefore(value) {
+				// 		if (value > this.endDate)
+				// 			throw new Error("Start date must be in the future");
+				// 	},
+				// },
 			},
 			endDate: {
 				type: DataTypes.DATE,
 				allowNull: false,
-				validate: {
-					isDate: true,
-					isAfter(value) {
-						if (value < this.startDate)
-							throw new Error("End date is less than start date");
-					},
-				},
+				// validate: {
+				// 	isDate: true,
+				// 	isAfter(value) {
+				// 		if (value < this.startDate)
+				// 			throw new Error("End date is less than start date");
+				// 	},
+				// },
 			},
 		},
 		{

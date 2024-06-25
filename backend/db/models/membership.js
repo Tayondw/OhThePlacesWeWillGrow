@@ -9,13 +9,11 @@ module.exports = (sequelize, DataTypes) => {
 		 */
 		static associate(models) {
 			// define association here
-			Membership.belongsTo(models.User, {
-				foreignKey: "userId",
-				onDelete: "CASCADE",
-			});
 			Membership.belongsTo(models.Group, {
 				foreignKey: "groupId",
-				onDelete: "CASCADE",
+			});
+			Membership.belongsTo(models.User, {
+				foreignKey: "userId",
 			});
 		}
 	}
@@ -24,20 +22,22 @@ module.exports = (sequelize, DataTypes) => {
 			userId: {
 				type: DataTypes.INTEGER,
 				allowNull: false,
+				onDelete: "CASCADE",
 			},
 			groupId: {
 				type: DataTypes.INTEGER,
 				allowNull: false,
+				onDelete: "CASCADE",
 			},
 			status: {
-				type: DataTypes.STRING,
+				type: DataTypes.TEXT,
 				allowNull: false,
 				validate: {
 					permissions(value) {
 						const permission = ["pending", "member", "organizer", "co-host"];
 
 						if (!permission.includes(value)) {
-							throw new Error("Invalid member");
+							throw new Error("Invalid membership type");
 						}
 					},
 				},
