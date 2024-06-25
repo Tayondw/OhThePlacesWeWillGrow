@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
 		{
 			venueId: {
 				type: DataTypes.INTEGER,
-				allowNull: false,
+				allowNull: true,
 				validate: {
 					type(value) {
 						if (this.type === "In person" && !value)
@@ -97,18 +97,24 @@ module.exports = (sequelize, DataTypes) => {
 			startDate: {
 				type: DataTypes.DATE,
 				allowNull: false,
-				// validate: {
-				// 	isDate: true,
-				// 	isBefore: this.endDate,
-				// },
+				validate: {
+					isDate: true,
+					isBefore(value) {
+						if (value > this.endDate)
+							throw new Error("Start date must be in the future");
+					},
+				},
 			},
 			endDate: {
 				type: DataTypes.DATE,
 				allowNull: false,
-				// validate: {
-				// 	isDate: true,
-				// 	isAfter: this.startDate,
-				// },
+				validate: {
+					isDate: true,
+					isAfter(value) {
+						if (value < this.startDate)
+							throw new Error("End date is less than start date");
+					},
+				},
 			},
 		},
 		{
