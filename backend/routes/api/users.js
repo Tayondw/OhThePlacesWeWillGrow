@@ -9,6 +9,12 @@ const { User } = require("../../db/models");
 const router = express.Router();
 
 const validateSignup = [
+	check("firstName")
+		.notEmpty({ checkFalsy: true })
+		.withMessage("First Name is required"),
+	check("lastName")
+		.notEmpty({ checkFalsy: true })
+		.withMessage("Last Name is required"),
 	check("email")
 		.exists({ checkFalsy: true })
 		.isEmail()
@@ -29,27 +35,84 @@ const validateSignup = [
 router.post("/", validateSignup, async (req, res) => {
 	const { firstName, lastName, email, password, username } = req.body;
 	const hashedPassword = bcrypt.hashSync(password);
-	const user = await User.create({
-		firstName,
-		lastName,
-		email,
-		username,
-		hashedPassword,
-	});
 
-	const safeUser = {
-		id: user.id,
-		firstName: user.firstName,
-		lastName: user.lastName,
-		email: user.email,
-		username: user.username,
-	};
+	try {
+		let searchCheck = await User.findOne({
+			where: {
+				email,
+			},
+		});
 
-	await setTokenCookie(res, safeUser);
+		if (!searchCheck) {
+			searchCheck = await User.findOne({
+				where: {
+					username,
+				},
+			});
+		} else {
+			searchCheck = await User.findOne({
+				where: {
+					username,
+				},
+			});
+			if (searchCheck) {
+				res.status(500);
+				return res.json({
+					message: "User already exists",
+					errors: {
+						email: "User with that email already exists",
+						username: "User with that username already exists",
+					},
+				});
+			} else {
+				res.status(500);
+				return res.json({
+					message: "User already exists",
+					errors: {
+						email: "User with that email already exists",
+					},
+				});
+			}
+		}
 
-	return res.json({
-		user: safeUser,
-	});
+		if (searchCheck) {
+			res.status(500);
+			return res.json({
+				message: "User already exists",
+				errors: {
+					username: "User with that username already exists",
+				},
+			});
+		}
+
+		const user = await User.create({
+			firstName,
+			lastName,
+			email,
+			username,
+			hashedPassword,
+		});
+
+		const safeUser = {
+			id: user.id,
+			firstName: user.firstName,
+			lastName: user.lastName,
+			email: user.email,
+			username: user.username,
+		};
+
+		await setTokenCookie(res, safeUser);
+
+		return res.json({
+			user: safeUser,
+		});
+	} catch (error) {
+		res.status(400);
+		res.json({
+			message: "Bad Request",
+			errors: error,
+		});
+	}
 });
 
 module.exports = router;
