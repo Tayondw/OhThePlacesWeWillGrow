@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
 			// define association here
 			Group.hasMany(models.GroupImage, {
 				foreignKey: "groupId",
-				onDelete: "CASCADE",
+                        onDelete: "CASCADE",
 			});
 			Group.hasMany(models.Venue, {
 				foreignKey: "groupId",
@@ -21,8 +21,13 @@ module.exports = (sequelize, DataTypes) => {
 				foreignKey: "groupId",
 				onDelete: "CASCADE",
 			});
+			Group.hasMany(models.Membership, {
+				foreignKey: "groupId",
+				as: "numMembers",
+			});
 			Group.belongsTo(models.User, {
 				foreignKey: "organizerId",
+				as: "Organizer",
 			});
 			Group.belongsToMany(models.User, {
 				through: "Memberships",
@@ -35,8 +40,8 @@ module.exports = (sequelize, DataTypes) => {
 		{
 			organizerId: {
 				type: DataTypes.INTEGER,
-                        allowNull: false,
-                        onDelete: "CASCADE"
+				allowNull: false,
+				onDelete: "CASCADE",
 			},
 			name: {
 				type: DataTypes.TEXT,
@@ -53,7 +58,7 @@ module.exports = (sequelize, DataTypes) => {
 				allowNull: false,
 				validate: {
 					properLength(value) {
-						if (value.length < 30)
+						if (value.length < 50)
 							throw new Error("About must be 50 characters or more");
 					},
 				},
@@ -111,11 +116,11 @@ module.exports = (sequelize, DataTypes) => {
 		{
 			sequelize,
 			modelName: "Group",
-			defaultScope: {
-				attributes: {
-					exclude: ["createdAt", "updatedAt"],
-				},
-			},
+			// defaultScope: {
+			// 	attributes: {
+			// 		exclude: ["createdAt", "updatedAt"],
+			// 	},
+			// },
 		}
 	);
 	return Group;
