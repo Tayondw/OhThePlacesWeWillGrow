@@ -8,6 +8,8 @@ const {
 	Membership,
 	User,
 	Venue,
+	Event,
+	EventImage,
 	sequelize,
 } = require("../../db/models");
 
@@ -207,6 +209,201 @@ router.get("/:groupId", async (req, res) => {
 	}
 });
 
+router.get("/:groupId/venues", requireAuth, async (req, res) => {
+	const { user } = req;
+	const groupId = +req.params.groupId;
+
+	let group;
+
+	try {
+		group = await Group.findByPk(groupId);
+	} catch (error) {
+		res.status(404);
+		res.json({
+			message: "Group couldn't be found",
+		});
+	}
+
+	if (group) {
+		const membership = await Membership.findOne({
+			where: {
+				groupId: group.id,
+				userId: user.id,
+			},
+		});
+
+		const organizer = group.organizerId === user.id;
+		const coHost = membership ? membership.status === "co-host" : false;
+
+		if (organizer || coHost) {
+			const venues = await Venue.findAll({
+				where: {
+					groupId: group.id,
+				},
+			});
+
+			return res.json(venues);
+		} else {
+			res.status(403);
+			res.json({
+				message:
+					"User must be the organizer of the group or a member of the group with a status of 'co-host'",
+			});
+		}
+	} else {
+		res.status(404);
+		res.json({
+			message: "Group couldn't be found",
+		});
+	}
+});
+
+router.get("/:groupId/events", async (req, res) => {
+	const groupId = +req.params.groupId;
+	let group;
+	try {
+		group = await Group.findByPk(groupId);
+	} catch (error) {
+		res.status(404);
+		res.json({
+			message: "Group couldn't be found",
+		});
+	}
+
+	if (group) {
+		const events = await Event.findByPk(groupId, {
+			attributes: {
+				include: [
+					[
+						sequelize.literal(`(
+                  SELECT COUNT(*)
+                  FROM Attendances AS Attendance
+                  WHERE
+                    Attendance.eventId = Event.id AND
+                    Attendance.status = 'attending')`),
+						"numAttending",
+					],
+					[
+						sequelize.literal(`(
+                                    SELECT url
+                                    FROM EventImages AS EventImage
+                                    WHERE
+                                      EventImage.eventId = Event.id
+                                    LIMIT 1
+                                  )`),
+						"previewImage",
+					],
+				],
+			},
+			include: [
+				{
+					model: Group,
+					attributes: ["id", "name", "city", "state"],
+				},
+				{
+					model: Venue,
+					attributes: ["id", "city", "state"],
+				},
+			],
+		});
+
+		return res.json({
+			Events: events,
+		});
+	} else {
+		res.status(404);
+		res.json({
+			message: "Group couldn't be found",
+		});
+	}
+});
+
+router.get("/:groupId/members", async (req, res) => {
+	const { user } = req;
+	const groupId = +req.params.groupId;
+	let group;
+
+	try {
+		group = await Group.findByPk(groupId);
+		if (!group) {
+			res.status(404);
+			res.json({
+				message: "Group couldn't be found",
+			});
+		}
+		let members;
+
+		if (user) {
+			const membership = await Membership.findOne({
+				where: {
+					userId: user.id,
+					groupId: group.id,
+				},
+			});
+			const organizer = group.organizerId === user.id;
+			const coHost = membership ? membership.status === "co-host" : false;
+
+			if (organizer || coHost) {
+				members = await Membership.findAll({
+					include: {
+						model: User,
+						attributes: ["id", "firstName", "lastName"],
+					},
+					where: {
+						groupId: group.id,
+					},
+					order: [[User, "id", "ASC"]],
+				});
+			} else {
+				members = await Membership.findAll({
+					include: {
+						model: User,
+						attributes: ["id", "firstName", "lastName"],
+					},
+					where: {
+						groupId: group.id,
+						status: {
+							[Op.not]: ["pending"],
+						},
+					},
+					order: [[User, "id", "ASC"]],
+				});
+			}
+		} else {
+			members = await Membership.findAll({
+				include: {
+					model: User,
+					attributes: ["id", "firstName", "lastName"],
+				},
+				where: {
+					groupId: group.id,
+					status: {
+						[Op.not]: ["pending"],
+					},
+				},
+				order: [[User, "id", "ASC"]],
+			});
+		}
+
+		const Members = members.map((member) => ({
+			id: member.User.id,
+			firstName: member.User.firstName,
+			lastName: member.User.lastName,
+			Membership: {
+				status: member.status,
+			},
+		}));
+		res.json({
+			Members,
+		});
+	} catch (error) {
+		res.status(404);
+		res.json({
+			message: "Group couldn't be found",
+		});
+	}
+});
+
 router.post("/", requireAuth, async (req, res) => {
 	const { user } = req;
 
@@ -320,18 +517,24 @@ router.put("/:groupId", requireAuth, async (req, res) => {
 	}
 });
 
-router.delete("/:groupId", requireAuth, async (res, req) => {
+router.delete("/:groupId", requireAuth, async (req, res) => {
 	const { user } = req;
-      const groupId = +req.params.groupId;
-      
-      const group = await Group.findByPk(groupId);
+	const groupId = +req.params.groupId;
+
+	let group;
+
+	try {
+		group = await Group.findByPk(groupId);
+	} catch (error) {
+		res.status(404);
+		res.json({ message: "Group couldn't be found" });
+	}
 
 	if (group && group.organizerId === user.id) {
 		try {
 			await group.destroy();
-			res.json({
-				message: "Successfully deleted",
-			});
+
+			res.json({ message: "Successfully deleted" });
 		} catch (error) {
 			let errorObj = { message: "Bad Request", errors: {} };
 			for (let err of error.errors) {
@@ -350,5 +553,4 @@ router.delete("/:groupId", requireAuth, async (res, req) => {
 		}
 	}
 });
-
 module.exports = router;
