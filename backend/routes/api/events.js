@@ -187,9 +187,7 @@ router.get("/:eventId/attendees", async (req, res) => {
 				where: {
 					eventId: event.id,
 					status: {
-						status: {
-							[Op.not]: ["pending"],
-						},
+						[Op.not]: ["pending"],
 					},
 				},
 				order: [[User, "id", "ASC"]],
