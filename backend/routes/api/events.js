@@ -316,9 +316,14 @@ router.post("/:eventId/images", requireAuth, async (req, res) => {
 				{ validate: true }
 			);
 
-			newImage.save();
+                  newImage.save();
+                  
+                  const safeImage = {
+                        url: newImage.url,
+                        preview: newImage.preview,
+                  }
 			res.status(200);
-			res.json(newImage);
+			res.json(safeImage);
 		} else {
 			res.status(403);
 			res.json({
