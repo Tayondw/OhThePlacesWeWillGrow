@@ -269,6 +269,81 @@ router.post("/:eventId/images", requireAuth, async (req, res) => {
 	}
 });
 
+router.post("/:eventId/attendance", requireAuth, async (req, res) => {
+	const { user } = req;
+	const eventId = +req.params.eventId;
+	let event;
+
+	try {
+		event = await Event.findByPk(eventId);
+	} catch (error) {
+		res.status(404);
+		return res.json({
+			message: "Event couldn't be found",
+		});
+	}
+	if (event) {
+		const attendance = await Attendance.findOne({
+			where: {
+				userId: user.id,
+				eventId: event.id,
+			},
+		});
+		if (attendance) {
+			if (attendance.status === "attending") {
+				res.status(400);
+				res.json({
+					message: "User is already an attendee of the event",
+				});
+			} else {
+				res.status(400);
+				res.json({
+					message: "Attendance has already been requested",
+				});
+			}
+		} else {
+			const group = await Group.findByPk(event.groupId);
+			const membership = await Membership.findOne({
+				where: {
+					userId: user.id,
+					status: {
+						[Op.in]: ["member", "co-host"],
+					},
+				},
+			});
+			if (!membership && user.id !== group.organizerId) {
+				res.status(403);
+				return res.json({
+					message: "Not a member of the group",
+				});
+			}
+
+			const attend = await Attendance.create(
+				{
+					userId: user.id,
+					status: "pending",
+					eventId: event.id,
+				},
+				{ validate: true }
+			);
+
+			await attend.save();
+
+			const pending = {
+				userId: attend.userId,
+				status: attend.status,
+			};
+
+			res.json(pending);
+		}
+	} else {
+		res.status(404);
+		res.json({
+			message: "Event couldn't be found",
+		});
+	}
+});
+
 router.put("/:eventId", requireAuth, async (req, res) => {
 	const { user } = req;
 	const eventId = +req.params.eventId;

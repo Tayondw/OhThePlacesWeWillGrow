@@ -661,7 +661,7 @@ router.post("/:groupId/events", requireAuth, async (req, res) => {
 		res.json({
 			message: "Group couldn't be found",
 		});
-      }
+	}
 
 	if (group) {
 		if (group.organizerId === user.id) {
@@ -688,21 +688,21 @@ router.post("/:groupId/events", requireAuth, async (req, res) => {
 					groupId: group.id,
 				});
 
-                        await newEvent.save();
-                        
-                        const safeEvent = {
-                              id: newEvent.id,
-                              venueId: newEvent.venueId,
-                              name: newEvent.name,
-                              type: newEvent.type,
-                              capacity: newEvent.capacity,
-                              price: newEvent.price,
-                              description: newEvent.description,
-                              private: newEvent.private,
-                              startDate: newEvent.startDate,
-                              endDate: newEvent.startDate,
-                              groupId: newEvent.groupId,
-                        };
+				await newEvent.save();
+
+				const safeEvent = {
+					id: newEvent.id,
+					venueId: newEvent.venueId,
+					name: newEvent.name,
+					type: newEvent.type,
+					capacity: newEvent.capacity,
+					price: newEvent.price,
+					description: newEvent.description,
+					private: newEvent.private,
+					startDate: newEvent.startDate,
+					endDate: newEvent.startDate,
+					groupId: newEvent.groupId,
+				};
 				res.status(200);
 				res.json(safeEvent);
 			} catch (error) {
@@ -746,21 +746,21 @@ router.post("/:groupId/events", requireAuth, async (req, res) => {
 							groupId: group.id,
 						});
 
-                                    await newEvent.save();
-                                    
-                                    const safeEvent = {
-                                          id: newEvent.id,
-                                          venueId: newEvent.venueId,
-                                          name: newEvent.name,
-                                          type: newEvent.type,
-                                          capacity: newEvent.capacity,
-                                          price: newEvent.price,
-                                          description: newEvent.description,
-                                          private: newEvent.private,
-                                          startDate: newEvent.startDate,
-                                          endDate: newEvent.startDate,
-                                          groupId: newEvent.groupId,
-                                    };
+						await newEvent.save();
+
+						const safeEvent = {
+							id: newEvent.id,
+							venueId: newEvent.venueId,
+							name: newEvent.name,
+							type: newEvent.type,
+							capacity: newEvent.capacity,
+							price: newEvent.price,
+							description: newEvent.description,
+							private: newEvent.private,
+							startDate: newEvent.startDate,
+							endDate: newEvent.startDate,
+							groupId: newEvent.groupId,
+						};
 						res.status(200);
 						res.json(safeEvent);
 					} catch (error) {
@@ -778,14 +778,93 @@ router.post("/:groupId/events", requireAuth, async (req, res) => {
 							"User must be a member of the group with the status of 'co-host'",
 					});
 				}
-                  } else {
-                        res.status(403);
-                        res.json({ message: "User must be organizer of the group" });  
-                  }
+			} else {
+				res.status(403);
+				res.json({ message: "User must be organizer of the group" });
+			}
 		}
 	} else {
 		res.status(404);
 		res.json({ message: "Group couldn't be found" });
+	}
+});
+
+router.post("/:groupId/membership", requireAuth, async (req, res) => {
+	const { user } = req;
+	const { userId, status } = req.body;
+	const groupId = +req.params.groupId;
+
+	let group;
+
+	try {
+		group = await Group.findByPk(groupId);
+	} catch (error) {
+		res.status(400);
+		res.json({
+			message: "Group couldn't be found",
+		});
+	}
+
+	if (group) {
+		if (group.organizerId !== user.id) {
+			const membership = await Membership.findOne({
+				where: {
+					userId: user.id,
+					groupId: group.id,
+				},
+			});
+
+			if (!membership) {
+				let newMembership;
+				try {
+					newMembership = await Membership.create(
+						{
+							userId: user.id,
+							status: "pending",
+							groupId: group.id,
+						},
+						{ validate: true }
+					);
+
+					await newMembership.save();
+					const safeNewMember = {
+						userId: newMembership.userId,
+						status: newMembership.status,
+					};
+					res.json(safeNewMember);
+				} catch (error) {
+					let errorObj = { message: "Bad Request", errors: {} };
+					for (let err of error.errors) {
+						errorObj.errors[err.path] = err.message;
+					}
+					res.status(400);
+					res.json(errorObj);
+				}
+			} else {
+				res.status(400);
+				if (membership.status === "pending") {
+					res.status(400);
+					res.json({
+						message: "Membership has already been requested",
+					});
+				} else {
+					res.status(400);
+					res.json({
+						message: "User is already a member of the group",
+					});
+				}
+			}
+		} else {
+			res.status(403);
+			res.json({
+				message: "User is the organizer of the group",
+			});
+		}
+	} else {
+		res.status(404);
+		res.json({
+			message: "Group couldn't be found",
+		});
 	}
 });
 
@@ -827,6 +906,161 @@ router.put("/:groupId", requireAuth, async (req, res) => {
 	}
 });
 
+router.put("/:groupId/membership", requireAuth, async (req, res) => {
+	const { user } = req;
+	const { userId, status } = req.body;
+	const groupId = +req.params.groupId;
+
+	let group;
+
+	try {
+		group = await Group.findByPk(groupId);
+	} catch (error) {
+		res.status(400);
+		res.json({
+			message: "Group couldn't be found",
+		});
+	}
+
+	if (group) {
+		if (group.organizerId === user.id) {
+			const otherUser = await User.findByPk(userId);
+
+			if (otherUser) {
+				const promotion = await Membership.findOne({
+					where: {
+						userId: user.id,
+						groupId: group.id,
+					},
+				});
+
+				if (promotion) {
+					const pending = promotion.status === "pending";
+					const member = promotion.status === "member";
+					const coHost = promotion.status === "co-host";
+
+					if (
+						(status === "member" && (pending || coHost)) ||
+						(status === "co-host" && (pending || member))
+					) {
+						if (group.organizerId !== user.id && status === "co-host") {
+							res.status(403);
+							return res.json({
+								message: "User must be an organizer to promote to 'co-host",
+							});
+						}
+						promotion.status = status;
+						await promotion.validate();
+						await promotion.save();
+
+						const safePromotion = {
+							id: promotion.id,
+							userId: otherUser.id,
+							status: promotion.status,
+							groupId: group.id,
+						};
+
+						res.json(safePromotion);
+					} else {
+						let errorObj = { message: "Bad Request", errors: {} };
+						if (status === "pending") {
+							// console.log(errorObj.errors['status']);
+							res.status(400);
+							errorObj.errors["status"] =
+								"Cannot change a membership status to pending";
+						}
+						res.json(errorObj);
+					}
+				} else {
+					res.status(404);
+					res.json({
+						message: "Membership between the user and the group does not exist",
+					});
+				}
+			} else {
+				res.status(404);
+				res.json({
+					message: "Bad message",
+					errors: {
+						userId: "User to promote does not exist",
+					},
+				});
+			}
+		} else {
+			const newPromotion = await Membership.findOne({
+				where: {
+					userId: user.id,
+					groupId: group.id,
+				},
+			});
+
+			if (newPromotion && newPromotion.status === "co-host") {
+				const otherUser = await User.findByPk(userId);
+				if (otherUser) {
+					const promotion = await Membership.findOne({
+						where: {
+							userId: user.id,
+							groupId: group.id,
+						},
+					});
+					if (promotion) {
+						if (status === "member" && promotion.status === "pending") {
+							promotion.status = status;
+							await promotion.validate();
+							await promotion.save();
+
+							const safePromotion = {
+								id: promotion.id,
+								userId: otherUser.id,
+								status: promotion.status,
+								groupId: group.id,
+							};
+
+							res.json(safePromotion);
+						} else {
+							let errorObj = { message: "Bad Request", errors: {} };
+							if (status === "pending") {
+								// console.log(errorObj.errors['status']);
+								res.status(400);
+								errorObj.errors["status"] =
+									"Cannot change a membership status to pending";
+							}
+							res.json(errorObj);
+						}
+					} else {
+						res.status(404);
+						res.json({
+							message:
+								"Membership between the user and the group does not exist",
+						});
+					}
+				} else {
+					res.status(400);
+					res.json({
+						message: "Bad message",
+						errors: {
+							userId: "User to promote does not exist",
+						},
+					});
+				}
+			} else {
+				res.status(403);
+				res.json({
+					message: "Invalid Request",
+					errors: {
+						user: "User is not a co-host or organizer of the group.",
+					},
+				});
+			}
+		}
+	} else {
+		res.status(404);
+		res.json({
+			message: "Group couldn't be found",
+		});
+	}
+});
+
 router.delete("/:groupId", requireAuth, async (req, res) => {
 	const { user } = req;
 	const groupId = +req.params.groupId;
@@ -863,4 +1097,100 @@ router.delete("/:groupId", requireAuth, async (req, res) => {
 		}
 	}
 });
+
+router.delete(
+	"/:groupId/membership/:memberId",
+	requireAuth,
+	async (req, res) => {
+		const { user } = req;
+		let memberId = +req.params.memberId;
+		const groupId = +req.params.groupId;
+
+		let group;
+
+		try {
+			group = await Group.findByPk(groupId);
+		} catch (error) {
+			res.status(404);
+			res.json({
+				message: "Group couldn't be found",
+			});
+		}
+
+		if (group) {
+			try {
+				const verifyExist = await User.findByPk(memberId);
+				if (!verifyExist) {
+					res.status(404);
+					return res.json({
+						message: "User couldn't be found",
+					});
+				}
+			} catch (error) {
+				res.status(404);
+				return res.json({
+					message: "User couldn't be found",
+				});
+			}
+
+			if (group.organizerId === user.id) {
+				const verifyUser = await User.findByPk(memberId);
+				if (verifyUser) {
+					const membership = await Membership.findOne({
+						where: {
+							groupId: group.id,
+							userId: verifyUser.id,
+						},
+					});
+					if (membership) {
+						await membership.destroy();
+						res.json({
+							message: "Successfully deleted membership from group",
+						});
+					} else {
+						res.status(404);
+						res.json({
+							message: "Membership does not exist for this User",
+						});
+					}
+				} else {
+					res.status(400);
+					res.json({
+						message: "Bad Message",
+						errors: {
+							memberId: "User couldn't be found",
+						},
+					});
+				}
+			} else if (memberId === user.id) {
+				const membership = await Membership.findOne({
+					where: {
+						groupId: group.id,
+						userId: user.id,
+					},
+				});
+				if (membership) {
+					await membership.destroy();
+					res.json({
+						message: "Successfully deleted membership from group",
+					});
+				} else {
+					res.status(404);
+					res.json({
+						message: "Membership does not exist for this User",
+					});
+				}
+			} else {
+				res.status(403);
+				res.json({
+					message:
+						"User must be the organizer of the group or the user whose membership is being deleted",
+				});
+			}
+		} else {
+			res.status(404);
+			res.json({ message: "Group couldn't be found" });
+		}
+	}
+);
 module.exports = router;
