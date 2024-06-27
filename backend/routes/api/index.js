@@ -16,10 +16,10 @@ router.use(restoreUser);
 router.use("/session", sessionRouter);
 router.use("/users", usersRouter);
 router.use("/groups", groupsRouter);
-router.use("/groupImages", groupImagesRouter);
+router.use("/group-images", groupImagesRouter);
 router.use("/venues", venuesRouter);
 router.use("/events", eventsRouter);
-router.use("/eventImages", eventImagesRouter);
+router.use("/event-images", eventImagesRouter);
 
 router.post("/test", (req, res) => {
 	res.json({ requestBody: req.body });
