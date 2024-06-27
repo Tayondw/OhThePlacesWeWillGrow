@@ -20,18 +20,18 @@ const attendees = [
 		status: "pending",
 	},
 	{
-		eventId: 2,
-		userId: 1,
+		eventId: 1,
+		userId: 3,
 		status: "pending",
 	},
 	{
-		eventId: 2,
-		userId: 2,
+		eventId: 1,
+		userId: 4,
 		status: "attending",
 	},
 	{
-		eventId: 3,
-		userId: 4,
+		eventId: 1,
+		userId: 5,
 		status: "attending",
 	},
 	{
