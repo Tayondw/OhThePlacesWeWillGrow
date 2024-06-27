@@ -21,7 +21,68 @@ const router = express.Router();
 
 router.get("/", async (req, res, next) => {
 	// want to try a different way and see if this works
+	let { page, size, name, type, startDate } = req.query;
+
+	page = +page;
+	size = +size;
+
+	const errors = {};
+
+	if (page <= 0) errors.page = "Page must be greater than or equal to 1";
+	if (size <= 0) errors.size = "Size must be greater than or equal to 1";
+
+	if (isNaN(page) || !page) page = 1;
+	if (isNaN(size) || !size) size = 20;
+
+	const pagination = {};
+	pagination.limit = size;
+	pagination.offset = size * (page - 1);
+
+	const where = {};
+
+	if (name) {
+		if (typeof name !== "string") {
+			errors.name = "Name must be a string";
+		} else {
+			where.name = {
+				[Op.like]: `${name}`,
+			};
+		}
+	}
+
+	if (type) {
+		if (type !== "Online" && type !== "In person") {
+			errors.type = "Type must be 'Online' or 'In Person'";
+		} else {
+			where.type = type;
+		}
+	}
+
+	if (startDate) {
+		let date = new Date(startDate);
+		if (isNaN(date)) {
+			errors.startDate = "Start date must be a valid datetime";
+		} else {
+			where.startDate = {
+				[Op.gte]: date,
+			};
+		}
+	}
+
+	const allErrors = Object.keys(errors);
+
+	if (allErrors.length) {
+		res.status(400);
+		res.json({
+			message: "Bad Request",
+			errors: {
+				...errors,
+			},
+		});
+	}
+
 	const events = await Event.findAll({
+		where,
 		attributes: {
 			include: [
 				[
@@ -55,10 +116,13 @@ router.get("/", async (req, res, next) => {
 				attributes: ["id", "city", "state"],
 			},
 		],
+		...pagination,
 	});
 
 	return res.json({
 		Events: events,
+		page,
+		size,
 	});
 });
 
@@ -519,6 +583,107 @@ router.put("/:eventId", requireAuth, async (req, res) => {
 	}
 });
 
+router.put("/:eventId/attendance", requireAuth, async (req, res) => {
+	const { user } = req;
+	let { userId, status } = req.body;
+	const eventId = +req.params.eventId;
+	let event;
+
+	try {
+		event = await Event.findByPk(eventId);
+	} catch (error) {
+		res.status(404);
+		return res.json({
+			message: "Event couldn't be found",
+		});
+	}
+	if (event) {
+		const group = await Group.findByPk(event.groupId);
+
+		const organizer = group.organizerId === user.id;
+		const membership = await Membership.findOne({
+			where: {
+				userId: user.id,
+				groupId: group.id,
+			},
+		});
+		const coHost = membership ? membership.status === "co-host" : false;
+		if (organizer || coHost) {
+			const attendance = await Attendance.findOne({
+				where: {
+					userId: userId,
+					eventId: event.id,
+				},
+			});
+			if (attendance) {
+				const numAttending = await Attendance.count({
+					where: {
+						eventId: event.id,
+					},
+				});
+				if (status !== "pending" && numAttending < event.capacity) {
+					if (attendance.status === "pending") {
+						attendance.status = status;
+						await attendance.validate();
+						await attendance.save();
+						res.json({
+							id: attendance.id,
+							eventId: event.id,
+							userId: attendance.userId,
+							status: attendance.status,
+						});
+					} else {
+						res.status(400);
+						res.json({
+							message: "User is already attending event",
+						});
+					}
+				} else {
+					if (attendance.status === "pending") {
+						attendance.status = status;
+						await attendance.validate();
+						await attendance.save();
+						res.json({
+							id: attendance.id,
+							eventId: event.id,
+							userId: attendance.id,
+							status: attendance.status,
+						});
+					} else {
+						res.status(400);
+						res.json({ message: "User is already attending" });
+					}
+					if (status === "pending") {
+						res.status(400);
+						res.json({
+							message: "Cannot change an attendance status to pending",
+						});
+					} else {
+						res.status(400);
+						res.json({
+							message: "Invalid status was sent. May be at capacity",
+						});
+					}
+				}
+			} else {
+				res.status(404);
+				res.json({
+					message: "Attendance between the user and the event does not exist",
+				});
+			}
+		} else {
+			res.status(403);
+			res.json({
+				message:
+					"User must be the organizer or have a membership status to the group with the status of 'co-host'",
+			});
+		}
+	} else {
+		res.status(404);
+		res.json({ message: "Event couldn't be found" });
+	}
+});
+
 router.delete("/:eventId", requireAuth, async (req, res) => {
 	const { user } = req;
 	const eventId = +req.params.eventId;
@@ -556,6 +721,71 @@ router.delete("/:eventId", requireAuth, async (req, res) => {
 	} else {
 		res.status(404);
 		res.json({ message: "Event couldn't be found" });
+	}
+});
+
+router.delete("/:eventId/attendance/:userId", requireAuth, async (req, res) => {
+	const { user } = req;
+	const eventId = +req.params.eventId;
+	const userId = +req.params.userId;
+	let event;
+
+	try {
+		event = await Event.findByPk(eventId);
+	} catch (error) {
+		res.status(404);
+		return res.json({
+			message: "Event couldn't be found",
+		});
+	}
+	if (event) {
+		const group = await Group.findByPk(event.groupId);
+		const organizer = group.organizerId === user.id;
+		try {
+			const verifyExist = await User.findByPk(userId);
+			if (!verifyExist) {
+				res.status(404);
+				return res.json({
+					message: "User couldn't be found",
+				});
+			}
+		} catch (error) {
+			res.status(404);
+			return res.json({
+				message: "User couldn't be found",
+			});
+		}
+		const verifyUser = userId === user.id;
+		if (organizer || verifyUser) {
+			const attendance = await Attendance.findOne({
+				where: {
+					userId: userId,
+					eventId: event.id,
+				},
+			});
+			if (attendance) {
+				await attendance.destroy();
+				res.json({
+					message: "Successfully deleted attendance from event",
+				});
+			} else {
+				res.status(404);
+				res.json({
+					message: "Attendance does not exist for this User",
+				});
+			}
+		} else {
+			res.status(403);
+			res.json({
+				message:
+					"User must be the organizer of the group ot the user whose attendance is being deleted",
+			});
+		}
+	} else {
+		res.status(404);
+		res.json({
+			message: "Event couldn't be found",
+		});
 	}
 });
 
