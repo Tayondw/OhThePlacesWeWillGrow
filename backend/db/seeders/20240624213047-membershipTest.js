@@ -12,7 +12,7 @@ const members = [
 	{
 		userId: 1,
 		groupId: 1,
-		status: "organizer",
+		status: "co-host",
 	},
 	{
 		userId: 5,
@@ -58,6 +58,23 @@ const members = [
 		userId: 9,
 		groupId: 2,
 		status: "co-host",
+      },
+      {
+		userId: 15,
+		groupId: 2,
+		status: "co-host",
+	},{
+		userId: 14,
+		groupId: 2,
+		status: "pending",
+	},{
+		userId: 12,
+		groupId: 2,
+		status: "member",
+	},{
+		userId: 11,
+		groupId: 2,
+		status: "member",
 	},
 ];
 
