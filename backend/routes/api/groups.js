@@ -210,23 +210,10 @@ router.get("/current", requireAuth, async (req, res) => {
 });
 
 router.get("/:groupId", async (req, res) => {
-	const groupId = +req.params.groupId;
 	let groups;
 	try {
-		groups = await Group.findByPk(groupId, {
-			attributes: [
-				"id",
-				"organizerId",
-				"name",
-				"about",
-				"type",
-				"private",
-				"city",
-				"state",
-				"createdAt",
-				"updatedAt",
-			],
-		});
+		let groupId = +req.params.groupId;
+		groups = await Group.findByPk(groupId);
 	} catch (error) {
 		res.status(404);
 		res.json({
@@ -235,48 +222,30 @@ router.get("/:groupId", async (req, res) => {
 	}
 
 	if (groups) {
-		groups = await Group.findByPk(groupId, {
-                  attributes: {
-                        include: [[sequelize.literal(`(
-                              SELECT COUNT(*)
-                              FROM Memberships AS Membership
-                              WHERE
-                                Membership.groupId = Group.id AND
-                                (Membership.status = 'member' OR
-                                Membership.status = 'co-host'))`),
-                                          "numMembers",]]
-                  },
-			include: [
-				// {
-				// 	model: Membership,
-				// 	attributes: [
-				// 		"groupId",
-				// 		[sequelize.fn("COUNT"), sequelize.col("groupId")],
-				// 	],
-				// 	status: {
-				// 		[Op.in]: ["member", "co-host"],
-				// 	},
-				// 	as: "numMembers",
-				// },
-				{
-					model: GroupImage,
-					attributes: ["id", "url", "preview"],
-				},
-				{
-					model: User,
-					attributes: ["id", "firstName", "lastName"],
-					as: "Organizer",
-				},
-				{
-					model: Venue,
-					where: {
-						groupId: groupId,
-					},
-				},
-			],
-		});
 		groups = groups.toJSON();
-		// groups.numMembers = groups.numMembers[0].groupId;
+
+		let image = await GroupImage.findAll({
+			where: {
+				groupId: groups.id,
+			},
+		});
+		groups.numMembers = await Membership.count({
+			where: {
+				groupId: groups.id,
+				status: {
+					[Op.in]: ["member", "co-host"],
+				},
+			},
+            });
+            
+            groups.numMembers += 1;
+            groups.GroupImages = image;
+            groups.Organizer = await User.findByPk(groups.organizerId);
+            groups.Venues = await Venue.findAll({
+                  where: {
+                        groupId: groups.id
+                  }
+            })
 
 		res.json(groups);
 	} else {
