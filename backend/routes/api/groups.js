@@ -504,18 +504,8 @@ router.post("/", requireAuth, async (req, res) => {
 		);
 
 		await newGroup.save();
-
-		const safeGroup = {
-			organizerId: newGroup.organizerId,
-			name: newGroup.name,
-			about: newGroup.about,
-			type: newGroup.type,
-			private: newGroup.private,
-			city: newGroup.city,
-			state: newGroup.state,
-		};
 		res.status(201);
-		res.json(safeGroup);
+		res.json(newGroup);
 	} catch (error) {
 		let errorObj = { message: "Bad Request", errors: {} };
 		// console.log(error.errors);
