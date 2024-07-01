@@ -59,8 +59,27 @@ router.get("/", async (req, res, next) => {
 			},
 		});
 
+		eachGroup.organizer = await User.findByPk(eachGroup.organizerId);
+		eachGroup.numEvents = await Event.count({
+			where: {
+				groupId: eachGroup.id,
+			},
+		});
+		eachGroup.events = await Event.findAll({
+			where: {
+				groupId: eachGroup.id,
+			},
+		});
+		eachGroup.venues = await Venue.findAll({
+			where: {
+				groupId: eachGroup.id,
+			},
+		});
+
 		if (image) {
 			eachGroup.previewImage = image.url;
+		} else {
+			eachGroup.previewImage = image;
 		}
 
 		groups.push(eachGroup);
