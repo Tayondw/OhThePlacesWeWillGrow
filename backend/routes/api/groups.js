@@ -59,22 +59,22 @@ router.get("/", async (req, res, next) => {
 			},
 		});
 
-		eachGroup.organizer = await User.findByPk(eachGroup.organizerId);
-		eachGroup.numEvents = await Event.count({
-			where: {
-				groupId: eachGroup.id,
-			},
-		});
-		eachGroup.events = await Event.findAll({
-			where: {
-				groupId: eachGroup.id,
-			},
-		});
-		eachGroup.venues = await Venue.findAll({
-			where: {
-				groupId: eachGroup.id,
-			},
-		});
+		// eachGroup.organizer = await User.findByPk(eachGroup.organizerId);
+		// eachGroup.numEvents = await Event.count({
+		// 	where: {
+		// 		groupId: eachGroup.id,
+		// 	},
+		// });
+		// eachGroup.events = await Event.findAll({
+		// 	where: {
+		// 		groupId: eachGroup.id,
+		// 	},
+		// });
+		// eachGroup.venues = await Venue.findAll({
+		// 	where: {
+		// 		groupId: eachGroup.id,
+		// 	},
+		// });
 
 		if (image) {
 			eachGroup.previewImage = image.url;
@@ -117,7 +117,7 @@ router.get("/current", requireAuth, async (req, res) => {
 		let eachGroup = group.toJSON();
 
 		if (eachGroup) {
-			eachGroup.numMembers = await Membership.count({
+			let numMembers = await Membership.count({
 				where: {
 					groupId: eachGroup.id,
 					status: {
@@ -126,7 +126,7 @@ router.get("/current", requireAuth, async (req, res) => {
 				},
 			});
 
-			eachGroup.numMembers += 1;
+			numMembers += 1;
 
 			let image = await GroupImage.findOne({
 				where: {
@@ -135,17 +135,78 @@ router.get("/current", requireAuth, async (req, res) => {
 				},
 			});
 
-			if (image) {
-				eachGroup.previewImage = image.url;
-			}
-		}
+			let result;
 
-		groups.push(eachGroup);
+			if (image) {
+				result = {
+					...eachGroup,
+					numMembers,
+					previewImage: image.url,
+				};
+			} else {
+				result = {
+					...eachGroup,
+					numMembers,
+					previewImage: null,
+				};
+			}
+			groups.push(result);
+		}
 	}
 
-	return res.json({
-		Groups: groups,
+	const members = await Membership.findAll({
+		where: {
+			userId: user.id,
+			status: {
+				[Op.in]: ["member", "co-host"],
+			},
+		},
 	});
+
+	for (let member of members) {
+		let eachGroup = await Group.findByPk(member.groupId);
+		if (eachGroup) {
+			eachGroup = eachGroup.toJSON();
+			let numMembers = await Membership.count({
+				where: {
+					groupId: eachGroup.id,
+					status: {
+						[Op.in]: ["member", "co-host"],
+					},
+				},
+			});
+			numMembers += 1;
+
+			const image = await GroupImage.findOne({
+				where: {
+					groupId: eachGroup.id,
+					preview: true,
+				},
+			});
+
+			let result;
+
+			if (image) {
+				result = {
+					...eachGroup,
+					numMembers,
+					previewImage: image.url,
+				};
+			} else {
+				result = {
+					...eachGroup,
+					numMembers,
+					previewImage: null,
+				};
+			}
+
+			if (!groups.includes(result)) {
+				groups.push(result);
+			}
+		}
+	}
+
+	res.json(groups);
 });
 
 router.get("/:groupId", async (req, res) => {
