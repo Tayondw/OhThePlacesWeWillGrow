@@ -236,30 +236,28 @@ router.get("/:groupId", async (req, res) => {
 
 	if (groups) {
 		groups = await Group.findByPk(groupId, {
-			attributes: [
-				"id",
-				"organizerId",
-				"name",
-				"about",
-				"type",
-				"private",
-				"city",
-				"state",
-				"createdAt",
-				"updatedAt",
-			],
+                  attributes: {
+                        include: [[sequelize.literal(`(
+                              SELECT COUNT(*)
+                              FROM Memberships AS Membership
+                              WHERE
+                                Membership.groupId = Group.id AND
+                                (Membership.status = 'member' OR
+                                Membership.status = 'co-host'))`),
+                                          "numMembers",]]
+                  },
 			include: [
-				{
-					model: Membership,
-					attributes: [
-						"groupId",
-						[sequelize.fn("COUNT"), sequelize.col("groupId")],
-					],
-					status: {
-						[Op.in]: ["member", "co-host"],
-					},
-					as: "numMembers",
-				},
+				// {
+				// 	model: Membership,
+				// 	attributes: [
+				// 		"groupId",
+				// 		[sequelize.fn("COUNT"), sequelize.col("groupId")],
+				// 	],
+				// 	status: {
+				// 		[Op.in]: ["member", "co-host"],
+				// 	},
+				// 	as: "numMembers",
+				// },
 				{
 					model: GroupImage,
 					attributes: ["id", "url", "preview"],
@@ -278,7 +276,7 @@ router.get("/:groupId", async (req, res) => {
 			],
 		});
 		groups = groups.toJSON();
-		groups.numMembers = groups.numMembers[0].groupId;
+		// groups.numMembers = groups.numMembers[0].groupId;
 
 		res.json(groups);
 	} else {
