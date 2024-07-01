@@ -934,10 +934,12 @@ router.put("/:groupId", requireAuth, async (req, res) => {
 
 router.put("/:groupId/membership", requireAuth, async (req, res) => {
 	const { user } = req;
-	const { userId, status } = req.body;
+	const { memberId, status } = req.body;
 	const groupId = +req.params.groupId;
-
 	let group;
+      
+      let userId = memberId;
+	// console.log("user..........", userId);
 
 	try {
 		group = await Group.findByPk(groupId);
@@ -965,10 +967,10 @@ router.put("/:groupId/membership", requireAuth, async (req, res) => {
 					const member = promotion.status === "member";
 					const coHost = promotion.status === "co-host";
 
-					if ((
+					if (
 						(status === "member" && (pending || coHost)) ||
 						(status === "co-host" && (pending || member))
-					)) {
+					) {
 						if (group.organizerId !== user.id && status === "co-host") {
 							res.status(403);
 							return res.json({
@@ -1033,7 +1035,7 @@ router.put("/:groupId/membership", requireAuth, async (req, res) => {
 						},
 					});
 					if (promotion) {
-						if (((status === "member") && (promotion.status === "pending"))) {
+						if (status === "member" && promotion.status === "pending") {
 							promotion.status = status;
 							await promotion.save();
 

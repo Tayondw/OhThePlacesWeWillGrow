@@ -408,7 +408,7 @@ router.post("/:eventId/attendance", requireAuth, async (req, res) => {
 					},
 				},
 			});
-			if (!membership && user.id !== group.organizerId) {
+			if (!membership) {
 				res.status(403);
 				return res.json({
 					message: "Not a member of the group",
