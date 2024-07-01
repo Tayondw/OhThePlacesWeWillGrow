@@ -615,8 +615,6 @@ router.put("/:eventId", requireAuth, async (req, res) => {
 });
 
 router.put("/:eventId/attendance", requireAuth, async (req, res) => {
-	const { user } = req;
-	let { userId, status } = req.body;
 	const eventId = +req.params.eventId;
 	let event;
 
@@ -630,7 +628,7 @@ router.put("/:eventId/attendance", requireAuth, async (req, res) => {
 	}
 	if (event) {
 		const group = await Group.findByPk(event.groupId);
-
+		const { user } = req;
 		const organizer = group.organizerId === user.id;
 		const membership = await Membership.findOne({
 			where: {
@@ -640,6 +638,8 @@ router.put("/:eventId/attendance", requireAuth, async (req, res) => {
 		});
 		const coHost = membership ? membership.status === "co-host" : false;
 		if (organizer || coHost) {
+			let { userId, status } = req.body;
+			userId = parseInt(userId);
 			const attendance = await Attendance.findOne({
 				where: {
 					userId: userId,
@@ -652,50 +652,49 @@ router.put("/:eventId/attendance", requireAuth, async (req, res) => {
 						eventId: event.id,
 					},
 				});
-				if (status !== "pending" && numAttending < event.capacity) {
-					if (attendance.status === "pending") {
-						attendance.status = status;
-						await attendance.validate();
-						await attendance.save();
-						res.json({
-							id: attendance.id,
-							eventId: event.id,
-							userId: attendance.userId,
-							status: attendance.status,
-						});
-					} else {
-						res.status(400);
-						res.json({
-							message: "User is already attending event",
-						});
-					}
-				} else {
-					if (attendance.status === "pending") {
-						attendance.status = status;
-						await attendance.validate();
-						await attendance.save();
-						res.json({
-							id: attendance.id,
-							eventId: event.id,
-							userId: attendance.id,
-							status: attendance.status,
-						});
-					} else {
-						res.status(400);
-						res.json({ message: "User is already attending" });
-					}
-					if (status === "pending") {
-						res.status(400);
-						res.json({
-							message: "Cannot change an attendance status to pending",
-						});
-					} else {
-						res.status(400);
-						res.json({
-							message: "Invalid status was sent. May be at capacity",
-						});
-					}
-				}
+                        if (status !== "pending" && numAttending < event.capacity) {
+                              if (attendance.status === "pending" || attendance.status === 'waitlist') {
+                                    attendance.status = status;
+                                    await attendance.validate();
+                                    await attendance.save();
+                                    res.json({
+                                          id: attendance.id,
+                                          eventId: event.id,
+                                          userId: attendance.userId,
+                                          status: attendance.status,
+                                    });
+                              } else {
+                                    res.status(400);
+                                    res.json({
+                                          message: "User is already attending event",
+                                    });
+                              }
+                        } else {
+                              if (status === 'waitlist') {
+                                    if (attendance.status === "pending") {
+                                          attendance.status = status;
+                                          await attendance.validate();
+                                          await attendance.save();
+                                          res.json({
+                                                id: attendance.id,
+                                                eventId: event.id,
+                                                userId: attendance.id,
+                                                status: attendance.status,
+                                          });
+                                    } else {
+                                          res.status(400);
+                                          res.json({ message: "User is already attending" });
+                                    }
+                                   
+                              } else {
+                                    if (status === "pending") {
+                                          res.status(400);
+                                          res.json({
+                                                message: "Cannot change an attendance status to pending",
+                                          });
+                                    }
+                              }
+                        }
 			} else {
 				res.status(404);
 				res.json({
