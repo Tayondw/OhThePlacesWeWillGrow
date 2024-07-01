@@ -22,19 +22,19 @@ const validateLogin = [
 
 // Restore session user
 router.get("/", (req, res) => {
-      const { user } = req;
-      if (user) {
-            const safeUser = {
-                  id: user.id,
-                  firstName: user.firstName,
-                  lastName: user.lastName,
-                  email: user.email,
-                  username: user.username,
-            };
-            return res.json({
-                  user: safeUser,
-            });
-      } else return res.json({ user: null });
+	const { user } = req;
+	if (user) {
+		const safeUser = {
+			id: user.id,
+			firstName: user.firstName,
+			lastName: user.lastName,
+			email: user.email,
+			username: user.username,
+		};
+		return res.json({
+			user: safeUser,
+		});
+	} else return res.json({ user: null });
 });
 
 router.post("/", validateLogin, async (req, res, next) => {
@@ -54,6 +54,7 @@ router.post("/", validateLogin, async (req, res, next) => {
 		error.title = "Login failed";
 		error.errors = {
 			credential: "The provided credentials were invalid.",
+			message: "Invalid credentials",
 		};
 		return next(error);
 	}
@@ -78,6 +79,5 @@ router.delete("/", (_req, res) => {
 	res.clearCookie("token");
 	return res.json({ message: "success" });
 });
-
 
 module.exports = router;
