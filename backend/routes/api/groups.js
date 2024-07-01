@@ -236,16 +236,16 @@ router.get("/:groupId", async (req, res) => {
 					[Op.in]: ["member", "co-host"],
 				},
 			},
-            });
-            
-            groups.numMembers += 1;
-            groups.GroupImages = image;
-            groups.Organizer = await User.findByPk(groups.organizerId);
-            groups.Venues = await Venue.findAll({
-                  where: {
-                        groupId: groups.id
-                  }
-            })
+		});
+
+		groups.numMembers += 1;
+		groups.GroupImages = image;
+		groups.Organizer = await User.findByPk(groups.organizerId);
+		groups.Venues = await Venue.findAll({
+			where: {
+				groupId: groups.id,
+			},
+		});
 
 		res.json(groups);
 	} else {
@@ -318,44 +318,55 @@ router.get("/:groupId/events", async (req, res) => {
 	}
 
 	if (group) {
-		const events = await Event.findByPk(groupId, {
-			attributes: {
-				include: [
-					[
-						sequelize.literal(`(
-                  SELECT COUNT(*)
-                  FROM Attendances AS Attendance
-                  WHERE
-                    Attendance.eventId = Event.id AND
-                    Attendance.status = 'attending')`),
-						"numAttending",
-					],
-					[
-						sequelize.literal(`(
-                                    SELECT url
-                                    FROM EventImages AS EventImage
-                                    WHERE
-                                      EventImage.eventId = Event.id
-                                    LIMIT 1
-                                  )`),
-						"previewImage",
-					],
-				],
+		const events = await Event.findByPk({
+			where: {
+				groupId: group.id,
 			},
-			include: [
-				{
-					model: Group,
-					attributes: ["id", "name", "city", "state"],
-				},
-				{
-					model: Venue,
-					attributes: ["id", "city", "state"],
-				},
-			],
-		});
+            });
+            
+            let result = [];
 
-		return res.json({
-			Events: events,
+            for (let event of events) {
+                  let image = await EventImage.findOne({
+                        where: {
+                              eventId: event.id,
+                              preview: true,
+                        },
+                  });
+      
+                  let venue = await Venue.findByPk(event.venueId, {
+                        attributes: ["id", "city", "state"],
+                  });
+      
+                  let numAttending = await Attendance.count({
+                        where: {
+                              status: {
+                                    [Op.in]: ["attending"],
+                              },
+                              eventId: event.id,
+                        },
+                  });
+      
+                  let safeEvent = {
+                        id: event.id,
+                        groupId: event.groupId,
+                        venueId: venue ? venue.id : null,
+                        name: event.name,
+                        description: event.description,
+                        type: event.type,
+                        startDate: event.startDate,
+                        endDate: event.endDate,
+                        numAttending,
+                        previewImage: image ? image.url : null,
+                        Group: group,
+                        Venue: venue ? venue : null,
+                  };
+            }
+      
+                  result.push(safeEvent);
+
+		res.json({
+			Events: result,
 		});
 	} else {
 		res.status(404);

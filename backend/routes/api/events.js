@@ -122,7 +122,7 @@ router.get("/", async (req, res, next) => {
 			startDate: event.startDate,
 			endDate: event.endDate,
 			numAttending,
-			previewImage: img ? img.url : null,
+			previewImage: image ? image.url : null,
 			Group: group,
 			Venue: venue ? venue : null,
 		};
@@ -149,51 +149,47 @@ router.get("/:eventId", async (req, res) => {
 			message: "Event couldn't be found",
 		});
 	}
-
 	if (event) {
-		const events = await Event.findByPk(eventId, {
-			attributes: {
-				include: [
-					[
-						sequelize.literal(`(
-                  SELECT COUNT(*)
-                  FROM Attendances AS Attendance
-                  WHERE
-                    Attendance.eventId = Event.id AND
-                    Attendance.status = 'attending')`),
-						"numAttending",
-					],
-					[
-						sequelize.literal(`(
-                                    SELECT url
-                                    FROM EventImages AS EventImage
-                                    WHERE
-                                      EventImage.eventId = Event.id
-                                    LIMIT 1
-                                  )`),
-						"previewImage",
-					],
-				],
+		let image = await EventImage.findAll({
+			where: {
+				eventId: event.id,
 			},
-			include: [
-				{
-					model: Group,
-					attributes: ["id", "name", "city", "state"],
-				},
-				{
-					model: Venue,
-					attributes: ["id", "city", "state"],
-				},
-				{
-					model: EventImage,
-					attributes: ["id", "url", "preview"],
-				},
-			],
 		});
 
-		return res.json({
-			Events: events,
+		let group = await Group.findByPk(event.groupId, {
+			attributes: ["id", "name", "city", "state"],
 		});
+		let venue = await Venue.findByPk(event.venueId, {
+			attributes: ["id", "city", "state"],
+		});
+
+		let numAttending = await Attendance.count({
+			where: {
+				status: {
+					[Op.in]: ["attending"],
+				},
+				eventId: event.id,
+			},
+		});
+
+		let safeEvent = {
+			id: event.id,
+			groupId: event.groupId,
+			venueId: venue ? venue.id : null,
+			name: event.name,
+			description: event.description,
+			type: event.type,
+			capacity: event.capacity,
+			price: event.price,
+			startDate: event.startDate,
+			endDate: event.endDate,
+			numAttending,
+			Group: group,
+                  Venue: venue ? venue : null,
+                  EventImages: image
+		};
+
+		res.json(safeEvent);
 	} else {
 		res.status(404);
 		res.json({
