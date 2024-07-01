@@ -318,52 +318,51 @@ router.get("/:groupId/events", async (req, res) => {
 	}
 
 	if (group) {
-		const events = await Event.findByPk({
+		const events = await Event.findAll({
 			where: {
 				groupId: group.id,
 			},
-            });
-            
-            let result = [];
+		});
 
-            for (let event of events) {
-                  let image = await EventImage.findOne({
-                        where: {
-                              eventId: event.id,
-                              preview: true,
-                        },
-                  });
-      
-                  let venue = await Venue.findByPk(event.venueId, {
-                        attributes: ["id", "city", "state"],
-                  });
-      
-                  let numAttending = await Attendance.count({
-                        where: {
-                              status: {
-                                    [Op.in]: ["attending"],
-                              },
-                              eventId: event.id,
-                        },
-                  });
-      
-                  let safeEvent = {
-                        id: event.id,
-                        groupId: event.groupId,
-                        venueId: venue ? venue.id : null,
-                        name: event.name,
-                        description: event.description,
-                        type: event.type,
-                        startDate: event.startDate,
-                        endDate: event.endDate,
-                        numAttending,
-                        previewImage: image ? image.url : null,
-                        Group: group,
-                        Venue: venue ? venue : null,
-                  };
-            }
-      
-                  result.push(safeEvent);
+		let result = [];
+
+		for (let event of events) {
+			let image = await EventImage.findOne({
+				where: {
+					eventId: event.id,
+					preview: true,
+				},
+			});
+
+			let venue = await Venue.findByPk(event.venueId, {
+				attributes: ["id", "city", "state"],
+			});
+
+			let numAttending = await Attendance.count({
+				where: {
+					status: {
+						[Op.in]: ["attending"],
+					},
+					eventId: event.id,
+				},
+			});
+
+			let safeEvent = {
+				id: event.id,
+				groupId: event.groupId,
+				venueId: venue ? venue.id : null,
+				name: event.name,
+				description: event.description,
+				type: event.type,
+				startDate: event.startDate,
+				endDate: event.endDate,
+				numAttending,
+				previewImage: image ? image.url : null,
+				Group: group,
+				Venue: venue ? venue : null,
+			};
+			result.push(safeEvent);
+		}
 
 		res.json({
 			Events: result,
@@ -606,10 +605,10 @@ router.post("/:groupId/venues", requireAuth, async (req, res) => {
 				res.json(errorObj);
 			}
 		} else {
-			let status = await Member.findOne({
+			let status = await Membership.findOne({
 				where: {
 					groupId: group.id,
-					memberId: user.id,
+					userId: user.id,
 				},
 			});
 			if (status) {
@@ -955,7 +954,7 @@ router.put("/:groupId/membership", requireAuth, async (req, res) => {
 			if (otherUser) {
 				const promotion = await Membership.findOne({
 					where: {
-						userId: user.id,
+						userId: otherUser.id,
 						groupId: group.id,
 					},
 				});
@@ -988,12 +987,15 @@ router.put("/:groupId/membership", requireAuth, async (req, res) => {
 
 						res.json(safePromotion);
 					} else {
+						res.status(400);
 						let errorObj = { message: "Bad Request", errors: {} };
 						if (status === "pending") {
 							// console.log(errorObj.errors['status']);
-							res.status(400);
 							errorObj.errors["status"] =
 								"Cannot change a membership status to pending";
+						} else {
+							errorObj.errors["status"] =
+								"Invalid status was sent. Must be 'member' or 'co-host'";
 						}
 						res.json(errorObj);
 					}
@@ -1025,20 +1027,19 @@ router.put("/:groupId/membership", requireAuth, async (req, res) => {
 				if (otherUser) {
 					const promotion = await Membership.findOne({
 						where: {
-							userId: user.id,
 							groupId: group.id,
+							userId,
 						},
 					});
 					if (promotion) {
 						if (status === "member" && promotion.status === "pending") {
 							promotion.status = status;
-							await promotion.validate();
 							await promotion.save();
 
 							const safePromotion = {
 								id: promotion.id,
 								groupId: group.id,
-								memberId: otherUser.id,
+								memberId: user.id,
 								status: promotion.status,
 							};
 
@@ -1050,7 +1051,17 @@ router.put("/:groupId/membership", requireAuth, async (req, res) => {
 								res.status(400);
 								errorObj.errors["status"] =
 									"Cannot change a membership status to pending";
-							}
+							} else if (status === "co-host") {
+								res.status(403);
+								errorObj.errors["status"] =
+									"Must be organizer of a group to promote to co-host";
+                                          } else if (status === "member") {
+                                                errorObj.errors["status"] =
+									"User is already a member, must be pending to change";
+                                          } else {
+                                                errorObj.errors["status"] =
+								"Invalid status was sent. Must be a 'member'"
+                                          }
 							res.json(errorObj);
 						}
 					} else {
