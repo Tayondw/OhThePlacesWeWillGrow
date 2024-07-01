@@ -5,7 +5,8 @@ const { setTokenCookie, requireAuth } = require("../../utils/auth");
 const {
 	Group,
 	GroupImage,
-	Membership,
+      Membership,
+      Attendance,
 	User,
 	Venue,
 	Event,
