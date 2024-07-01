@@ -487,7 +487,6 @@ router.put("/:eventId", requireAuth, async (req, res) => {
 						private: newEvent.private,
 						startDate: newEvent.startDate,
 						endDate: newEvent.startDate,
-						groupId: newEvent.groupId,
 					};
 
 					res.status(200);
@@ -547,7 +546,6 @@ router.put("/:eventId", requireAuth, async (req, res) => {
 								private: newEvent.private,
 								startDate: newEvent.startDate,
 								endDate: newEvent.startDate,
-								groupId: newEvent.groupId,
 							};
 
 							res.status(200);

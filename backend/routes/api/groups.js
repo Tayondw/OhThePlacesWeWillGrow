@@ -660,7 +660,6 @@ router.post("/:groupId/events", requireAuth, async (req, res) => {
 					private: newEvent.private,
 					startDate: newEvent.startDate,
 					endDate: newEvent.startDate,
-					groupId: newEvent.groupId,
 				};
 				res.status(200);
 				res.json(safeEvent);
@@ -786,7 +785,7 @@ router.post("/:groupId/membership", requireAuth, async (req, res) => {
 
 					await newMembership.save();
 					const safeNewMember = {
-						userId: newMembership.userId,
+						memberId: newMembership.userId,
 						status: newMembership.status,
 					};
 					res.json(safeNewMember);
@@ -916,9 +915,9 @@ router.put("/:groupId/membership", requireAuth, async (req, res) => {
 
 						const safePromotion = {
 							id: promotion.id,
-							userId: otherUser.id,
-							status: promotion.status,
 							groupId: group.id,
+							memberId: otherUser.id,
+							status: promotion.status,
 						};
 
 						res.json(safePromotion);
@@ -972,9 +971,9 @@ router.put("/:groupId/membership", requireAuth, async (req, res) => {
 
 							const safePromotion = {
 								id: promotion.id,
-								userId: otherUser.id,
-								status: promotion.status,
 								groupId: group.id,
+								memberId: otherUser.id,
+								status: promotion.status,
 							};
 
 							res.json(safePromotion);

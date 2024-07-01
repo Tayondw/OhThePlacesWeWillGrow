@@ -51,7 +51,7 @@ router.put("/:venueId", requireAuth, async (req, res) => {
 				res.json(errorObj);
 			}
 		} else {
-			let status = await Member.findOne({
+			let status = await Membership.findOne({
 				where: {
 					groupId: group.id,
 					userId: user.id,
