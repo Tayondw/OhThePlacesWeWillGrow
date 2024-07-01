@@ -5,8 +5,8 @@ const { setTokenCookie, requireAuth } = require("../../utils/auth");
 const {
 	Group,
 	GroupImage,
-      Membership,
-      Attendance,
+	Membership,
+	Attendance,
 	User,
 	Venue,
 	Event,
@@ -965,10 +965,10 @@ router.put("/:groupId/membership", requireAuth, async (req, res) => {
 					const member = promotion.status === "member";
 					const coHost = promotion.status === "co-host";
 
-					if (
+					if ((
 						(status === "member" && (pending || coHost)) ||
 						(status === "co-host" && (pending || member))
-					) {
+					)) {
 						if (group.organizerId !== user.id && status === "co-host") {
 							res.status(403);
 							return res.json({
@@ -1033,7 +1033,7 @@ router.put("/:groupId/membership", requireAuth, async (req, res) => {
 						},
 					});
 					if (promotion) {
-						if (status === "member" && promotion.status === "pending") {
+						if (((status === "member") && (promotion.status === "pending"))) {
 							promotion.status = status;
 							await promotion.save();
 
@@ -1056,13 +1056,13 @@ router.put("/:groupId/membership", requireAuth, async (req, res) => {
 								res.status(403);
 								errorObj.errors["status"] =
 									"Must be organizer of a group to promote to co-host";
-                                          } else if (status === "member") {
-                                                errorObj.errors["status"] =
+							} else if (status === "member") {
+								errorObj.errors["status"] =
 									"User is already a member, must be pending to change";
-                                          } else {
-                                                errorObj.errors["status"] =
-								"Invalid status was sent. Must be a 'member'"
-                                          }
+							} else {
+								errorObj.errors["status"] =
+									"Invalid status was sent. Must be a 'member'";
+							}
 							res.json(errorObj);
 						}
 					} else {

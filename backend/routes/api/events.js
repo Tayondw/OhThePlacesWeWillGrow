@@ -185,8 +185,8 @@ router.get("/:eventId", async (req, res) => {
 			endDate: event.endDate,
 			numAttending,
 			Group: group,
-                  Venue: venue ? venue : null,
-                  EventImages: image
+			Venue: venue ? venue : null,
+			EventImages: image,
 		};
 
 		res.json(safeEvent);
@@ -291,11 +291,7 @@ router.post("/:eventId/images", requireAuth, async (req, res) => {
 
 	let event;
 	try {
-		event = await Event.findByPk(eventId, {
-			include: {
-				model: EventImage,
-			},
-		});
+		event = await Event.findByPk(eventId);
 	} catch (error) {
 		res.status(404);
 		res.json({
@@ -304,33 +300,58 @@ router.post("/:eventId/images", requireAuth, async (req, res) => {
 	}
 
 	if (event) {
-		const attendee = await Attendance.findOne({
+		const attendeeStatus = await Attendance.findOne({
 			where: {
 				eventId: event.id,
 				userId: user.id,
 			},
 		});
 
-		const attending = attendee ? attendee.status === "attending" : false;
+		const attending = attendeeStatus
+			? attendeeStatus.status === "attending" ||
+			  attendeeStatus.status === "co-host"
+			: false;
 
 		if (attending) {
-			const newImage = await EventImage.create(
-				{
-					url: url,
-					preview: preview,
-					eventId: event.id,
-				},
-				{ validate: true }
-			);
+			try {
+				if (preview === true) {
+					let oldImage = await EventImage.findOne({
+						where: {
+							eventId: event.id,
+							preview: true,
+						},
+					});
 
-			newImage.save();
+					if (oldImage) {
+						oldImage.preview = false;
+						await oldImage.validate();
+						await oldImage.save();
+					}
+				}
+				const newImage = await EventImage.create(
+					{
+						url: url,
+						preview: preview,
+						eventId: event.id,
+					},
+					{ validate: true }
+				);
 
-			const safeImage = {
-				url: newImage.url,
-				preview: newImage.preview,
-			};
-			res.status(200);
-			res.json(safeImage);
+				newImage.save();
+				const safeImage = {
+					url: newImage.url,
+					preview: newImage.preview,
+				};
+				// res.status(200);
+				res.json(safeImage);
+			} catch (error) {
+				let errorObj = { message: "Bad Request", errors: {} };
+				for (let err of error.errors) {
+					errorObj.errors[err.path] = err.message;
+				}
+				res.status(400);
+				res.json(errorObj);
+			}
 		} else {
 			res.status(403);
 			res.json({
