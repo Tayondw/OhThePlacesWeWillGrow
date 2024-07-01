@@ -83,44 +83,55 @@ router.get("/", async (req, res, next) => {
 
 	const events = await Event.findAll({
 		where,
-		attributes: {
-			include: [
-				[
-					sequelize.literal(`(
-                  SELECT COUNT(*)
-                  FROM Attendances AS Attendance
-                  WHERE
-                    Attendance.eventId = Event.id AND
-                    Attendance.status = 'attending')`),
-					"numAttending",
-				],
-				[
-					sequelize.literal(`(
-                                    SELECT url
-                                    FROM EventImages AS EventImage
-                                    WHERE
-                                      EventImage.eventId = Event.id
-                                    LIMIT 1
-                                  )`),
-					"previewImage",
-				],
-			],
-		},
-		include: [
-			{
-				model: Group,
-				attributes: ["id", "name", "city", "state"],
-			},
-			{
-				model: Venue,
-				attributes: ["id", "city", "state"],
-			},
-		],
 		...pagination,
 	});
 
+	let result = [];
+
+	for (let event of events) {
+		let image = await EventImage.findOne({
+			where: {
+				eventId: event.id,
+				preview: true,
+			},
+		});
+
+		let group = await Group.findByPk(event.groupId, {
+			attributes: ["id", "name", "city", "state"],
+		});
+		let venue = await Venue.findByPk(event.venueId, {
+			attributes: ["id", "city", "state"],
+		});
+
+		let numAttending = await Attendance.count({
+			where: {
+				status: {
+					[Op.in]: ["attending"],
+				},
+				eventId: event.id,
+			},
+		});
+
+		let safeEvent = {
+			id: event.id,
+			groupId: event.groupId,
+			venueId: venue ? venue.id : null,
+			name: event.name,
+			description: event.description,
+			type: event.type,
+			startDate: event.startDate,
+			endDate: event.endDate,
+			numAttending,
+			previewImage: img ? img.url : null,
+			Group: group,
+			Venue: venue ? venue : null,
+		};
+
+		result.push(safeEvent);
+	}
+
 	return res.json({
-		Events: events,
+		Events: result,
 		page,
 		size,
 	});
@@ -316,12 +327,12 @@ router.post("/:eventId/images", requireAuth, async (req, res) => {
 				{ validate: true }
 			);
 
-                  newImage.save();
-                  
-                  const safeImage = {
-                        url: newImage.url,
-                        preview: newImage.preview,
-                  }
+			newImage.save();
+
+			const safeImage = {
+				url: newImage.url,
+				preview: newImage.preview,
+			};
 			res.status(200);
 			res.json(safeImage);
 		} else {
