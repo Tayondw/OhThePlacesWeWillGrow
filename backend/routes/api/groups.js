@@ -450,12 +450,9 @@ router.post("/", requireAuth, async (req, res) => {
 });
 
 router.post("/:groupId/images", requireAuth, async (req, res) => {
-	const { user } = req;
-	const groupId = +req.params.groupId;
-	const { url, preview } = req.body;
-
 	let group;
 	try {
+		let groupId = +req.params.groupId;
 		group = await Group.findByPk(groupId, {
 			include: {
 				model: GroupImage,
@@ -467,30 +464,51 @@ router.post("/:groupId/images", requireAuth, async (req, res) => {
 			message: "Group couldn't be found",
 		});
 	}
-	if (user.id !== group.organizerId) {
-		res.status(403);
-		return res.json({
-			message: "Must be organizer of the group in order to add or change image",
+
+	const { url, preview } = req.body;
+
+	if (group !== null) {
+		const { user } = req;
+		if (user.id !== group.organizerId) {
+			res.status(403);
+			return res.json({
+				message: "Must be owner to change or add image to a group",
+			});
+		}
+
+		if (preview === true && group.GroupImages.length) {
+			let images = group.GroupImages;
+
+			for (let image of images) {
+				if (image.isPreview) {
+					let oldImage = await GroupImage.findByPk(image.id);
+					oldImage.isPreview = false;
+					await oldImage.save();
+					break;
+				}
+			}
+		}
+		try {
+			let newImage = await GroupImage.create(
+				{
+					url: url,
+					preview: preview,
+					groupId: group.id,
+				},
+				{ validate: true }
+			);
+			await newImage.save();
+			res.status(200);
+			res.json(newImage);
+		} catch (error) {
+			res.json(error.errors);
+		}
+	} else {
+		res.status(404);
+		res.json({
+			message: "Group couldn't be found",
 		});
 	}
-
-	const newImage = await GroupImage.create(
-		{
-			url: url,
-			preview: preview,
-			groupId: group.id,
-		},
-		{ validate: true }
-	);
-
-	await newImage.save();
-
-	const safeImage = {
-		url: newImage.url,
-		preview: newImage.preview,
-	};
-	res.status(200);
-	res.json(safeImage);
 });
 
 router.post("/:groupId/venues", requireAuth, async (req, res) => {
