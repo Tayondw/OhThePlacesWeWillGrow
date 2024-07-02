@@ -307,12 +307,12 @@ router.post("/:eventId/images", requireAuth, async (req, res) => {
 			},
 		});
 
-		const attending = attendeeStatus
-			? attendeeStatus.status === "attending" ||
-			  attendeeStatus.status === "co-host"
-			: false;
+		// const attending = attendeeStatus
+		// 	? attendeeStatus.status === "attending" ||
+		// 	  attendeeStatus.status === "co-host"
+		// 	: false;
             // console.log("check............", attending);
-		if (attending) {
+		if (attendeeStatus.status === "attending") {
 			try {
 				if (preview === true) {
 					let oldImage = await EventImage.findOne({
