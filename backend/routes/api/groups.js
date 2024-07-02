@@ -791,7 +791,7 @@ router.post("/:groupId/events", requireAuth, async (req, res) => {
 							description: newEvent.description,
 							private: newEvent.private,
 							startDate: newEvent.startDate,
-							endDate: newEvent.startDate,
+							endDate: newEvent.endDate,
 						};
 						res.status(200);
 						res.json(safeEvent);

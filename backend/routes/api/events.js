@@ -306,11 +306,23 @@ router.post("/:eventId/images", requireAuth, async (req, res) => {
 				userId: user.id,
 			},
 		});
-	
+
+		const group = await Group.findByPk(event.groupId);
+		const member = await Membership.findOne({
+			where: {
+				groupId: group.id,
+				userId: user.id,
+			},
+		});
+		// console.log(group);
+
 		const isAttending = attendanceStatus
 			? attendanceStatus.status === "attending"
 			: false;
-		if (isAttending) {
+		const coHost = member ? member.status === "co-host" : false;
+		console.log(isAttending);
+		console.log(coHost);
+		if (isAttending || coHost) {
 			try {
 				const newImage = await EventImage.create(
 					{
