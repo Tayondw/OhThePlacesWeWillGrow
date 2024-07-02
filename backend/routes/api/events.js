@@ -327,32 +327,36 @@ router.post("/:eventId/images", requireAuth, async (req, res) => {
 		: false;
 	const coHost = member ? member.status === "co-host" : false;
 
-	if (isAttending || coHost) {
-		try {
-			const newImage = await EventImage.create(
-				{
-					url: url,
-					preview: preview,
-					eventId: event.id,
-				},
-				{ validate: true }
-			);
+	if (!isAttending || !coHost) {
+		res.status(403);
+		res.json({
+			message: "User must be attending the event",
+		});
+	}
+	try {
+		const newImage = await EventImage.create(
+			{
+				url: url,
+				preview: preview,
+				eventId: event.id,
+			},
+			{ validate: true }
+		);
 
-			const safeImage = {
-				id: newImage.id,
-				url: newImage.url,
-				preview: newImage.preview,
-			};
-			res.status(200);
-			res.json(safeImage);
-		} catch (error) {
-			let errorObj = { message: "Bad Request", errors: {} };
-			for (let err of error.errors) {
-				errorObj.errors[err.path] = err.message;
-			}
-			res.status(400);
-			res.json(errorObj);
+		const safeImage = {
+			id: newImage.id,
+			url: newImage.url,
+			preview: newImage.preview,
+		};
+		res.status(200);
+		res.json(safeImage);
+	} catch (error) {
+		let errorObj = { message: "Bad Request", errors: {} };
+		for (let err of error.errors) {
+			errorObj.errors[err.path] = err.message;
 		}
+		res.status(400);
+		res.json(errorObj);
 	}
 
 	// const { user } = req;
