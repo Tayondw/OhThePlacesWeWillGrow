@@ -286,11 +286,10 @@ router.get("/:eventId/attendees", async (req, res) => {
 
 router.post("/:eventId/images", requireAuth, async (req, res) => {
 	const { user } = req;
-	const eventId = +req.params.eventId;
-	const { url, preview } = req.body;
 
 	let event;
 	try {
+		let eventId = +req.params.eventId;
 		event = await Event.findByPk(eventId);
 	} catch (error) {
 		res.status(404);
@@ -298,6 +297,7 @@ router.post("/:eventId/images", requireAuth, async (req, res) => {
 			message: "Event couldn't be found",
 		});
 	}
+	const { url, preview } = req.body;
 
 	if (event) {
 		const attendeeStatus = await Attendance.findOne({
@@ -306,10 +306,18 @@ router.post("/:eventId/images", requireAuth, async (req, res) => {
 				userId: user.id,
 			},
 		});
+		const group = await Group.findByPk(event.groupId);
+		const coHost = await Membership.findOne({
+			where: {
+				groupId: group.id,
+				userId: user.id,
+			},
+		});
 		const isAttending = attendeeStatus
 			? attendeeStatus.status === "attending"
 			: false;
-		if (isAttending) {
+		const isCoHost = coHost ? coHost.status === "co-host" : false;
+		if (isAttending || isCoHost) {
 			try {
 				if (preview === true) {
 					let oldImage = await EventImage.findOne({

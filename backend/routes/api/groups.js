@@ -532,9 +532,9 @@ router.post("/:groupId/images", requireAuth, async (req, res) => {
 			let images = group.GroupImages;
 
 			for (let image of images) {
-				if (image.isPreview) {
+				if (image.preview) {
 					let oldImage = await GroupImage.findByPk(image.id);
-					oldImage.isPreview = false;
+					oldImage.preview = false;
 					await oldImage.save();
 					break;
 				}
