@@ -21,7 +21,7 @@ const router = express.Router();
 
 router.get("/", async (req, res, next) => {
 	// want to try a different way and see if this works
-
+	const pagination = {};
 	let { page, size, name, type, startDate } = req.query;
 
 	page = +page;
@@ -29,13 +29,18 @@ router.get("/", async (req, res, next) => {
 
 	const errors = {};
 
-	if (page <= 0) errors.page = "Page must be greater than or equal to 1";
-	if (size <= 0) errors.size = "Size must be greater than or equal to 1";
+	if (page <= 0) {
+		errors.page = "Page must be greater than or equal to 1";
+	} else if (isNaN(page) || !page) {
+		page = 1;
+	}
 
-	if (isNaN(page) || !page) page = 1;
-	if (isNaN(size) || !size) size = 20;
+	if (size <= 0) {
+		errors.size = "Size must be greater than or equal to 1";
+	} else if (isNaN(size) || !size) {
+		size = 20;
+	}
 
-	const pagination = {};
 	pagination.limit = size;
 	pagination.offset = size * (page - 1);
 
@@ -70,9 +75,7 @@ router.get("/", async (req, res, next) => {
 		}
 	}
 
-	const allErrors = Object.keys(errors);
-
-	if (allErrors.length) {
+	if (Object.keys(errors).length) {
 		res.status(400);
 		res.json({
 			message: "Bad Request",
@@ -111,8 +114,17 @@ router.get("/", async (req, res, next) => {
 				},
 				eventId: event.id,
 			},
-		});
+            });
+            
+            let attendance = await Attendance.findOne({
+                  where: {
+                        status: 'host',
+                        eventId: event.id
+                  }
+            })
 
+            let host = attendance ? await User.findByPk(attendance.userId) : null;
+            
 		let safeEvent = {
 			id: event.id,
 			groupId: event.groupId,
