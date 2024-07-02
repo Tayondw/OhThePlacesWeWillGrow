@@ -333,7 +333,7 @@ router.post("/:eventId/images", requireAuth, async (req, res) => {
 					{ validate: true }
 				);
 
-				newImage.save();
+				await newImage.save();
 				const safeImage = {
 					id: newImage.id,
 					url: newImage.url,
