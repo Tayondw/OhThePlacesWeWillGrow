@@ -684,6 +684,7 @@ router.post("/:groupId/events", requireAuth, async (req, res) => {
 		});
 	}
 	const { user } = req;
+	const errors = {};
 
 	if (group) {
 		if (group.organizerId === user.id) {
@@ -702,10 +703,7 @@ router.post("/:groupId/events", requireAuth, async (req, res) => {
 				let venue;
 				if (venueId) venue = await Venue.findByPk(venueId);
 				if (venue === null) {
-					res.status(404);
-					res.json({
-						message: "Venue couldn't be found",
-					});
+					errors.venueId = "Venue does not exist";
 				}
 
 				if (Object.keys(errors).length) {
@@ -757,12 +755,22 @@ router.post("/:groupId/events", requireAuth, async (req, res) => {
 				res.status(200);
 				return res.json(safeEvent);
 			} catch (error) {
-				let errorObj = { message: "Bad Request", errors: {} };
+				const errorObj = {};
+				if (!Object.keys(error).length) return res.json(safeEvent);
 				for (let err of error.errors) {
-					errorObj.errors[err.path] = err.message;
+					if (err.path === "name") errorObj.name = err.message;
+					if (err.path === "type") errorObj.type = err.message;
+					if (err.path === "capacity") errorObj.capacity = err.message;
+					if (err.path === "price") errorObj.price = err.message;
+					if (err.path === "description")
+						errorObj.description = "Description is required";
+					if (err.path === "private") errorObj.private = err.message;
+					if (err.path === "startDate") errorObj.startDate = err.message;
+					if (err.path === "endDate") errorObj.endDate = err.message;
 				}
-				res.status(400);
-				res.json(errorObj);
+				return res
+					.status(400)
+					.json({ message: "Bad Request", error: { ...errorObj } });
 			}
 		} else {
 			let memberStatus = await Membership.findOne({
@@ -789,8 +797,14 @@ router.post("/:groupId/events", requireAuth, async (req, res) => {
 						if (venueId) venue = await Venue.findByPk(venueId);
 						if (venue === null) {
 							res.status(404);
-							res.json({
-								message: "Venue couldn't be found",
+							errors.venueId = "Venue does not exist";
+						}
+
+						if (Object.keys(errors).length) {
+							res.status(404);
+							return res.json({
+								message: "Bad Request",
+								errors,
 							});
 						}
 
@@ -838,12 +852,22 @@ router.post("/:groupId/events", requireAuth, async (req, res) => {
 						res.status(200);
 						return res.json(safeEvent);
 					} catch (error) {
-						let errorObj = { message: "Bad Request", errors: {} };
+						const errorObj = {};
+						if (!Object.keys(error).length) return res.json(safeEvent);
 						for (let err of error.errors) {
-							errorObj.errors[err.path] = err.message;
+							if (err.path === "name") errorObj.name = err.message;
+							if (err.path === "type") errorObj.type = err.message;
+							if (err.path === "capacity") errorObj.capacity = err.message;
+							if (err.path === "price") errorObj.price = err.message;
+							if (err.path === "description")
+								errorObj.description = "Description is required";
+							if (err.path === "private") errorObj.private = err.message;
+							if (err.path === "startDate") errorObj.startDate = err.message;
+							if (err.path === "endDate") errorObj.endDate = err.message;
 						}
-						res.status(400);
-						res.json(errorObj);
+						return res
+							.status(400)
+							.json({ message: "Bad Request", error: { ...errorObj } });
 					}
 				} else {
 					res.status(403);

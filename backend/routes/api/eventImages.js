@@ -18,6 +18,7 @@ const { Op } = require("sequelize");
 const router = express.Router();
 
 router.delete("/:imageId", requireAuth, async (req, res) => {
+      const imageId = +req.params.imageId;
 	let eventImage;
 	try {
 		eventImage = await EventImage.findByPk(+req.params.imageId);
@@ -29,7 +30,7 @@ router.delete("/:imageId", requireAuth, async (req, res) => {
 		});
 	}
 	if (eventImage) {
-		console.log(eventImage.toJSON());
+		// console.log(eventImage.toJSON());
 		const event = await Event.findByPk(eventImage.eventId);
 		const group = await Group.findByPk(event.groupId);
 		const { user } = req;
