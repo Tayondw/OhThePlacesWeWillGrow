@@ -320,8 +320,8 @@ router.post("/:eventId/images", requireAuth, async (req, res) => {
 			? attendanceStatus.status === "attending"
 			: false;
 		const coHost = member ? member.status === "co-host" : false;
-		console.log(isAttending);
-		console.log(coHost);
+		// console.log(isAttending);
+		// console.log(coHost);
 		if (isAttending || coHost) {
 			try {
 				const newImage = await EventImage.create(
