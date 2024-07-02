@@ -1,4 +1,4 @@
-# SyncUp
+# Oh! The Places We'll Grow!
 
 ## Database Schema Design
 
