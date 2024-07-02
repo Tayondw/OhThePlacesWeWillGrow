@@ -24,7 +24,7 @@ router.delete("/:imageId", requireAuth, async (req, res) => {
 		image = await EventImage.findByPk(imageId);
 	} catch (error) {
 		res.status(400);
-		return res.json({
+		res.json({
 			message: "Invalid image id requested",
 			val: { raw: req.params.imageId, parsed: imageId },
 		});

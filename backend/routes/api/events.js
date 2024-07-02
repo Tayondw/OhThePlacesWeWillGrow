@@ -306,13 +306,10 @@ router.post("/:eventId/images", requireAuth, async (req, res) => {
 				userId: user.id,
 			},
 		});
-
-		// const attending = attendeeStatus
-		// 	? attendeeStatus.status === "attending" ||
-		// 	  attendeeStatus.status === "co-host"
-		// 	: false;
-            // console.log("check............", attending);
-		if (attendeeStatus.status === "attending") {
+		const isAttending = attendeeStatus
+			? attendeeStatus.status === "attending"
+			: false;
+		if (isAttending) {
 			try {
 				if (preview === true) {
 					let oldImage = await EventImage.findOne({
@@ -338,8 +335,8 @@ router.post("/:eventId/images", requireAuth, async (req, res) => {
 				);
 
 				newImage.save();
-                        const safeImage = {
-                              id: newImage.id,
+				const safeImage = {
+					id: newImage.id,
 					url,
 					preview,
 				};
@@ -653,49 +650,51 @@ router.put("/:eventId/attendance", requireAuth, async (req, res) => {
 						eventId: event.id,
 					},
 				});
-                        if (status !== "pending" && numAttending < event.capacity) {
-                              if (attendance.status === "pending" || attendance.status === 'waitlist') {
-                                    attendance.status = status;
-                                    await attendance.validate();
-                                    await attendance.save();
-                                    res.json({
-                                          id: attendance.id,
-                                          eventId: event.id,
-                                          userId: attendance.userId,
-                                          status: attendance.status,
-                                    });
-                              } else {
-                                    res.status(400);
-                                    res.json({
-                                          message: "User is already attending event",
-                                    });
-                              }
-                        } else {
-                              if (status === 'waitlist') {
-                                    if (attendance.status === "pending") {
-                                          attendance.status = status;
-                                          await attendance.validate();
-                                          await attendance.save();
-                                          res.json({
-                                                id: attendance.id,
-                                                eventId: event.id,
-                                                userId: attendance.id,
-                                                status: attendance.status,
-                                          });
-                                    } else {
-                                          res.status(400);
-                                          res.json({ message: "User is already attending" });
-                                    }
-                                   
-                              } else {
-                                    if (status === "pending") {
-                                          res.status(400);
-                                          res.json({
-                                                message: "Cannot change an attendance status to pending",
-                                          });
-                                    }
-                              }
-                        }
+				if (status !== "pending" && numAttending < event.capacity) {
+					if (
+						attendance.status === "pending" ||
+						attendance.status === "waitlist"
+					) {
+						attendance.status = status;
+						await attendance.validate();
+						await attendance.save();
+						res.json({
+							id: attendance.id,
+							eventId: event.id,
+							userId: attendance.userId,
+							status: attendance.status,
+						});
+					} else {
+						res.status(400);
+						res.json({
+							message: "User is already attending event",
+						});
+					}
+				} else {
+					if (status === "waitlist") {
+						if (attendance.status === "pending") {
+							attendance.status = status;
+							await attendance.validate();
+							await attendance.save();
+							res.json({
+								id: attendance.id,
+								eventId: event.id,
+								userId: attendance.id,
+								status: attendance.status,
+							});
+						} else {
+							res.status(400);
+							res.json({ message: "User is already attending" });
+						}
+					} else {
+						if (status === "pending") {
+							res.status(400);
+							res.json({
+								message: "Cannot change an attendance status to pending",
+							});
+						}
+					}
+				}
 			} else {
 				res.status(404);
 				res.json({
