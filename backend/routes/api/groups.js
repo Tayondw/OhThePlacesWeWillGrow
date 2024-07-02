@@ -673,32 +673,31 @@ router.post("/:groupId/venues", requireAuth, async (req, res) => {
 });
 
 router.post("/:groupId/events", requireAuth, async (req, res) => {
-	const { user } = req;
-	const groupId = +req.params.groupId;
-	const {
-		venueId,
-		name,
-		type,
-		capacity,
-		price,
-		description,
-		startDate,
-		endDate,
-	} = req.body;
-
 	let group;
 
 	try {
-		group = await Group.findByPk(groupId);
+		group = await Group.findByPk(+req.params.groupId);
 	} catch (error) {
 		res.status(404);
 		res.json({
 			message: "Group couldn't be found",
 		});
 	}
+	const { user } = req;
 
 	if (group) {
 		if (group.organizerId === user.id) {
+			const {
+				venueId,
+				name,
+				type,
+				capacity,
+				price,
+				description,
+				startDate,
+				endDate,
+			} = req.body;
+			let safeEvent;
 			try {
 				let venue;
 				if (venueId) venue = await Venue.findByPk(venueId);
@@ -709,7 +708,16 @@ router.post("/:groupId/events", requireAuth, async (req, res) => {
 					});
 				}
 
+				if (Object.keys(errors).length) {
+					res.status(404);
+					return res.json({
+						message: "Bad Request",
+						errors,
+					});
+				}
+
 				const newEvent = await Event.create({
+					groupId: group.id,
 					venueId: venueId,
 					name: name,
 					type: type,
@@ -719,13 +727,14 @@ router.post("/:groupId/events", requireAuth, async (req, res) => {
 					startDate,
 					startDate,
 					endDate: endDate,
-					groupId: group.id,
 				});
 
+				await newEvent.validate();
 				await newEvent.save();
 
-				const safeEvent = {
+				safeEvent = {
 					id: newEvent.id,
+					groupId: newEvent.groupId,
 					venueId: newEvent.venueId,
 					name: newEvent.name,
 					type: newEvent.type,
@@ -736,8 +745,17 @@ router.post("/:groupId/events", requireAuth, async (req, res) => {
 					startDate: newEvent.startDate,
 					endDate: newEvent.startDate,
 				};
+
+				const newHost = await Attendance.create({
+					eventId: newEvent.id,
+					userId: user.id,
+					status: "host",
+				});
+
+				await newHost.validate();
+				await newHost.save();
 				res.status(200);
-				res.json(safeEvent);
+				return res.json(safeEvent);
 			} catch (error) {
 				let errorObj = { message: "Bad Request", errors: {} };
 				for (let err of error.errors) {
@@ -756,6 +774,16 @@ router.post("/:groupId/events", requireAuth, async (req, res) => {
 
 			if (memberStatus) {
 				if (memberStatus.status === "co-host") {
+					const {
+						venueId,
+						name,
+						type,
+						capacity,
+						price,
+						description,
+						startDate,
+						endDate,
+					} = req.body;
 					try {
 						let venue;
 						if (venueId) venue = await Venue.findByPk(venueId);
@@ -767,6 +795,7 @@ router.post("/:groupId/events", requireAuth, async (req, res) => {
 						}
 
 						const newEvent = await Event.create({
+							groupId: group.id,
 							venueId: venueId,
 							name: name,
 							type: type,
@@ -776,13 +805,14 @@ router.post("/:groupId/events", requireAuth, async (req, res) => {
 							startDate,
 							startDate,
 							endDate: endDate,
-							groupId: group.id,
 						});
 
+						await newEvent.validate();
 						await newEvent.save();
 
 						const safeEvent = {
 							id: newEvent.id,
+							groupId: newEvent.groupId,
 							venueId: newEvent.venueId,
 							name: newEvent.name,
 							type: newEvent.type,
@@ -793,8 +823,20 @@ router.post("/:groupId/events", requireAuth, async (req, res) => {
 							startDate: newEvent.startDate,
 							endDate: newEvent.endDate,
 						};
+
+						const newHost = await Attendance.create(
+							{
+								eventId: newEvent.id,
+								userId: user.id,
+								status: "host",
+							},
+							{ validate: true }
+						);
+
+						await newHost.validate();
+						await newHost.save();
 						res.status(200);
-						res.json(safeEvent);
+						return res.json(safeEvent);
 					} catch (error) {
 						let errorObj = { message: "Bad Request", errors: {} };
 						for (let err of error.errors) {

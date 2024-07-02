@@ -21,37 +21,37 @@ const router = express.Router();
 
 router.get("/", async (req, res, next) => {
 	// want to try a different way and see if this works
-	let { page, size, name, type, startDate } = req.query;
 
+	const params = {};
+	let { page, size } = req.query;
 	page = +page;
 	size = +size;
 
+	if (page < 1) errors.page = "Page must be greater than or equal to 1";
+	if (size < 1) errors.size = "Size must be greater than or equal to 1";
+
+	if (!page || isNaN(page)) page = 1;
+	if (!size || isNaN(size)) size = 20;
+
+	params.limit = size;
+	params.offset = size * (page - 1);
+
 	const errors = {};
 
-	if (page <= 0) errors.page = "Page must be greater than or equal to 1";
-	if (size <= 0) errors.size = "Size must be greater than or equal to 1";
-
-	if (isNaN(page) || !page) page = 1;
-	if (isNaN(size) || !size) size = 20;
-
-	const pagination = {};
-	pagination.limit = size;
-	pagination.offset = size * (page - 1);
-
 	const where = {};
+
+	let { name, type, startDate, price } = req.query;
 
 	if (name) {
 		if (typeof name !== "string") {
 			errors.name = "Name must be a string";
 		} else {
-			where.name = {
-				[Op.like]: `${name}`,
-			};
+			where.name = { [Op.like]: `%${name}%` };
 		}
 	}
 
 	if (type) {
-		if (type !== "Online" && type !== "In person") {
+		if (type !== "Online" && type !== "In Person") {
 			errors.type = "Type must be 'Online' or 'In Person'";
 		} else {
 			where.type = type;
@@ -61,80 +61,154 @@ router.get("/", async (req, res, next) => {
 	if (startDate) {
 		let date = new Date(startDate);
 		if (isNaN(date)) {
-			errors.startDate = "Start date must be a valid datetime";
+			errors.date =
+				"Start date must be a valid datetime. I.E: '10-20-2012' or '10-20-2012 18:30:00'";
 		} else {
-			where.startDate = {
-				[Op.gte]: date,
-			};
+			where.startDate = { [Op.gte]: date };
 		}
 	}
 
-	const allErrors = Object.keys(errors);
+	if (price) {
+		if (isNaN(+price) || +price < 0) {
+			errors.price = "price must be a valid integer greater than -1";
+		} else {
+			where.price = { [Op.between]: [0, +price] };
+		}
+	}
 
-	if (allErrors.length) {
+	if (Object.keys(errors).length) {
 		res.status(400);
-		res.json({
+		return res.json({
 			message: "Bad Request",
-			errors: {
-				...errors,
-			},
+			errors: { ...errors },
 		});
 	}
 
 	const events = await Event.findAll({
 		where,
-		...pagination,
+		...params,
+		include: [{ model: Group }, { model: Venue }],
 	});
-
-	let result = [];
-
-	for (let event of events) {
-		let image = await EventImage.findOne({
-			where: {
-				eventId: event.id,
-				preview: true,
-			},
-		});
-
-		let group = await Group.findByPk(event.groupId, {
-			attributes: ["id", "name", "city", "state"],
-		});
-		let venue = await Venue.findByPk(event.venueId, {
-			attributes: ["id", "city", "state"],
-		});
-
-		let numAttending = await Attendance.count({
-			where: {
-				status: {
-					[Op.in]: ["attending"],
-				},
-				eventId: event.id,
-			},
-		});
-
-		let safeEvent = {
-			id: event.id,
-			groupId: event.groupId,
-			venueId: venue ? venue.id : null,
-			name: event.name,
-			description: event.description,
-			type: event.type,
-			startDate: event.startDate,
-			endDate: event.endDate,
-			numAttending,
-			previewImage: image ? image.url : null,
-			Group: group,
-			Venue: venue ? venue : null,
-		};
-
-		result.push(safeEvent);
-	}
 
 	return res.json({
-		Events: result,
-		page,
-		size,
+		Events: events,
+		page: page,
+		size: size,
 	});
+	// let { page, size, name, type, startDate } = req.query;
+
+	// page = +page;
+	// size = +size;
+
+	// const errors = {};
+
+	// if (page <= 0) errors.page = "Page must be greater than or equal to 1";
+	// if (size <= 0) errors.size = "Size must be greater than or equal to 1";
+
+	// if (isNaN(page) || !page) page = 1;
+	// if (isNaN(size) || !size) size = 20;
+
+	// const pagination = {};
+	// pagination.limit = size;
+	// pagination.offset = size * (page - 1);
+
+	// const where = {};
+
+	// if (name) {
+	// 	if (typeof name !== "string") {
+	// 		errors.name = "Name must be a string";
+	// 	} else {
+	// 		where.name = {
+	// 			[Op.like]: `${name}`,
+	// 		};
+	// 	}
+	// }
+
+	// if (type) {
+	// 	if (type !== "Online" && type !== "In person") {
+	// 		errors.type = "Type must be 'Online' or 'In Person'";
+	// 	} else {
+	// 		where.type = type;
+	// 	}
+	// }
+
+	// if (startDate) {
+	// 	let date = new Date(startDate);
+	// 	if (isNaN(date)) {
+	// 		errors.startDate = "Start date must be a valid datetime";
+	// 	} else {
+	// 		where.startDate = {
+	// 			[Op.gte]: date,
+	// 		};
+	// 	}
+	// }
+
+	// const allErrors = Object.keys(errors);
+
+	// if (allErrors.length) {
+	// 	res.status(400);
+	// 	res.json({
+	// 		message: "Bad Request",
+	// 		errors: {
+	// 			...errors,
+	// 		},
+	// 	});
+	// }
+
+	// const events = await Event.findAll({
+	// 	where,
+	// 	...pagination,
+	// });
+
+	// let result = [];
+
+	// for (let event of events) {
+	// 	let image = await EventImage.findOne({
+	// 		where: {
+	// 			eventId: event.id,
+	// 			preview: true,
+	// 		},
+	// 	});
+
+	// 	let group = await Group.findByPk(event.groupId, {
+	// 		attributes: ["id", "name", "city", "state"],
+	// 	});
+	// 	let venue = await Venue.findByPk(event.venueId, {
+	// 		attributes: ["id", "city", "state"],
+	// 	});
+
+	// 	let numAttending = await Attendance.count({
+	// 		where: {
+	// 			status: {
+	// 				[Op.in]: ["attending"],
+	// 			},
+	// 			eventId: event.id,
+	// 		},
+	// 	});
+
+	// 	let safeEvent = {
+	// 		id: event.id,
+	// 		groupId: event.groupId,
+	// 		venueId: venue ? venue.id : null,
+	// 		name: event.name,
+	// 		description: event.description,
+	// 		type: event.type,
+	// 		startDate: event.startDate,
+	// 		endDate: event.endDate,
+	// 		numAttending,
+	// 		previewImage: image ? image.url : null,
+	// 		Group: group,
+	// 		Venue: venue ? venue : null,
+	// 	};
+
+	// 	result.push(safeEvent);
+	// }
+
+	// return res.json({
+	// 	Events: result,
+	// 	page,
+	// 	size,
+	// });
 });
 
 router.get("/:eventId", async (req, res) => {
