@@ -291,11 +291,6 @@ router.post("/:eventId/images", requireAuth, async (req, res) => {
 	try {
 		let eventId = +req.params.eventId;
 		event = await Event.findByPk(eventId);
-		if (!event) {
-			res.status(404).json({
-				message: "Event couldn't be found",
-			});
-		}
 	} catch (error) {
 		res.status(404);
 		res.json({
@@ -311,33 +306,12 @@ router.post("/:eventId/images", requireAuth, async (req, res) => {
 				userId: user.id,
 			},
 		});
-		const group = await Group.findByPk(event.groupId);
-		const coHost = await Membership.findOne({
-			where: {
-				groupId: group.id,
-				userId: user.id,
-			},
-		});
+	
 		const isAttending = attendanceStatus
 			? attendanceStatus.status === "attending"
 			: false;
-		const isCoHost = coHost ? coHost.status === "co-host" : false;
-		if (isAttending || isCoHost) {
+		if (isAttending) {
 			try {
-				// if (preview === true) {
-				// 	let oldImage = await EventImage.findOne({
-				// 		where: {
-				// 			eventId: event.id,
-				// 			preview: true,
-				// 		},
-				// 	});
-
-				// 	if (oldImage) {
-				// 		oldImage.preview = false;
-				// 		await oldImage.validate();
-				// 		await oldImage.save();
-				// 	}
-				// }
 				const newImage = await EventImage.create(
 					{
 						url: url,
