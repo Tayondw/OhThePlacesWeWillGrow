@@ -207,7 +207,9 @@ router.get("/current", requireAuth, async (req, res) => {
 		}
 	}
 
-	res.json(groups);
+	res.json({
+		Groups: groups,
+	});
 });
 
 router.get("/:groupId", async (req, res) => {
@@ -290,7 +292,9 @@ router.get("/:groupId/venues", requireAuth, async (req, res) => {
 				},
 			});
 
-			return res.json(venues);
+			return res.json({
+				Venues: venues,
+			});
 		} else {
 			res.status(403);
 			res.json({
@@ -546,8 +550,13 @@ router.post("/:groupId/images", requireAuth, async (req, res) => {
 				{ validate: true }
 			);
 			await newImage.save();
+			const safeImage = {
+				id: newImage.id,
+				url: newImage.url,
+				preview: newImage.preview,
+			};
 			res.status(200);
-			res.json(newImage);
+			res.json(safeImage);
 		} catch (error) {
 			res.json(error.errors);
 		}
@@ -783,7 +792,6 @@ router.post("/:groupId/events", requireAuth, async (req, res) => {
 							private: newEvent.private,
 							startDate: newEvent.startDate,
 							endDate: newEvent.startDate,
-							groupId: newEvent.groupId,
 						};
 						res.status(200);
 						res.json(safeEvent);
@@ -937,8 +945,8 @@ router.put("/:groupId/membership", requireAuth, async (req, res) => {
 	const { memberId, status } = req.body;
 	const groupId = +req.params.groupId;
 	let group;
-      
-      let userId = memberId;
+
+	let userId = memberId;
 	// console.log("user..........", userId);
 
 	try {

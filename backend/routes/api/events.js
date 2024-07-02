@@ -311,7 +311,7 @@ router.post("/:eventId/images", requireAuth, async (req, res) => {
 			? attendeeStatus.status === "attending" ||
 			  attendeeStatus.status === "co-host"
 			: false;
-
+            // console.log("check............", attending);
 		if (attending) {
 			try {
 				if (preview === true) {
@@ -338,9 +338,10 @@ router.post("/:eventId/images", requireAuth, async (req, res) => {
 				);
 
 				newImage.save();
-				const safeImage = {
-					url: newImage.url,
-					preview: newImage.preview,
+                        const safeImage = {
+                              id: newImage.id,
+					url,
+					preview,
 				};
 				// res.status(200);
 				res.json(safeImage);

@@ -31,8 +31,8 @@ router.delete("/:imageId", requireAuth, async (req, res) => {
 	}
 	if (image) {
 		// console.log(image.toJSON());
-		const event = await Event.findByPk(+image.eventId);
-		const group = await Group.findByPk(+event.groupId);
+		const event = await Event.findByPk(image.eventId);
+		const group = await Group.findByPk(event.groupId);
 		const { user } = req;
 		const membership = await Membership.findOne({
 			where: {
