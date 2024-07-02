@@ -285,91 +285,161 @@ router.get("/:eventId/attendees", async (req, res) => {
 });
 
 router.post("/:eventId/images", requireAuth, async (req, res) => {
-	const { user } = req;
-
 	let event;
 	try {
 		let eventId = +req.params.eventId;
-		event = await Event.findByPk(eventId);
+		event = await Event.findByPk(eventId, {
+			include: {
+				model: EventImage,
+			},
+		});
 	} catch (error) {
 		res.status(404);
 		res.json({
 			message: "Event couldn't be found",
 		});
 	}
+
 	const { url, preview } = req.body;
 
-	if (event) {
-		const attendeeStatus = await Attendance.findOne({
-			where: {
-				eventId: event.id,
-				userId: user.id,
-			},
-		});
+	if (event !== null) {
+		const { user } = req;
 		const group = await Group.findByPk(event.groupId);
-		const coHost = await Membership.findOne({
+		const memberStatus = await Membership.findOne({
 			where: {
-				groupId: group.id,
 				userId: user.id,
 			},
 		});
-		const isAttending = attendeeStatus
-			? attendeeStatus.status === "attending"
-			: false;
-		const isCoHost = coHost ? coHost.status === "co-host" : false;
-		if (isAttending || isCoHost) {
-			try {
-				if (preview === true) {
-					let oldImage = await EventImage.findOne({
-						where: {
-							eventId: event.id,
-							preview: true,
-						},
-					});
-
-					if (oldImage) {
-						oldImage.preview = false;
-						await oldImage.validate();
-						await oldImage.save();
-					}
-				}
-				const newImage = await EventImage.create(
-					{
-						url: url,
-						preview: preview,
-						eventId: event.id,
-					},
-					{ validate: true }
-				);
-
-				newImage.save();
-				const safeImage = {
-					id: newImage.id,
-					url,
-					preview,
-				};
-				// res.status(200);
-				res.json(safeImage);
-			} catch (error) {
-				let errorObj = { message: "Bad Request", errors: {} };
-				for (let err of error.errors) {
-					errorObj.errors[err.path] = err.message;
-				}
-				res.status(400);
-				res.json(errorObj);
-			}
-		} else {
+		if (memberStatus.status !== "co-host") {
 			res.status(403);
-			res.json({
-				message: "User must be attending the event",
+			return res.json({
+				message: "Must be 'co-host' to add image to a event",
 			});
+		}
+
+		if (preview === true && event.EventImages.length) {
+			let images = event.EventImages;
+
+			for (let image of images) {
+				if (image.preview) {
+					let oldImage = await EventImage.findByPk(image.id);
+					oldImage.preview = false;
+					await oldImage.save();
+					break;
+				}
+			}
+		}
+		try {
+			let newImage = await EventImage.create(
+				{
+					url: url,
+					preview: preview,
+					eventId: event.id,
+				},
+				{ validate: true }
+			);
+			await newImage.save();
+			const safeImage = {
+				id: newImage.id,
+				url: newImage.url,
+				preview: newImage.preview,
+			};
+			res.status(200);
+			res.json(safeImage);
+		} catch (error) {
+			res.json(error.errors);
 		}
 	} else {
 		res.status(404);
 		res.json({
-			message: "Event couldn't be found",
+			message: "Group couldn't be found",
 		});
 	}
+	// const { user } = req;
+
+	// let event;
+	// try {
+	// 	let eventId = +req.params.eventId;
+	// 	event = await Event.findByPk(eventId);
+	// } catch (error) {
+	// 	res.status(404);
+	// 	res.json({
+	// 		message: "Event couldn't be found",
+	// 	});
+	// }
+	// const { url, preview } = req.body;
+
+	// if (event) {
+	// 	const attendeeStatus = await Attendance.findOne({
+	// 		where: {
+	// 			eventId: event.id,
+	// 			userId: user.id,
+	// 		},
+	// 	});
+	// 	const group = await Group.findByPk(event.groupId);
+	// 	const coHost = await Membership.findOne({
+	// 		where: {
+	// 			groupId: group.id,
+	// 			userId: user.id,
+	// 		},
+	// 	});
+	// 	const isAttending = attendeeStatus
+	// 		? attendeeStatus.status === "attending"
+	// 		: false;
+	// 	const isCoHost = coHost ? coHost.status === "co-host" : false;
+	// 	if (isAttending || isCoHost) {
+	// 		try {
+	// 			if (preview === true) {
+	// 				let oldImage = await EventImage.findOne({
+	// 					where: {
+	// 						eventId: event.id,
+	// 						preview: true,
+	// 					},
+	// 				});
+
+	// 				if (oldImage) {
+	// 					oldImage.preview = false;
+	// 					await oldImage.validate();
+	// 					await oldImage.save();
+	// 				}
+	// 			}
+	// 			const newImage = await EventImage.create(
+	// 				{
+	// 					url: url,
+	// 					preview: preview,
+	// 					eventId: event.id,
+	// 				},
+	// 				{ validate: true }
+	// 			);
+
+	// 			newImage.save();
+	// 			const safeImage = {
+	// 				id: newImage.id,
+	// 				url,
+	// 				preview,
+	// 			};
+	// 			// res.status(200);
+	// 			res.json(safeImage);
+	// 		} catch (error) {
+	// 			let errorObj = { message: "Bad Request", errors: {} };
+	// 			for (let err of error.errors) {
+	// 				errorObj.errors[err.path] = err.message;
+	// 			}
+	// 			res.status(400);
+	// 			res.json(errorObj);
+	// 		}
+	// 	} else {
+	// 		res.status(403);
+	// 		res.json({
+	// 			message: "User must be attending the event",
+	// 		});
+	// 	}
+	// } else {
+	// 	res.status(404);
+	// 	res.json({
+	// 		message: "Event couldn't be found",
+	// 	});
+	// }
 });
 
 router.post("/:eventId/attendance", requireAuth, async (req, res) => {
