@@ -1,3 +1,3 @@
-import Navigation from "./Navigation";
+import Navigation from "./Navigation-bonus";
 
 export default Navigation;
