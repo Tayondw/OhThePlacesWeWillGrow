@@ -43,41 +43,72 @@ const SignupFormPage = () => {
 	};
 
 	return (
-		<div className="body">
-			<div className="ring">
-				<i style={{ borderColor: "#00ff0a" }}></i>
-				<i style={{ borderColor: "#ff0057" }}></i>
-				<i style={{ borderColor: "#fffd44" }}></i>
-
-				<div className="login">
-					<h1>Log In</h1>
-					<form onSubmit={handleSubmit}>
-						<label>
-							<input
-								type="text"
-								value={credential}
-								onChange={(e) => setCredential(e.target.value)}
-								required
-								placeholder="Username or Email"
-							/>
-						</label>
-						<label>
-							<input
-								type="password"
-								value={password}
-								onChange={(e) => setPassword(e.target.value)}
-								required
-								placeholder="Password"
-							/>
-						</label>
-						{errors.credential && <p>{errors.credential}</p>}
-						<div>
-							<button type="submit">Log In</button>
-						</div>
-					</form>
-				</div>
-			</div>
-		</div>
+		<>
+			<h1>Sign Up</h1>
+			<form onSubmit={handleSubmit}>
+				<label>
+					Email
+					<input
+						type="text"
+						value={email}
+						onChange={(e) => setEmail(e.target.value)}
+						required
+					/>
+				</label>
+				{errors.email && <p>{errors.email}</p>}
+				<label>
+					Username
+					<input
+						type="text"
+						value={username}
+						onChange={(e) => setUsername(e.target.value)}
+						required
+					/>
+				</label>
+				{errors.username && <p>{errors.username}</p>}
+				<label>
+					First Name
+					<input
+						type="text"
+						value={firstName}
+						onChange={(e) => setFirstName(e.target.value)}
+						required
+					/>
+				</label>
+				{errors.firstName && <p>{errors.firstName}</p>}
+				<label>
+					Last Name
+					<input
+						type="text"
+						value={lastName}
+						onChange={(e) => setLastName(e.target.value)}
+						required
+					/>
+				</label>
+				{errors.lastName && <p>{errors.lastName}</p>}
+				<label>
+					Password
+					<input
+						type="password"
+						value={password}
+						onChange={(e) => setPassword(e.target.value)}
+						required
+					/>
+				</label>
+				{errors.password && <p>{errors.password}</p>}
+				<label>
+					Confirm Password
+					<input
+						type="password"
+						value={confirmPassword}
+						onChange={(e) => setConfirmPassword(e.target.value)}
+						required
+					/>
+				</label>
+				{errors.confirmPassword && <p>{errors.confirmPassword}</p>}
+				<button type="submit">Sign Up</button>
+			</form>
+		</>
 	);
 };
 
