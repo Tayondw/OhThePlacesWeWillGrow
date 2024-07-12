@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import ProfileButton from "./ProfileButton-bonus";
 import "./Navigation.css";
 
-function Navigation({ isLoaded }) {
+const Navigation = ({ isLoaded }) => {
 	const sessionUser = useSelector((state) => state.session.user);
 
 	return (
@@ -18,6 +18,6 @@ function Navigation({ isLoaded }) {
 			)}
 		</ul>
 	);
-}
+};
 
 export default Navigation;

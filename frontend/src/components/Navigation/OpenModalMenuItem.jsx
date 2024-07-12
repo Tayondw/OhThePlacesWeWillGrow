@@ -1,9 +1,9 @@
 import { useModal } from "../../context/Modal";
 
-const OpenModalButton = ({
+const OpenModalMenuItem = ({
 	modalComponent, // component to render inside the modal
-	buttonText, // text of the button that opens the modal
-	onButtonClick, // optional: callback function that will be called once the button that opens the modal is clicked
+	itemText, // text of the menu item that opens the modal
+	onItemClick, // optional: callback function that will be called once the menu item that opens the modal is clicked
 	onModalClose, // optional: callback function that will be called once the modal is closed
 }) => {
 	const { setModalContent, setOnModalClose } = useModal();
@@ -11,10 +11,10 @@ const OpenModalButton = ({
 	const onClick = () => {
 		if (onModalClose) setOnModalClose(onModalClose);
 		setModalContent(modalComponent);
-		if (typeof onButtonClick === "function") onButtonClick();
+		if (typeof onItemClick === "function") onItemClick();
 	};
 
-	return <button onClick={onClick}>{buttonText}</button>;
+	return <li onClick={onClick}>{itemText}</li>;
 };
 
-export default OpenModalButton;
+export default OpenModalMenuItem;
