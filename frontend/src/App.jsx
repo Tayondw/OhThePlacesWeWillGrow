@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import LoginFormPage from "./components/LoginFormPage";
 import SignupFormPage from "./components/SignUpFormPage";
+import Navigation from "./components/Navigation";
 import * as sessionActions from "./store/session";
 
 const Layout = () => {
@@ -15,7 +16,12 @@ const Layout = () => {
 		});
 	}, [dispatch]);
 
-	return <>{isLoaded && <Outlet />}</>;
+	return (
+		<>
+			<Navigation isLoaded={isLoaded} />
+			{isLoaded && <Outlet />}
+		</>
+	);
 };
 
 const router = createBrowserRouter([
@@ -29,11 +35,11 @@ const router = createBrowserRouter([
 			{
 				path: "/login",
 				element: <LoginFormPage />,
-                  },
-                  {
-                        path: "/signup",
+			},
+			{
+				path: "/signup",
 				element: <SignupFormPage />,
-                  }
+			},
 		],
 	},
 ]);
