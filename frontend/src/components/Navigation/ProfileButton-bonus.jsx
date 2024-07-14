@@ -5,6 +5,7 @@ import * as sessionActions from "../../store/session";
 import OpenModalButton from "../OpenModalButton";
 import LoginFormModal from "../LoginFormModal";
 import SignupFormModal from "../SignupFormModal";
+import { redirect } from "react-router-dom";
 
 const ProfileButton = ({ user }) => {
 	const dispatch = useDispatch();
@@ -35,7 +36,8 @@ const ProfileButton = ({ user }) => {
 	const logout = (e) => {
 		e.preventDefault();
 		dispatch(sessionActions.logout());
-		closeMenu();
+            closeMenu();
+            redirect("/");
 	};
 
 	const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
@@ -43,16 +45,17 @@ const ProfileButton = ({ user }) => {
 	return (
 		<>
 			<button onClick={toggleMenu}>
-				<FaUserCircle />
+				<FaUserCircle size={28}/>
 			</button>
 			<ul className={ulClassName} ref={ulRef}>
 				{user ? (
 					<>
 						<li>{user.username}</li>
 						<li>
-							{user.firstName} {user.lastName}
+							Hello, {user.firstName}
 						</li>
-						<li>{user.email}</li>
+                                    <li>{user.email}</li>
+                                    <hr></hr>
 						<li>
 							<button onClick={logout}>Log Out</button>
 						</li>

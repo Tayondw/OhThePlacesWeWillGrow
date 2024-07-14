@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
-import Navigation from "./components/Navigation";
+import Navigation from "./components/Navigation/Navigation-bonus";
 import * as sessionActions from "./store/session";
 
 const Layout = () => {
@@ -28,7 +28,10 @@ const router = createBrowserRouter([
 		children: [
 			{
 				path: "/",
-				element: <h1>Welcome!</h1>,
+                        element: <>
+                              <h1>Growthup</h1>
+                              <p>The cultivate platform—Where the places you go contain the places in which you will grow</p>
+                        </>
 			},
 		],
 	},

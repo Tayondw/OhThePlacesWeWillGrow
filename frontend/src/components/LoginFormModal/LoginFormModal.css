@@ -1,120 +1,150 @@
-@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap");
 
-* {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: "Quicksand", sans-serif;
+div #modal-content {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	border-radius: 125px;
+	font-family: "Quicksand", sans-serif;
+      /* width: fit-content; */
 }
+
 
 
 .body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      background: #111;
-      width: 115%; 
-      /* change width to 100% if want modal directly centered */
-      overflow: hidden;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 650px;
+	background: #faf5e4;
+	width: 700px;
+	/* change width to 100% if want modal directly centered */
+	overflow: hidden;
+      border-radius: 25px;
 }
 
 .ring {
-      position: relative;
-      width: 500px;
-      height: 500px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+	position: relative;
+	width: 550px;
+	height: 600px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .ring i {
-      position: absolute;
-      inset: 0;
-      border: 2px solid #fff;
-      transition: 0.5s;
+	position: absolute;
+	inset: 0;
+	border: 2px solid #fff;
+	transition: 0.5s;
+      /* padding: 25px; */
 }
 
 .ring i:nth-child(1) {
-      border-radius: 38% 62% 63% 37% / 41% 44% 56% 59%;
-      animation: animate 6s linear infinite;
+	border-radius: 38% 62% 63% 37% / 41% 44% 56% 59%;
+	animation: animate 6s linear infinite;
 }
 
 .ring i:nth-child(2) {
-      border-radius: 41% 44% 56% 59% / 38% 62% 63% 37%;
-      animation: animate 4s linear infinite;
+	border-radius: 41% 44% 56% 59% / 38% 62% 63% 37%;
+	animation: animate 4s linear infinite;
 }
 
 .ring i:nth-child(3) {
-      border-radius: 41% 44% 56% 59% / 38% 62% 63% 37%;
-      animation: animate2 10s linear infinite;
+	border-radius: 41% 44% 56% 59% / 38% 62% 63% 37%;
+	animation: animate2 10s linear infinite;
 }
 
 .ring:hover {
-      border: 6px solid var(borderColor);
-      filter: drop-shadow(0 0 20px var(borderColor));
+	border: 6px solid var(borderColor);
+	filter: drop-shadow(0 0 20px var(borderColor));
 }
 
 @keyframes animate {
-      0% {
-            transform: rotate(0deg);
-      }
-      100% {
-            transform: rotate(360deg);
-      }
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
 }
 
 @keyframes animate2 {
-      0% {
-            transform: rotate(360deg);
-      }
-      100% {
-            transform: rotate(0deg);
-      }
+	0% {
+		transform: rotate(360deg);
+	}
+	100% {
+		transform: rotate(0deg);
+	}
 }
 
-.login {
-      position: absolute;
-      width: 300px;
-      height: 100px;
+/* .login {
+	position: absolute;
+	width: 000px;
+	height: 000px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	gap: 20px;
+      padding: 25px;
+} */
+
+form img {
+      width: 150px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 150px;
+      padding: 0;
+      margin: 0;
+}
+
+form h1 {
+      margin: 0;
+	font-size: 40px;
+	color: #111;
+}
+.login label input {
+	position: relative;
+	width: 80%;
+	padding: 12px 25px;
+	background: transparent;
+	border: 2px solid #111;
+	border-radius: 40px;
+	font-size: 1.2em;
+	color: #111;
+	box-shadow: none;
+	outline: none;
+}
+
+.login label input::placeholder {
+	color: #111;
+}
+
+form {
       display: flex;
       justify-content: center;
       align-items: center;
       flex-direction: column;
-      gap: 20px;
+      padding-top: 25px;
+      padding-bottom: 50px;
 }
 
-.login h1 {
-      font-size: 3em;
-      color: #fff;
-}
-
-.login label input {
-      position: relative;
-      width: 100%;
-      padding: 12px 25px;
-      background: transparent;
-      border: 2px solid #fff;
-      border-radius: 40px;
-      font-size: 1.2em;
-      color: #fff;
-      box-shadow: none;
-      outline: none;
-}
-
-.login label input::placeholder {
-      color: rgba(255, 255, 255, 0.75);
+form div {
+	padding-bottom: 25px;
 }
 
 .login form div button {
-      width: 100%;
-      background: #0078ff;
-      background: linear-gradient(45deg, #ff357a, #fff172);
-      border: none;
-      cursor: pointer;
-      margin-top: 15px;
-      border-radius: 40px;
-      padding-top: 10px;
-      padding-bottom: 10px;
-      font-size: 1em;
+	width: 300px;
+	background: #0078ff;
+	background: linear-gradient(45deg, #ff5e5e, #135c51);
+	border: none;
+	cursor: pointer;
+	/* margin-top: 15px; */
+	border-radius: 40px;
+	/* padding-top: 10px;
+      padding-bottom: 10px; */
+	padding: 12px 25px;
+	font-size: 1em;
 }
