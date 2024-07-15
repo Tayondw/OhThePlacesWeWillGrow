@@ -50,38 +50,37 @@ const LoginFormModal = () => {
 				<i style={{ borderColor: "#FF5E5E" }}></i>
 
 				<div className="login">
-					<form onSubmit={handleSubmit}>
-						<div className="image">
-							<img src={growthUpimg} alt="growthup image" />
+					<form className="form" onSubmit={handleSubmit}>
+						<div>
+							<img className="image" src={growthUpimg} alt="growthup image" />
 							<h1>Log In</h1>
 						</div>
 						<div>
-							<label>
-								<input
-									type="text"
-									value={credential}
-									onChange={(event) => setCredential(event.target.value)}
-									required
-									placeholder="Username Or Email"
-								/>
-							</label>
+							<input
+								className="input"
+								type="text"
+								value={credential}
+								onChange={(event) => setCredential(event.target.value)}
+								required
+								placeholder="Username Or Email"
+							/>
 						</div>
 						<div>
-							<label>
-								<input
-									type="password"
-									value={password}
-									onChange={(event) => setPassword(event.target.value)}
-									required
-									placeholder="Password"
-								/>
-							</label>
+							<input
+								className="input"
+								type="password"
+								value={password}
+								onChange={(event) => setPassword(event.target.value)}
+								required
+								placeholder="Password"
+							/>
+							{errors.credential && (
+								<p style={{ color: "red" }}>{errors.credential}</p>
+							)}
 						</div>
-						{errors.credential && (
-							<p style={{ color: "red" }}>{errors.credential}</p>
-						)}
 						<div>
 							<button
+								className="login-button"
 								type="submit"
 								disabled={isDisabled}
 								style={{ cursor: isDisabled ? "not-allowed" : "pointer" }}
@@ -90,7 +89,9 @@ const LoginFormModal = () => {
 							</button>
 						</div>
 						<div>
-							<button onClick={demoUserLogin}>Log in as Demo User</button>
+							<button className="login-button" onClick={demoUserLogin}>
+								Log in as Demo User
+							</button>
 						</div>
 					</form>
 				</div>

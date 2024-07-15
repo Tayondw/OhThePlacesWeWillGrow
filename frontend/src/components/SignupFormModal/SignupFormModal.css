@@ -1,0 +1,150 @@
+.body {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 700px;
+	background: #faf5e4;
+	width: 700px;
+	/* change width to 100% if want modal directly centered */
+	overflow: hidden;
+	border-radius: 25px;
+}
+
+.ring {
+	position: relative;
+	width: 550px;
+	height: 600px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.ring i {
+	position: absolute;
+	inset: 0;
+	border: 2px solid #fff;
+	transition: 0.5s;
+	/* padding: 25px; */
+}
+
+.ring i:nth-child(1) {
+	border-radius: 38% 62% 63% 37% / 41% 44% 56% 59%;
+	animation: animate 6s linear infinite;
+}
+
+.ring i:nth-child(2) {
+	border-radius: 41% 44% 56% 59% / 38% 62% 63% 37%;
+	animation: animate 4s linear infinite;
+}
+
+.ring i:nth-child(3) {
+	border-radius: 41% 44% 56% 59% / 38% 62% 63% 37%;
+	animation: animate2 10s linear infinite;
+}
+
+.ring:hover {
+	border: 6px solid var(borderColor);
+	filter: drop-shadow(0 0 20px var(borderColor));
+}
+
+@keyframes animate {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+@keyframes animate2 {
+	0% {
+		transform: rotate(360deg);
+	}
+	100% {
+		transform: rotate(0deg);
+	}
+}
+
+.login {
+	position: absolute;
+	width: 000px;
+	height: 000px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	gap: 20px;
+      padding: 25px;
+      /* border: 2px solid red;
+      margin: 500px; */
+}
+
+.form-signup .signup-img {
+      width: 150px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 90px;
+      padding: 0;
+      margin: 0;
+      border-radius: 100px;
+}
+
+form h1 {
+      margin: 0;
+	font-size: 40px;
+	color: #111;
+}
+
+.login input {
+	position: relative;
+	width: 165px;
+	padding: 5px 15px;
+	background: transparent;
+	border: 2px solid #111;
+	border-radius: 40px;
+	font-size: 0.9em;
+	color: #111;
+	box-shadow: none;
+	outline: none;
+}
+
+.login label input::placeholder {
+	color: #111;
+}
+
+.login .form-signup {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      padding-top: 70px;
+      padding-bottom: 50px;
+      /* border: 2px solid red; */
+}
+
+form div {
+	padding-bottom: 15px;
+      /* border: 2px solid red; */
+}
+
+.login form div .signup {
+	width: 200px;
+	background: #0078ff;
+	background: linear-gradient(45deg, #ff5e5e, #135c51);
+	border: none;
+	cursor: pointer;
+	/* margin-top: 15px; */
+	border-radius: 40px;
+	/* padding-top: 10px;
+      padding-bottom: 10px; */
+	padding: 12px 25px;
+	font-size: 0.9em;
+      margin-bottom: 20px;
+}
+
+p {
+      margin: 0;
+      display: flex;
+      justify-content: space-around;
+}
