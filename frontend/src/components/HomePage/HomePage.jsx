@@ -19,7 +19,7 @@ const HomePage = () => {
 					<div className="intro-text">
 						<h1>
 							The cultivate platform — Where the places you go contain the places
-							in which you will grow
+							in which you&apos;ll grow
 						</h1>
 					</div>
 					<div className="intro-desc">
@@ -59,7 +59,7 @@ const HomePage = () => {
 			</div>
 			<div id="section-3">
 				<div className="meetup-links">
-					<img src={allGroups} alt="all-groups" />
+					<img className="meetup-img" src={allGroups} alt="all-groups" />
 					<Link to="/groups">See all groups</Link>
 					<div className="link-desc"></div>
 				</div>

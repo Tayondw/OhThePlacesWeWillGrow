@@ -1,8 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Sacramento&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Sacramento&family=Shadows+Into+Light&display=swap');
+
 #all-four {
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      font-family: "Quicksand", sans-serif;
 }
 
 #section-1 {
@@ -10,26 +17,33 @@
       justify-content: center;
       align-content: center;
       /* border: 2px solid red; */
-      gap: 30px;
-      padding: 35px 30px;
+      gap: 100px;
+      padding: 35px 35px;
+      margin: 0px 20%;
 }
 
 #section-1 > .intro {
-      border: 2px solid black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+}
+
+#section-1 .intro-text h1 {
+      font-family: "Shadows Into Light";
+      font-weight: 800;
 }
 
 #section-1 > .img-holder {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       grid-template-rows: repeat(2, 1fr);
-      grid-gap: 15px;
-      /* grid-template-rows: auto; */
-      border: 2px solid red;
+      grid-gap: 25px;
 }
 
 .img-holder img {
-      width: 100px;
-      height: 100px;
+      width: 200px;
+      height: 200px;
 }
 
 #section-2 {
@@ -40,6 +54,11 @@
 #section-3 {
       border: 2px solid green;
       display: grid;
+}
+
+.meetup-links > img {
+      background-color: #FAF5E4;
+      background: transparent;
 }
 
 #section-4 {
