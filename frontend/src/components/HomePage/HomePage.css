@@ -48,7 +48,18 @@
 
 #section-2 {
       border: 2px solid blue;
-      display: grid;
+      display: flex;
+      justify-content: center;
+      align-content: center;
+      flex-direction: column;
+      margin: 25px 35%;
+}
+
+
+
+#section-2 .meetup-text h2{
+      font-family: "Shadows Into Light";
+      font-weight: 800;
 }
 
 #section-3 {
