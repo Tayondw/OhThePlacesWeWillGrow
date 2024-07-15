@@ -23,7 +23,8 @@ export const login = (user) => async (dispatch) => {
 		body: JSON.stringify({ credential, password }),
 	});
 
-	const data = await response.json();
+      const data = await response.json();
+      // console.log("THIS IS THE THUNK DATA", data);
 	dispatch(setUser(data.user));
 	return response;
 };

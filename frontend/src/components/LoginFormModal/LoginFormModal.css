@@ -78,7 +78,7 @@ div #modal-content {
 	}
 }
 
-/* .login {
+.login {
 	position: absolute;
 	width: 000px;
 	height: 000px;
@@ -88,7 +88,7 @@ div #modal-content {
 	flex-direction: column;
 	gap: 20px;
       padding: 25px;
-} */
+}
 
 form img {
       width: 150px;
