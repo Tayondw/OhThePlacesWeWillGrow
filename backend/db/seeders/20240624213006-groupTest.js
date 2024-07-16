@@ -11,9 +11,9 @@ if (process.env.NODE_ENV === "production") {
 const groups = [
 	{
 		organizerId: 1,
-		name: "Group 1",
+		name: "App Academy",
 		about:
-			"This is to test the FIRST test group.        11111111111111111111111111111111111111111111",
+			"This is to for those who are enrolled in App Academy, the FIRST test group.",
 		type: "Online",
 		private: true,
 		city: "Atlanta",
@@ -21,9 +21,9 @@ const groups = [
 	},
 	{
 		organizerId: 2,
-		name: "Group 2",
+		name: "Google Lovers",
 		about:
-			"This is to test the SECOND test group.        22222222222222222222222222222222222222222222",
+			"This is to for those who love Google and Google Products, the SECOND test group.",
 		type: "In person",
 		private: false,
 		city: "San Francisco",
@@ -31,9 +31,9 @@ const groups = [
 	},
 	{
 		organizerId: 3,
-		name: "Group 3",
+		name: "Google",
 		about:
-			"This is to test the THIRD test group.        33333333333333333333333333333333333333333333",
+			"This is to for those who love Google and everything there is to Google, the THIRD test group.",
 		type: "Online",
 		private: true,
 		city: "Seattle",
@@ -41,9 +41,9 @@ const groups = [
 	},
 	{
 		organizerId: 4,
-		name: "Group 4",
+		name: "Render",
 		about:
-			"This is to test the FOURTH test group.        444444444444444444444444444444444444444444444",
+			"This is to for those who love Render and everything there is to Render, the FOURTH test group.",
 		type: "In person",
 		private: false,
 		city: "Philadelphia",
@@ -51,9 +51,9 @@ const groups = [
 	},
 	{
 		organizerId: 4,
-		name: "Group 5",
+		name: "Tech Equity Collective",
 		about:
-			"This is to test the FIFTH test group.        555555555555555555555555555555555555555555555",
+			"This is to for those who love Tech Equity Collective and everything there is to Tech Equity Collective, the FIFTH test group.",
 		type: "Online",
 		private: true,
 		city: "Alexandria",
@@ -61,9 +61,9 @@ const groups = [
 	},
 	{
 		organizerId: 3,
-		name: "Group 6",
+		name: "Black Genius Academy",
 		about:
-			"This is to test the SIXTH test group.        666666666666666666666666666666666666666666666",
+			"This is to for those who love Black Genius Academy and everything there is to Google, the SIXTH test group.",
 		type: "In person",
 		private: true,
 		city: "Baton Rouge",
@@ -71,9 +71,9 @@ const groups = [
 	},
 	{
 		organizerId: 2,
-		name: "Group 7",
+		name: "Men Cry Too",
 		about:
-			"This is to test the SEVENTH test group.        777777777777777777777777777777777777777777777",
+			"This is to for those who love Men Cry Too and everything there is to Men Cry Too, the SEVENTH test group.",
 		type: "In person",
 		private: false,
 		city: "Boston",
@@ -81,9 +81,9 @@ const groups = [
 	},
 	{
 		organizerId: 1,
-		name: "Group 8",
+		name: "Tech Talk",
 		about:
-			"This is to test the EIGHTH test group.        88888888888888888888888888888888888888888888",
+			"This is to for those who love talking about tech and everything there is to know about tech, the EIGHT test group.",
 		type: "Online",
 		private: false,
 		city: "Des Moines",
@@ -91,9 +91,9 @@ const groups = [
 	},
 	{
 		organizerId: 1,
-		name: "Group 9",
+		name: "SWE Talk",
 		about:
-			"This is to test the NINTH test group.        999999999999999999999999999999999999999999999",
+			"This is to for those who love talking about tech and everything there is to know about software engineering, the NINTH test group.",
 		type: "Online",
 		private: false,
 		city: "Des Moines",
@@ -101,9 +101,9 @@ const groups = [
 	},
 	{
 		organizerId: 12,
-		name: "Group 10",
+		name: "The Affluent Standard",
 		about:
-			"This is to test the TENTH test group.        1010101010101010101010101010101010101010101010",
+			"This is to for those who love talking about tHE Affluent Standard and everything there is to know about the Affluent Standard, the TENTH test group.",
 		type: "Online",
 		private: false,
 		city: "Des Moines",
@@ -111,9 +111,9 @@ const groups = [
 	},
 	{
 		organizerId: 13,
-		name: "Group 11",
+		name: "SWE Study",
 		about:
-			"This is to test the ELEVENTH test group.        011011011011011011011011011011011011011011011011",
+			"This is to for those who love talking about and studying tech and everything there is to know about software engineering, the ELEVENTH test group.",
 		type: "Online",
 		private: false,
 		city: "Des Moines",

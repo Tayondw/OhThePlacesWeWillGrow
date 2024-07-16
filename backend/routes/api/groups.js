@@ -42,6 +42,10 @@ router.get("/", async (req, res, next) => {
 	for (let group of allGroups) {
 		let eachGroup = group.toJSON();
 
+		// added for frontend
+		eachGroup.organizer = await User.findByPk(eachGroup.organizerId);
+
+		//original
 		eachGroup.numMembers = await Membership.count({
 			where: {
 				groupId: eachGroup.id,
@@ -53,29 +57,32 @@ router.get("/", async (req, res, next) => {
 
 		eachGroup.numMembers += 1;
 
+		//added for frontend part
+		eachGroup.numEvents = await Event.count({
+			where: {
+				groupId: eachGroup.id,
+			},
+		});
+
+		eachGroup.events = await Event.findAll({
+			where: {
+				groupId: eachGroup.id,
+			},
+		});
+
+		eachGroup.venues = await Venue.findAll({
+			where: {
+				groupId: eachGroup.id,
+			},
+		});
+
+		//original
 		let image = await GroupImage.findOne({
 			where: {
 				groupId: eachGroup.id,
 				preview: true,
 			},
 		});
-
-		// eachGroup.organizer = await User.findByPk(eachGroup.organizerId);
-		// eachGroup.numEvents = await Event.count({
-		// 	where: {
-		// 		groupId: eachGroup.id,
-		// 	},
-		// });
-		// eachGroup.events = await Event.findAll({
-		// 	where: {
-		// 		groupId: eachGroup.id,
-		// 	},
-		// });
-		// eachGroup.venues = await Venue.findAll({
-		// 	where: {
-		// 		groupId: eachGroup.id,
-		// 	},
-		// });
 
 		if (image) {
 			eachGroup.previewImage = image.url;
