@@ -11,57 +11,57 @@ if (process.env.NODE_ENV === "production") {
 const images = [
 	{
 		eventId: 1,
-		url: "https://www.pexels.com/photo/silhouette-of-man-standing-against-black-and-red-background-333850/",
+		url: "https://afrotechconference.com/",
 		preview: true,
 	},
 	{
 		eventId: 2,
-		url: "https://www.pexels.com/photo/blue-and-red-abstract-painting-1068872/",
+		url: "https://cloud.withgoogle.com/next",
 		preview: true,
 	},
 	{
 		eventId: 3,
-		url: "https://www.pexels.com/photo/i-love-you-light-streaks-776764/",
+		url: "https://io.google/2024/",
 		preview: true,
 	},
 	{
 		eventId: 4,
-		url: "https://www.pexels.com/photo/clear-glass-footed-drinking-glass-with-orange-juice-338713/",
+		url: "https://www.renderatl.com/2024-home",
 		preview: true,
 	},
 	{
 		eventId: 5,
-		url: "https://www.pexels.com/photo/yellow-volkswagen-beetle-die-cast-on-floor-381228/",
+		url: "https://www.techequitycollective.com/tec-innovate/",
 		preview: true,
 	},
 	{
 		eventId: 6,
-		url: "https://www.pexels.com/photo/pineapple-with-brown-sunglasses-459601/",
+		url: "https://bgaadvocates.careerkarma.com/",
 		preview: true,
 	},
 	{
 		eventId: 7,
-		url: "https://www.pexels.com/photo/blue-body-of-water-261152/",
+		url: "https://www.amazon.com/Men-Cry-Too-Alfreada-Brown-Kelly/dp/1532745877",
 		preview: true,
 	},
 	{
 		eventId: 8,
-		url: "https://www.pexels.com/photo/lime-cocktail-drink-with-two-straws-1187766/",
+		url: "https://www.techequitycollective.com/",
 		preview: true,
 	},
 	{
 		eventId: 9,
-		url: "https://www.pexels.com/photo/white-rabbit-wearing-yellow-eyeglasses-4588065/",
+		url: "https://www.techequitycollective.com/",
 		preview: true,
 	},
 	{
 		eventId: 10,
-		url: "https://www.pexels.com/photo/photo-of-woman-sitting-on-chair-993870/",
+		url: "https://www.techequitycollective.com/",
 		preview: true,
 	},
 	{
 		eventId: 11,
-		url: "https://www.pexels.com/photo/close-up-photography-of-water-flow-612341/",
+		url: "https://www.techequitycollective.com/",
 		preview: true,
 	},
 ];

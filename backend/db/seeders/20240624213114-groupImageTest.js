@@ -11,57 +11,57 @@ if (process.env.NODE_ENV === "production") {
 const images = [
 	{
 		groupId: 1,
-		url: "https://www.pexels.com/photo/silhouette-of-man-standing-against-black-and-red-background-333850/",
+		url: "https://afrotechconference.com/",
 		preview: true,
 	},
 	{
 		groupId: 2,
-		url: "https://www.pexels.com/photo/silhouette-of-man-standing-against-black-and-red-background-333850/",
+		url: "https://cloud.withgoogle.com/next",
 		preview: true,
 	},
 	{
 		groupId: 3,
-		url: "https://www.pexels.com/photo/silhouette-of-man-standing-against-black-and-red-background-333850/",
+		url: "https://io.google/2024/",
 		preview: true,
 	},
 	{
 		groupId: 4,
-		url: "https://www.pexels.com/photo/silhouette-of-man-standing-against-black-and-red-background-333850/",
+		url: "https://www.renderatl.com/2024-home",
 		preview: true,
 	},
 	{
 		groupId: 5,
-		url: "https://www.pexels.com/photo/silhouette-of-man-standing-against-black-and-red-background-333850/",
+		url: "https://www.techequitycollective.com/",
 		preview: true,
 	},
 	{
 		groupId: 6,
-		url: "https://www.pexels.com/photo/silhouette-of-man-standing-against-black-and-red-background-333850/",
+		url: "https://bgaadvocates.careerkarma.com/",
 		preview: true,
 	},
 	{
 		groupId: 7,
-		url: "https://www.pexels.com/photo/silhouette-of-man-standing-against-black-and-red-background-333850/",
+		url: "https://www.amazon.com/Men-Cry-Too-Alfreada-Brown-Kelly/dp/1532745877",
 		preview: true,
 	},
 	{
 		groupId: 8,
-		url: "https://www.pexels.com/photo/silhouette-of-man-standing-against-black-and-red-background-333850/",
+		url: "https://www.techequitycollective.com/",
 		preview: true,
 	},
 	{
 		groupId: 9,
-		url: "https://www.pexels.com/photo/silhouette-of-man-standing-against-black-and-red-background-333850/",
+		url: "https://www.techequitycollective.com/",
 		preview: true,
 	},
 	{
 		groupId: 10,
-		url: "https://www.pexels.com/photo/silhouette-of-man-standing-against-black-and-red-background-333850/",
+		url: "https://www.techequitycollective.com/",
 		preview: true,
 	},
 	{
 		groupId: 11,
-		url: "https://www.pexels.com/photo/silhouette-of-man-standing-against-black-and-red-background-333850/",
+		url: "https://www.techequitycollective.com/",
 		preview: true,
 	},
 ];
