@@ -4,7 +4,9 @@ import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import Navigation from "./components/Navigation/Navigation-bonus";
 import * as sessionActions from "./store/session";
 import HomePage from "./components/HomePage";
+import { loaderGroup } from "./components/Groups/loaderGroup";
 import Groups from "./components/Groups";
+// import GroupDetail from "./components/Groups/GroupDetail";
 import Events from "./components/Events";
 // import { useLoaderData } from "react-router-dom";
 // import { loginAction } from "./components/LoginFormModal/loginAction";
@@ -42,8 +44,15 @@ const router = createBrowserRouter([
                         
                   },
                   {
-				path: "/groups",
+                        path: "/groups",
+                        loader: loaderGroup,
                         element: <Groups />,
+                        // children: [
+                        //       {
+                        //             path: "/groups/:groupId",
+                        //             element: <GroupDetail />
+                        //       }
+                        // ]
                         
                   },
                   {
