@@ -10,12 +10,12 @@ import {
 } from "./components/Groups/loaderGroup";
 import {
 	loaderEvent,
-	loaderEventDetails,
+	// loaderEventDetails,
 } from "./components/Events/loaderEvents";
 import Groups from "./components/Groups";
 import GroupDetail from "./components/Groups/GroupDetail";
 import Events from "./components/Events";
-import EventDetail from "./components/Events/EventDetail";
+// import EventDetail from "./components/Events/EventDetail";
 
 const Layout = () => {
 	const dispatch = useDispatch();
@@ -62,8 +62,8 @@ const router = createBrowserRouter([
 			},
 			{
 				path: "/events/:eventId",
-				loader: loaderEventDetails,
-				element: <EventDetail />,
+				// loader: loaderEventDetails,
+				// element: <EventDetail />,
 			},
 		],
 	},
