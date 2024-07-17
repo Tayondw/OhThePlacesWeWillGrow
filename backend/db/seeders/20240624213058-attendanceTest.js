@@ -12,7 +12,7 @@ const attendees = [
 	{
 		eventId: 1,
 		userId: 1,
-		status: "attending",
+		status: "host",
 	},
 	{
 		eventId: 1,
@@ -30,19 +30,19 @@ const attendees = [
 		status: "attending",
 	},
 	{
-		eventId: 1,
+		eventId: 2,
 		userId: 5,
-		status: "attending",
+		status: "host",
 	},
 	{
 		eventId: 3,
 		userId: 5,
-		status: "pending",
+		status: "host",
 	},
 	{
 		eventId: 4,
 		userId: 6,
-		status: "attending",
+		status: "host",
 	},
 	{
 		eventId: 4,
@@ -52,7 +52,7 @@ const attendees = [
 	{
 		eventId: 5,
 		userId: 6,
-		status: "attending",
+		status: "host",
 	},
 	{
 		eventId: 5,
@@ -60,19 +60,19 @@ const attendees = [
 		status: "pending",
 	},
 	{
-		eventId: 10,
+		eventId: 6,
 		userId: 15,
-		status: "attending",
+		status: "host",
 	},
 	{
 		eventId: 10,
-		userId: 14,
-		status: "pending",
+		userId: 12,
+		status: "host",
 	},
 	{
 		eventId: 9,
-		userId: 10,
-		status: "attending",
+		userId: 1,
+		status: "host",
       },
       {
 		eventId: 11,
@@ -80,8 +80,8 @@ const attendees = [
 		status: "attending",
 	},{
 		eventId: 8,
-		userId: 8,
-		status: "pending",
+		userId: 1,
+		status: "host",
 	},{
 		eventId: 5,
 		userId: 10,
@@ -92,12 +92,12 @@ const attendees = [
 		status: "attending",
 	},{
 		eventId: 11,
-		userId: 1,
-		status: "attending",
+		userId: 13,
+		status: "host",
 	},{
-		eventId: 11,
+		eventId: 7,
 		userId: 2,
-		status: "attending",
+		status: "host",
 	},{
 		eventId:11,
 		userId: 3,

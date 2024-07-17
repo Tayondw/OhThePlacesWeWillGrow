@@ -116,7 +116,7 @@ router.get("/", async (req, res, next) => {
 			},
 		});
 
-		let attendance = await Attendance.findOne({
+		let attendance = await Attendance.findAll({
 			where: {
 				status: "host",
 				eventId: event.id,
@@ -134,7 +134,8 @@ router.get("/", async (req, res, next) => {
 			type: event.type,
 			startDate: event.startDate,
 			endDate: event.endDate,
-			numAttending,
+                  numAttending,
+                  host,
 			previewImage: image ? image.url : null,
 			Group: group,
 			Venue: venue ? venue : null,
@@ -185,15 +186,15 @@ router.get("/:eventId", async (req, res) => {
 			},
 		});
 
-		let coHostAttendance = await Attendance.findAll({
+		let hostAttendance = await Attendance.findAll({
 			where: {
-				status: "co-host",
+				status: "host",
 				eventId: event.id,
 			},
 		});
 
-		let coHost = coHostAttendance
-			? await User.findByPk(coHostAttendance.userId)
+		let host = hostAttendance
+			? await User.findByPk(hostAttendance.userId)
 			: null;
 
 		let safeEvent = {
@@ -207,7 +208,7 @@ router.get("/:eventId", async (req, res) => {
 			price: event.price,
 			startDate: event.startDate,
 			endDate: event.endDate,
-			coHost,
+			host,
 			numAttending,
 			Group: group,
 			Venue: venue ? venue : null,
