@@ -101,7 +101,7 @@ router.get("/", async (req, res, next) => {
 		});
 
 		let group = await Group.findByPk(event.groupId, {
-			attributes: ["id", "name", "city", "state"],
+			attributes: ["id", "name", "city", "state", "private"],
 		});
 		let venue = await Venue.findByPk(event.venueId, {
 			attributes: ["id", "city", "state"],
@@ -116,7 +116,7 @@ router.get("/", async (req, res, next) => {
 			},
 		});
 
-		let attendance = await Attendance.findAll({
+		let attendance = await Attendance.findOne({
 			where: {
 				status: "host",
 				eventId: event.id,
@@ -171,7 +171,7 @@ router.get("/:eventId", async (req, res) => {
 		});
 
 		let group = await Group.findByPk(event.groupId, {
-			attributes: ["id", "name", "city", "state"],
+			attributes: ["id", "name", "city", "state", "private"],
 		});
 		let venue = await Venue.findByPk(event.venueId, {
 			attributes: ["id", "city", "state"],
@@ -186,7 +186,7 @@ router.get("/:eventId", async (req, res) => {
 			},
 		});
 
-		let hostAttendance = await Attendance.findAll({
+		let hostAttendance = await Attendance.findOne({
 			where: {
 				status: "host",
 				eventId: event.id,
