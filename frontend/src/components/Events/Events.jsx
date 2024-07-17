@@ -43,7 +43,7 @@ const Events = () => {
 						</div> */}
 						<div id="event">
 							<img key={index} src={eventImage} alt={event.name} />
-							<div key={index} id="eventInfo">
+							<div id="eventInfo">
 								<p>{event.startDate}</p>
 								<h4>{event.name}</h4>
 								{event.Venue ? (

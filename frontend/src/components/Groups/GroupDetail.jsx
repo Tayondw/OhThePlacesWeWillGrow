@@ -108,8 +108,10 @@ const GroupDetail = () => {
 						)}
 						{sessionUser.id === groupDetail.Organizer.id ? (
 							<div id="crud-buttons">
-                                                <button
-                                                      onClick={() => navigate(`/groups/${groupDetail.id}/events/new`)}
+								<button
+									onClick={() =>
+										navigate(`/groups/${groupDetail.id}/events/new`)
+									}
 									style={{ backgroundColor: `darkgray`, color: `#FAF5E4` }}
 								>
 									Create event
@@ -144,13 +146,6 @@ const GroupDetail = () => {
 						>
 							<h3>Upcoming Events ({groupEvents.Events.length})</h3>
 							<div id="info-and-image">
-								{/* <div id="eventImage">
-									{groupEvents.Events.map((event) => {
-										return { ...event };
-									}).map((event, index) => (
-										
-									))}
-								</div> */}
 								<div id="eventInfo">
 									{formatEventDate.map((event, index) => (
 										<>
