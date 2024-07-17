@@ -41,8 +41,8 @@ const Events = () => {
 						{/* <div id="eventImage">
 							<img src={images[index % images.length]} alt={event.name} />
 						</div> */}
-						<div id="event">
-							<img key={index} src={eventImage} alt={event.name} />
+						<div key={index} id="event">
+							<img src={eventImage} alt={event.name} />
 							<div id="eventInfo">
 								<p>{event.startDate}</p>
 								<h4>{event.name}</h4>

@@ -149,17 +149,19 @@ const GroupDetail = () => {
 								<div id="eventInfo">
 									{formatEventDate.map((event, index) => (
 										<>
-											<img key={index} src={eventImage} alt={event.name} />
 											<div key={index}>
-												<p>{event.startDate}</p>
-												<h4>{event.name}</h4>
-												{event.Venue ? (
-													<p>{`${event.Venue.city}, ${event.Venue.state}`}</p>
-												) : (
-													<p>Online</p>
-												)}
-												{/* <p>{`${event.Venue.city}, ${event.Venue.state}`}</p> */}
+												<img src={eventImage} alt={event.name} />
+												<div>
+													<p>{event.startDate}</p>
+													<h4>{event.name}</h4>
+													{event.Venue ? (
+														<p>{`${event.Venue.city}, ${event.Venue.state}`}</p>
+													) : (
+														<p>Online</p>
+													)}
+												</div>
 											</div>
+
 											<div id="event-desc">{event.description}</div>
 										</>
 									))}
