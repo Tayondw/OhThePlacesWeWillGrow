@@ -1,4 +1,5 @@
 import { useLoaderData, Link, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import affluent from "../../assets/collageGroup-2.png";
 import appAcademy from "../../assets/app-academy.png";
 import googleLovers from "../../assets/google-cloud-next.png";
@@ -19,6 +20,7 @@ const GroupDetail = () => {
 	let { groupDetail } = useLoaderData();
 	let { groupEvents } = useLoaderData();
 	const navigate = useNavigate();
+	const sessionUser = useSelector((state) => state.session.user);
 	console.log("HERE GROUPDETAIL LOADER ...", groupDetail);
 	console.log("HERE GROUPEVENTS LOADER ...", [groupEvents]);
 	const groupImages = [
@@ -89,18 +91,41 @@ const GroupDetail = () => {
 							</p>
 						)}
 						<p>Organized by {`${firstName}, ${lastName}`}</p>
-						<div id="join">
-							<button
-								className="revoke"
-								onClick={(event) => {
-									event.preventDefault();
-									alert("Feature Coming Soon...");
-								}}
-								style={{ backgroundColor: "red" }}
-							>
-								Join this group
-							</button>
-						</div>
+						{!sessionUser ||
+						sessionUser.id === groupDetail.Organizer.id ? null : (
+							<div id="join">
+								<button
+									className="revoke"
+									onClick={(event) => {
+										event.preventDefault();
+										alert("Feature Coming Soon...");
+									}}
+									style={{ backgroundColor: "red" }}
+								>
+									Join this group
+								</button>
+							</div>
+						)}
+						{sessionUser.id === groupDetail.Organizer.id ? (
+							<div id="crud-buttons">
+                                                <button
+                                                      onClick={() => navigate(`/groups/${groupDetail.id}/events/new`)}
+									style={{ backgroundColor: `darkgray`, color: `#FAF5E4` }}
+								>
+									Create event
+								</button>
+								<button
+									style={{ backgroundColor: `darkgray`, color: `#FAF5E4` }}
+								>
+									Update
+								</button>
+								<button
+									style={{ backgroundColor: `darkgray`, color: `#FAF5E4` }}
+								>
+									Delete
+								</button>
+							</div>
+						) : null}
 					</div>
 					<div id="body-page">
 						<div id="organizer">

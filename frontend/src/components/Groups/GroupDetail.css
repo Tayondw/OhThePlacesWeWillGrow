@@ -1,0 +1,9 @@
+#crud-buttons button:hover {
+	cursor: pointer;
+	box-shadow: 2px 2px #135c51;
+}
+
+#crud-buttons button {
+	cursor: pointer;
+	box-shadow: 2px 2px #FF6464;
+}

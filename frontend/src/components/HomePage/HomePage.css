@@ -123,7 +123,15 @@
 
 #section-3 .meetup-links .nav-link {
       /* border: 2px solid orange; */
-      font-size: 1.1em;
+      font-size: 1.3em;
+      text-decoration: none;
+      font-weight: 800;
+      font-family: "Shadows Into Light";
+}
+
+#section-3 .meetup-links .nav-link:hover {
+      color: teal;
+      text-decoration: underline;
 }
 
 #section-3 .meetup-links .link-desc p {
@@ -152,6 +160,10 @@
 }
 
 .disabled {
-      color: lightgrey;
+      color: gray;
       pointer-events: none;
+      font-weight: 800;
+      text-decoration: none;
+      font-size: 1.3em;
+      font-family: "Shadows Into Light";
 }

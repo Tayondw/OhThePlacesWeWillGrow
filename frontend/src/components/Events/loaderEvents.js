@@ -10,18 +10,23 @@ export const loaderEvent = async () => {
 	}
 };
 
-// export const loaderEventDetails = async ({ params }) => {
-// 	const urls = [
-// 		`/api/events/${params.eventId}`,
-//             `/api/events/${params.eventId}/attendees`,
-//             // `/api/groups/${params.eventId}/members`
-// 	];
+export const loaderEventDetails = async ({ params }) => {
+	const response = await csrfFetch(`/api/events/${params.eventId}`);
 
-// 	const fetchPromises = urls.map((url) =>
-// 		csrfFetch(url).then((response) => response.json())
-// 	);
-// // eventStatus
-// 	const [eventDetail, eventAttendees] = await Promise.all(fetchPromises);
+	if (response.ok) {
+		const eventDetail = await response.json();
+		return eventDetail;
+	}
 
-// 	return json({ eventDetail, eventAttendees});
-// };
+	// const urls = [
+	// 	`/api/events/${params.eventId}`,
+	// ];
+
+	// const fetchPromises = urls.map((url) =>
+	// 	csrfFetch(url).then((response) => response.json())
+	// );
+
+	// const [eventDetail] = await Promise.all(fetchPromises);
+
+	// return json({ eventDetail});
+};

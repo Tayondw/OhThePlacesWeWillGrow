@@ -1,13 +1,16 @@
 import { useState, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
-import { FaUserCircle } from "react-icons/fa";
 import * as sessionActions from "../../store/session";
-import OpenModalButton from "../OpenModalButton";
+import OpenModalMenuItem from "./OpenModalMenuItem";
 import LoginFormModal from "../LoginFormModal";
 import SignupFormModal from "../SignupFormModal";
-import { redirect } from "react-router-dom";
+import OpenModalButton from "../OpenModalButton";
+import { CgProfile } from "react-icons/cg";
+import { GoChevronDown } from "react-icons/go";
+import "./Navigation.css";
+import { Link } from "react-router-dom";
 
-const ProfileButton = ({ user }) => {
+const ProfileButton = ({ user, navigate }) => {
 	const dispatch = useDispatch();
 	const [showMenu, setShowMenu] = useState(false);
 	const ulRef = useRef();
@@ -33,53 +36,93 @@ const ProfileButton = ({ user }) => {
 
 	const closeMenu = () => setShowMenu(false);
 
-	const logout = (e) => {
-		e.preventDefault();
+	const logout = () => {
+		// e.preventDefault();
 		dispatch(sessionActions.logout());
-            closeMenu();
-            redirect("/");
+		closeMenu();
+		navigate("/");
 	};
 
-	const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
+	// const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
 
 	return (
 		<>
-			<button onClick={toggleMenu}>
-				<FaUserCircle size={28}/>
-			</button>
-			<ul className={ulClassName} ref={ulRef}>
-				{user ? (
-					<>
-						<li>{user.username}</li>
-						<li>
-							Hello, {user.firstName}
-						</li>
-                                    <li>{user.email}</li>
-                                    <hr></hr>
-						<li>
-							<button onClick={logout}>Log Out</button>
-						</li>
-					</>
-				) : (
-					<>
-						<li>
-							<OpenModalButton
-								buttonText="Log In"
-								onButtonClick={closeMenu}
-								modalComponent={<LoginFormModal />}
+			{user ? (
+				<div id="options" ref={ulRef}>
+					<Link className="options-link" to="/groups/new">
+						Start a new Group
+					</Link>
+					<div id="options-button">
+						<div className="dropdown">
+							<button onClick={toggleMenu}>
+								<CgProfile size={35} style={{ color: `#FF6464` }} />
+								<GoChevronDown size={35} style={{ color: `#FF6464` }} />
+							</button>
+						</div>
+						<div
+							className={showMenu ? "profile-dropdown" : "hidden"}
+							ref={ulRef}
+						>
+							<OpenModalMenuItem itemText={`Hello, ${user.firstName}`} />
+							<OpenModalMenuItem itemText={user.email} />
+							<hr
+								style={{
+									border: `1px solid #D9ECF2`,
+								}}
 							/>
-						</li>
-						<li>
-							<OpenModalButton
-								buttonText="Sign Up"
-								onButtonClick={closeMenu}
-								modalComponent={<SignupFormModal />}
-							/>
-						</li>
-					</>
-				)}
-			</ul>
+							<div id="options-modal">
+								<OpenModalButton
+									className="logout"
+									buttonText="View Groups"
+									onButtonClick={() => {
+										closeMenu();
+										navigate("/groups");
+									}}
+									style={{
+										color: `#FF6464`,
+										backgroundColor: `#FAF5E4`,
+									}}
+								/>
+								<OpenModalButton
+									className="logout"
+									buttonText="View Events"
+									onButtonClick={() => {
+										closeMenu();
+										navigate("/events");
+									}}
+									style={{
+										color: `#FF6464`,
+										backgroundColor: `#FAF5E4`,
+									}}
+								/>
+								<OpenModalButton
+									className="logout"
+									buttonText="Log Out"
+									onButtonClick={logout}
+									style={{
+										color: `#FF6464`,
+										backgroundColor: `#FAF5E4`,
+									}}
+								/>
+							</div>
+						</div>
+					</div>
+				</div>
+			) : (
+				<div id="authentication">
+					<OpenModalMenuItem
+						itemText="Log In"
+						onItemClick={closeMenu}
+						modalComponent={<LoginFormModal navigate={navigate} />}
+					/>
+					<OpenModalMenuItem
+						itemText="Sign Up"
+						onItemClick={closeMenu}
+						modalComponent={<SignupFormModal navigate={navigate} />}
+					/>
+				</div>
+			)}
 		</>
 	);
-}
+};
 export default ProfileButton;

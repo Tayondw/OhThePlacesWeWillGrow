@@ -1,4 +1,4 @@
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { Outlet, useLoaderData, useNavigate } from "react-router-dom";
 import eventImage from "../../assets/event-1.png";
 import "./Events.css";
 
@@ -41,24 +41,23 @@ const Events = () => {
 						{/* <div id="eventImage">
 							<img src={images[index % images.length]} alt={event.name} />
 						</div> */}
-                                    <div id="event">
-							<img
-								key={index}
-								src={eventImage}
-								alt={event.name}
-							/>
+						<div id="event">
+							<img key={index} src={eventImage} alt={event.name} />
 							<div key={index} id="eventInfo">
 								<p>{event.startDate}</p>
 								<h4>{event.name}</h4>
 								{event.Venue ? (
 									<p>{`${event.Venue.city}, ${event.Venue.state}`}</p>
-								) : <p>Online</p>}
+								) : (
+									<p>Online</p>
+								)}
 							</div>
 							<div id="event-desc">{event.description}</div>
-                                    </div>
-                                    <hr width={2000} />
+						</div>
+						<hr width={2000} />
 					</div>
 				))}
+			<Outlet />
 		</div>
 	);
 };

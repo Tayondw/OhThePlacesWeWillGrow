@@ -1,4 +1,4 @@
-import { Link, useLoaderData, useNavigate } from "react-router-dom";
+import { Outlet, useLoaderData, useNavigate } from "react-router-dom";
 import affluent from "../../assets/collageGroup-2.png";
 import appAcademy from "../../assets/app-academy.png";
 import googleLovers from "../../assets/google-cloud-next.png";
@@ -30,16 +30,8 @@ const Groups = () => {
 		sweStudy,
 	];
 
-	// images.map(image => console.log(image))
-
 	return (
-		<div>
-			<Link to="/events" id="event-link">
-				Events
-			</Link>
-			<Link to="/groups" id="group-link">
-				Groups
-			</Link>
+		<div id="view-group">
 			<h1>Groups in Meetup</h1>
 			{allGroups &&
 				allGroups.map((group, index) => (
@@ -73,6 +65,7 @@ const Groups = () => {
 						<hr width={2000} />
 					</div>
 				))}
+			<Outlet />
 		</div>
 	);
 };
