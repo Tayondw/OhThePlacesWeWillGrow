@@ -53,7 +53,7 @@ const GroupDetail = () => {
 		return `${year}-${month}-${day} • ${hours}:${minutes}:${seconds}`;
 	};
 
-	const eventDate = groupEvents.Events.map((event) => {
+	const formatEventDate = groupEvents.Events.map((event) => {
 		return {
 			...event,
 			startDate: formatDate(event.startDate),
@@ -114,7 +114,7 @@ const GroupDetail = () => {
 						<div
 							id="upcoming-events"
 							key={groupDetail.id}
-							onClick={() => navigate(`/groups/${groupDetail.id}/events`)}
+							onClick={() => navigate(`/events/${groupDetail.id}`)}
 							style={{ cursor: "pointer" }}
 						>
 							<h3>Upcoming Events ({groupEvents.Events.length})</h3>
@@ -127,13 +127,18 @@ const GroupDetail = () => {
 									))}
 								</div> */}
 								<div id="eventInfo">
-									{eventDate.map((event, index) => (
+									{formatEventDate.map((event, index) => (
 										<>
 											<img key={index} src={eventImage} alt={event.name} />
 											<div key={index}>
 												<p>{event.startDate}</p>
 												<h4>{event.name}</h4>
-												<p>{`${event.Venue.city}, ${event.Venue.state}`}</p>
+												{event.Venue ? (
+													<p>{`${event.Venue.city}, ${event.Venue.state}`}</p>
+												) : (
+													<p>Online</p>
+												)}
+												{/* <p>{`${event.Venue.city}, ${event.Venue.state}`}</p> */}
 											</div>
 											<div id="event-desc">{event.description}</div>
 										</>
