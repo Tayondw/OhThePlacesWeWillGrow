@@ -1,22 +1,21 @@
 import {
 	useLoaderData,
 	useFetcher,
+	useActionData,
 	// useNavigate,
 	// Outlet,
 } from "react-router-dom";
 // import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-// import { createGroupAction } from "./createLoaderAction";
-// const PRIVATE = ["Private", "Public"];
 
 const CreateGroup = () => {
 	let fetcher = useFetcher();
 	const allGroups = useLoaderData();
-	console.log("is this the city", allGroups.city);
 	const sessionUser = useSelector((state) => state.session.user);
+	let errors = useActionData();
+      console.log("ERRORS", errors);
 
-	// const navigate = useNavigate();
-	// const dispatch = useDispatch();
+
 	// const [location, setLocation] = useState("");
 	// const [name, setName] = useState("");
 	// const [about, setAbout] = useState("");
@@ -28,20 +27,21 @@ const CreateGroup = () => {
 	// const [city, state] = location.split(", ");
 
 	// if (!sessionUser) navigate("/");
-
 	// useEffect(() => {
 	// 	if (fetcher.state == "loading") setText("");
 	// }, [fetcher.state]);
 
 	// useEffect(() => {
-	// 	const errs = {};
+	//       const errs = {};
+	//       console.log("fetcherrrrrr", fetcher);
 	// 	if (!location || location.length === 0)
-	// 		errs.location = "Location is required";
+	// 		errs.location =
+	// 			"Location is required; REMEMBER: Please enter a city and state, separated by a comma and a space.";
 	// 	if (!name || name.length === 0) errs.name = "Name is required";
-	// 	if (description.length < 30)
-	// 		errs.description = "Description must be at least 30 characters";
-	// 	if (!groupType) errs.groupType = "Group Type is required";
-	// 	if (!visibilityType) errs.visibilityType = "Visibility Type is required";
+	// 	if (about.length < 30)
+	// 		errs.about = "Description must be at least 50 characters";
+	// 	if (!type) errs.type = "Group Type is required";
+	// 	if (!privacy) errs.privacy = "Visibility Type is required";
 	// 	if (
 	// 		!image ||
 	// 		(!image.endsWith(".png") &&
@@ -49,23 +49,12 @@ const CreateGroup = () => {
 	// 			!image.endsWith(".jpeg"))
 	// 	)
 	// 		errs.image = "Image URL must end in .png, .jpg, or .jpeg";
-	// 	if (!city || !state)
-	// 		errs.location =
-	// 			"Please enter a city and state, separated by a comma and a space.";
-	// 	// if (fetcher.state == "loading") setText("");
+	//       if (fetcher.state == "loading") setText("");
 
 	// 	setErrors(errs);
-	// }, [
-	// 	location,
-	// 	name,
-	// 	description,
-	// 	groupType,
-	// 	visibilityType,
-	// 	image,
-	// 	city,
-	// 	state,
-	// 	// fetcher.state,
-	// ]);
+	// }, [location, name, about, type, privacy, image, fetcher.state]);
+
+	// /\.(png|jpe?g)$/i
 
 	// const handleClick = async (event) => {
 	// 	event.preventDefault();
@@ -168,11 +157,11 @@ const CreateGroup = () => {
 						{/* <p style={{ color: "red" }} className="error">
 							{errors && errors.location}
 						</p> */}
-						{/* {errors.location && (
+						{errors?.location && (
 							<p style={{ color: "red" }} className="errors">
 								{errors.location}
 							</p>
-						)} */}
+						)}
 						<hr />
 					</div>
 					<div id="section-2-create">
@@ -202,11 +191,11 @@ const CreateGroup = () => {
 						{/* <p style={{ color: "red" }} className="error">
 							{errors && errors.name}
 						</p> */}
-						{/* {errors.name && (
+						{errors?.name && (
 							<p style={{ color: "red" }} className="errors">
 								{errors.name}
 							</p>
-						)} */}
+						)}
 						<hr />
 					</div>
 					<div id="section-3-create">
@@ -240,11 +229,11 @@ const CreateGroup = () => {
 						{/* <p style={{ color: "red" }} className="errors">
 							{errors && errors.about}
 						</p> */}
-						{/* {errors.description && (
+						{errors?.about && (
 							<p style={{ color: "red" }} className="errors">
-								{errors.description}
+								{errors.about}
 							</p>
-						)} */}
+						)}
 						<hr />
 					</div>
 					<div id="section-4-create">
@@ -262,20 +251,18 @@ const CreateGroup = () => {
 										// onChange={(event) => setText(event.target.value)}
 									>
 										<option value="">(select one)</option>
-										<option value="In Person">
-											In Person
-										</option>
+										<option value="In person">In Person</option>
 										<option value="Online">Online</option>
 									</select>
 								</label>
 								{/* <p style={{ color: "red" }} className="errors">
 									{errors && errors.type}
 								</p> */}
-								{/* {errors.groupType && (
+								{errors?.type && (
 									<p style={{ color: "red" }} className="errors">
-										{errors && errors.type}
+										{errors.type}
 									</p>
-								)} */}
+								)}
 							</div>
 							<div className="privacy-questions">
 								<label htmlFor="privacy-select">
@@ -296,11 +283,11 @@ const CreateGroup = () => {
 								{/* <p style={{ color: "red" }} className="errors">
 									{errors && errors.private}
 								</p> */}
-								{/* {errors.visibilityType && (
+								{errors?.private && (
 									<p style={{ color: "red" }} className="errors">
-										{errors && errors.private}
+										{errors.private}
 									</p>
-								)} */}
+								)}
 							</div>
 
 							<div id="url-input">
@@ -320,11 +307,11 @@ const CreateGroup = () => {
 								{/* <p style={{ color: "red" }} className="errors">
 									{errors && errors.image}
 								</p> */}
-								{/* {errors.image && (
+								{errors?.url && (
 									<p style={{ color: "red" }} className="errors">
-										{errors && errors.image}
+										{errors.url}
 									</p>
-								)} */}
+								)}
 							</div>
 						</div>
 						<hr />

@@ -144,29 +144,35 @@ const GroupDetail = () => {
 							onClick={() => navigate(`/events/${groupDetail.id}`)}
 							style={{ cursor: "pointer" }}
 						>
-							<h3>Upcoming Events ({groupEvents.Events.length})</h3>
-							<div id="info-and-image">
-								<div id="eventInfo">
-									{formatEventDate.map((event, index) => (
-										<>
-											<div key={index}>
-												<img src={eventImage} alt={event.name} />
-												<div>
-													<p>{event.startDate}</p>
-													<h4>{event.name}</h4>
-													{event.Venue ? (
-														<p>{`${event.Venue.city}, ${event.Venue.state}`}</p>
-													) : (
-														<p>Online</p>
-													)}
-												</div>
-											</div>
+							{!groupEvents.Events.length ? (
+								<h3>No Upcoming Events</h3>
+							) : (
+								<>
+									<h3>Upcoming Events ({groupEvents.Events.length})</h3>
+									<div id="info-and-image">
+										<div id="eventInfo">
+											{formatEventDate.map((event, index) => (
+												<>
+													<div key={index}>
+														<img src={eventImage} alt={event.name} />
+														<div>
+															<p>{event.startDate}</p>
+															<h4>{event.name}</h4>
+															{event.Venue ? (
+																<p>{`${event.Venue.city}, ${event.Venue.state}`}</p>
+															) : (
+																<p>Online</p>
+															)}
+														</div>
+													</div>
 
-											<div id="event-desc">{event.description}</div>
-										</>
-									))}
-								</div>
-							</div>
+													<div id="event-desc">{event.description}</div>
+												</>
+											))}
+										</div>
+									</div>
+								</>
+							)}
 						</div>
 					</div>
 				</div>

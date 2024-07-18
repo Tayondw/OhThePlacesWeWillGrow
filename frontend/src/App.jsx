@@ -14,16 +14,16 @@ import {
 } from "./components/Events/loaderEvents";
 import {
 	createGroupLoader,
-	// createGroupDetailsLoader,
+	createGroupDetailsLoader,
 	createGroupAction,
 	// createEventLoader,
-	// createEventAction,
+	createEventAction,
 } from "./components/Create/createLoaderAction";
 import Toggle from "./components/Toggle";
 import GroupDetail from "./components/Groups/GroupDetail";
 import EventDetail from "./components/Events/EventDetail";
 import CreateGroup from "./components/Create/CreateGroup";
-// import CreateEvent from "./components/Create/CreateEvent";
+import CreateEvent from "./components/Create/CreateEvent";
 
 const Layout = () => {
 	const dispatch = useDispatch();
@@ -75,18 +75,19 @@ const router = createBrowserRouter([
 				path: "/events",
 				loader: loaderEvent,
 				element: <Toggle />,
+				action: createEventAction,
 			},
 			{
 				path: "/events/:eventId",
 				loader: loaderEventDetails,
 				element: <EventDetail />,
 			},
-			// {
-			// 	path: "/groups/:groupId/events/new",
-			// 	loader: createEventLoader,
-			// 	element: <CreateEvent />,
-			// 	action: createEventAction,
-			// },
+			{
+				path: "/groups/:groupId/events/new",
+				loader: createGroupDetailsLoader,
+				element: <CreateEvent />,
+				action: createEventAction,
+			},
 		],
 	},
 ]);

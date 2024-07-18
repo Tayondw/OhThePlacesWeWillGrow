@@ -29,55 +29,112 @@ export const createGroupDetailsLoader = async ({ params }) => {
 };
 
 export const createGroupAction = async ({ request }) => {
-      console.log("CHECK REQUEST", request);
+	// console.log("CHECK REQUEST", request);
 	let formData = await request.formData();
-      let data = Object.fromEntries(formData);
-      let [city, state] = data.location.split(", ");
-      data["city"] = city;
-      data["state"] = state;
+	console.log("CHECK FORM DATA", formData);
+	// const name = formData.get("name");
+	// const about = formData.get("about");
+	// const location = formData.get("location");
+	// const type = formData.get("type");
+	// const image = formData.get("image");
+	// const privacy = formData.get("private");
+	// const [city, state] = formData.get("location").split(", ");
+	const errors = {};
+	let data = Object.fromEntries(formData);
+	console.log("CHECKING MY DATA", data);
+	// console.log("THIS IS THE NAME", name);
+	// console.log("THIS IS THE LOCATION", location);
+	// console.log("THIS IS THE ABOUT", about);
+	// console.log("THIS IS THE IMAGE", image);
+	// console.log("THIS IS THE CITY", city);
+	// console.log("THIS IS THE STATE", state);
+	// console.log("THIS IS THE TYPE", type);
+	// console.log("THIS IS THE PRIVACY", privacy);
 
-      console.log("THIS IS DATA", data);
-	try {
-		const response = await csrfFetch(`/api/groups`, {
+	if (!data.location || !data.location.length) errors.location = "Location is required";
+	if (!data.name || !data.name.length) errors.name = "Name is required";
+	if (data.about && data.about.length < 50)
+		errors.about = "Description must be at least 50 characters";
+	if (!data.type) errors.type = "Group Type is required";
+	if (data.private === undefined) errors.private = "Visibility Type is required";
+	if (
+		!data.url ||
+		(!data.url.endsWith(".png") &&
+			!data.url.endsWith(".jpg") &&
+			!data.url.endsWith(".jpeg"))
+	)
+		errors.url = "Image URL must end in .png, .jpg, or .jpeg";
+	let [city, state] = data.location.split(", ");
+	if (!city || !state)
+		errors.location =
+			"Please enter a city and state, separated by a comma and a space.";
+
+	console.log("Validation Errors:", errors);
+
+	data["city"] = city;
+	data["state"] = state;
+	delete data.location;
+
+	if (Object.keys(errors).length) {
+		return errors;
+      }
+      
+
+	const response = await csrfFetch(`/api/groups`, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify({
+			name: data.name,
+			about: data.about,
+			type: data.type,
+			private: data.private,
+			city: data.city,
+			state: data.state,
+		}),
+	});
+
+	// console.log("this is response, are we here", response);
+
+	if (response.ok) {
+		const group = await response.json();
+		const imageResponse = await csrfFetch(`/api/groups/${group.id}/images`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify(data),
+			body: JSON.stringify({
+				url: group.image,
+				preview: true,
+			}),
 		});
-
-		if (response.ok) {
-			const group = await response.json();
-			const imageResponse = await csrfFetch(`/api/groups/${group.id}/images`, {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
-					url: request.url,
-					preview: true,
-				}),
-			});
-
-			if (imageResponse.ok) {
-				throw redirect(`/groups/${group.id}`);
-			} else {
-				const imageError = await imageResponse.json();
-				return {
-					errors: imageError.errors,
-				};
-			}
+		console.log("checking group", group);
+		if (imageResponse.ok) {
+			throw redirect(`/groups/${group.id}`);
 		} else {
-			const errorResponse = await response.json();
+			const imageError = await imageResponse.json();
 			return {
-				errors: errorResponse.errors,
+				errors: imageError.errors,
 			};
 		}
-	} catch (error) {
-		return {
-			errors: ["An unexpected error occurred. Please try again later."],
-		};
 	}
+
+	// console.log("THIS IS DATA", data);
+
+	// let intent = formData.get("intent");
+
+	// if (intent === "delete") {
+	//       const response = await csrfFetch(`/api/groups/${data.id}`, {
+	//             method: "DELETE",
+	// 	});
+
+	//       console.log("did i make it", response);
+
+	// 	if (response.ok) {
+	// 		return { message: "Successfully deleted" };
+	// 	}
+	// }
 };
 
 // export const createEventLoader = async () => {
@@ -98,30 +155,30 @@ export const createGroupAction = async ({ request }) => {
 // 	}
 // };
 
-// export const createEventAction = async ({ request }, id) => {
-// 	let formData = await request.formData();
-// 	let data = Object.fromEntries(formData);
+export const createEventAction = async ({ request }, id) => {
+	let formData = await request.formData();
+	let data = Object.fromEntries(formData);
 
-// 	const response = await csrfFetch(`/api/groups/${id}/events`, {
-// 		method: "POST",
-// 		headers: {
-// 			"Content-Type": "application/json",
-// 		},
-// 		body: JSON.stringify(data),
-// 	});
+	const response = await csrfFetch(`/api/groups/${id}/events`, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify(data),
+	});
 
-// 	if (response.ok) {
-// 		const event = await response.json();
-// 		await csrfFetch(`/api/events/${event.id}/images`, {
-// 			method: "POST",
-// 			headers: {
-// 				"Content-Type": "application/json",
-// 			},
-// 			body: JSON.stringify({
-// 				url: request.url,
-// 				preview: true,
-// 			}),
-// 		});
-// 		throw redirect(`/event/${event.id}`);
-// 	}
-// };
+	if (response.ok) {
+		const event = await response.json();
+		await csrfFetch(`/api/events/${event.id}/images`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				url: request.url,
+				preview: true,
+			}),
+		});
+		throw redirect(`/event/${event.id}`);
+	}
+};
