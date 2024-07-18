@@ -12,11 +12,18 @@ import {
 	loaderEvent,
 	loaderEventDetails,
 } from "./components/Events/loaderEvents";
+import {
+	createGroupLoader,
+	// createGroupDetailsLoader,
+	createGroupAction,
+	// createEventLoader,
+	// createEventAction,
+} from "./components/Create/createLoaderAction";
 import Toggle from "./components/Toggle";
-// import Groups from "./components/Groups";
 import GroupDetail from "./components/Groups/GroupDetail";
-// import Events from "./components/Events";
 import EventDetail from "./components/Events/EventDetail";
+import CreateGroup from "./components/Create/CreateGroup";
+// import CreateEvent from "./components/Create/CreateEvent";
 
 const Layout = () => {
 	const dispatch = useDispatch();
@@ -38,9 +45,7 @@ const Layout = () => {
 
 const router = createBrowserRouter([
 	{
-		// loader: loginLoader,
 		element: <Layout />,
-		// action: loginAction,
 		children: [
 			{
 				path: "/",
@@ -50,11 +55,21 @@ const router = createBrowserRouter([
 				path: "/groups",
 				loader: loaderGroup,
 				element: <Toggle />,
+				action: createGroupAction,
 			},
 			{
 				path: "/groups/:groupId",
 				loader: loaderGroupDetails,
 				element: <GroupDetail />,
+			},
+			{
+				path: "/groups/new",
+				loader: createGroupLoader,
+				element: <CreateGroup />,
+				action: createGroupAction,
+			},
+			{
+				path: "/groups/:groupId/edit",
 			},
 			{
 				path: "/events",
@@ -66,6 +81,12 @@ const router = createBrowserRouter([
 				loader: loaderEventDetails,
 				element: <EventDetail />,
 			},
+			// {
+			// 	path: "/groups/:groupId/events/new",
+			// 	loader: createEventLoader,
+			// 	element: <CreateEvent />,
+			// 	action: createEventAction,
+			// },
 		],
 	},
 ]);
