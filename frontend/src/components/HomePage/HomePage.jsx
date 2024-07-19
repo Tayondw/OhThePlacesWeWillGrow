@@ -87,11 +87,11 @@ const HomePage = () => {
 				<div className="meetup-links">
 					<img src={newGroup} alt="new-group" />
 					{sessionUser ? (
-						<Link className="nav-link" to="/groups/create">
+						<Link className="nav-link" to="/groups/new">
 							Start a new group
 						</Link>
 					) : (
-						<Link className="disabled" to="/groups/create">
+						<Link className="disabled" to="/groups/new">
 							Start a new group
 						</Link>
 					)}
