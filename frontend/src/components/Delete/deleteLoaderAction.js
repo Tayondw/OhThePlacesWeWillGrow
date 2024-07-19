@@ -21,6 +21,7 @@ export const deleteEventAction = async ({ request }) => {
 	let data = Object.fromEntries(formData);
 
 	// let intent = formData.get("intent");
+
       const response = await csrfFetch(`/api/events/${data.id}`, {
             method: "DELETE",
       });

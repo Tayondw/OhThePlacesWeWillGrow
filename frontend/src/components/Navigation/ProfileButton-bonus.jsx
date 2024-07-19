@@ -54,7 +54,7 @@ const ProfileButton = ({ user, navigate }) => {
 					</Link>
 					<div id="options-button">
 						<div className="dropdown">
-							<button onClick={toggleMenu}>
+							<button className="nav-profile-button" onClick={toggleMenu}>
 								<CgProfile size={35} style={{ color: `#FF6464` }} />
 								<GoChevronDown size={35} style={{ color: `#FF6464` }} />
 							</button>

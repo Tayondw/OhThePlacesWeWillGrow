@@ -1,3 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Sacramento&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Sacramento&family=Shadows+Into+Light&display=swap');
+
+/* #root #toggle {
+      margin: 0 22%;
+      padding: 0;
+} */
+
 #toggle {
 	padding: 0%;
 	margin: 0 22%;
@@ -12,26 +23,43 @@
 	display: flex;
 	flex-direction: row;
 	column-gap: 20px;
+      padding-bottom: 0px;
+      margin-bottom: 0px;
 }
 
 .inactive {
 	color: gray;
 	text-decoration: none;
+      font-family: "Shadows Into Light";
+      margin-bottom: 0;
+      font-size: 2.3em;
 }
 
 .inactive:hover {
 	text-decoration: underline;
+      margin-bottom: 0;
+      font-size: 2.3em;
 }
 
 .active {
 	color: teal;
 	text-decoration: underline;
+      font-family: "Shadows Into Light";
+      margin-bottom: 0;
+      font-size: 2.3em;
 }
 
 .clickable:hover {
 	cursor: pointer;
+      margin-bottom: 0;
 }
 
 .neutral:hover {
 	cursor: default;
+      margin-bottom: 0;
+}
+
+#which {
+      /* margin-top: 0px;
+      padding-top: 0; */
 }

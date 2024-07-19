@@ -118,7 +118,7 @@ const EventDetail = () => {
 								<>
 									<div id="update-button">
 										<button
-											style={{ backgroundColor: `darkgray`, color: `#FAF5E4` }}
+											style={{ backgroundColor: `gray`, color: `#FAF5E4` }}
 										>
 											Update
 										</button>
@@ -130,6 +130,7 @@ const EventDetail = () => {
 											className="delete-button"
 											id="delete-event"
 											buttonText="Delete"
+											style={{ backgroundColor: `gray`, color: `#FAF5E4` }}
 											modalComponent={
 												<DeleteEventModal
 													eventDetail={eventDetail}

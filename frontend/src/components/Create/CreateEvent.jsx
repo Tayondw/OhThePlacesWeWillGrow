@@ -74,17 +74,17 @@ const CreateEvent = () => {
 			);
 		}
 	};
-	// const formatDate = (date) => {
-	// 	if (!date) return;
+	const formatDate = (date) => {
+		if (!date) return;
 
-	// 	const year = date.getFullYear();
-	// 	const month = String(date.getMonth() + 1).padStart(2, "0");
-	// 	const day = String(date.getDate()).padStart(2, "0");
-	// 	const hours = String(date.getHours()).padStart(2, "0");
-	// 	const minutes = String(date.getMinutes()).padStart(2, "0");
+		const year = date.getFullYear();
+		const month = String(date.getMonth() + 1).padStart(2, "0");
+		const day = String(date.getDate()).padStart(2, "0");
+		const hours = String(date.getHours()).padStart(2, "0");
+		const minutes = String(date.getMinutes()).padStart(2, "0");
 
-	// 	return `${year}-${month}-${day}T${hours}:${minutes}`;
-	// };
+		return `${year}-${month}-${day}T${hours}:${minutes}`;
+	};
 
 	// console.log("CHECK ALL GROUP EVENTS", groupEvents);
 	// console.log("CHECK ALL GROUP DETAILS", groupDetail);
@@ -141,7 +141,9 @@ const CreateEvent = () => {
 							<label>
 								What is the price of your event?
 								<input
-									type="text"
+                                                      type="number"
+                                                      min="1"
+                                                      step="any"
 									name="price"
 									placeholder="0"
 									value={price}
@@ -155,12 +157,11 @@ const CreateEvent = () => {
 								When does your event start?
 								
 								<input
-									type="text"
+									type="datetime-local"
 									name="startDate"
-									placeholder="YYYY-MM-DD HH:MM"
-									value={startDate}
+									value={formatDate(startDate)}
 									onChange={(event) =>
-										setStartDate(event.target.value)
+										setStartDate(new Date(event.target.value))
 									}
 								/>
 								<FaCalendarAlt />
@@ -173,11 +174,10 @@ const CreateEvent = () => {
 							<label>
 								When does your event end?
 								<input
-									type="text"
+									type="datetime-local"
 									name="endDate"
-									placeholder="YYYY-MM-DD HH:MM"
-									value={endDate}
-									onChange={(event) => setEndDate(event.target.value)}
+									value={formatDate(endDate)}
+									onChange={(event) => setEndDate(new Date(event.target.value))}
 								/>
 								<FaCalendarAlt />
 							</label>

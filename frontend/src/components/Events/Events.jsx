@@ -5,7 +5,7 @@ import "./Events.css";
 const Events = () => {
 	const allEvents = useLoaderData();
 	const navigate = useNavigate();
-	console.log("checking for all events", allEvents);
+	// console.log("checking for all events", allEvents);
 
 	const formatDate = (startDate) => {
 		const date = new Date(startDate);
@@ -28,34 +28,37 @@ const Events = () => {
 	});
 
 	return (
-		<div>
-			<h1>Events in Meetup</h1>
+		<div id="allEvents">
+			<h1 id="events-in-meetup">Events in Meetup</h1>
+			<hr />
 			{formatEventDate &&
 				formatEventDate.map((event, index) => (
-					<div
-						key={event.id}
-						className="eventDetail"
-						onClick={() => navigate(`/events/${event.id}`)}
-						style={{ cursor: "pointer" }}
-					>
-						{/* <div id="eventImage">
+					<>
+						<div
+							key={event.id}
+							className="eventDetail"
+							onClick={() => navigate(`/events/${event.id}`)}
+							style={{ cursor: "pointer" }}
+						>
+							{/* <div id="eventImage">
 							<img src={images[index % images.length]} alt={event.name} />
 						</div> */}
-						<div key={index} id="event">
-							<img src={eventImage} alt={event.name} />
-							<div id="eventInfo">
-								<p>{event.startDate}</p>
-								<h4>{event.name}</h4>
-								{event.Venue ? (
-									<p>{`${event.Venue.city}, ${event.Venue.state}`}</p>
-								) : (
-									<p>Online</p>
-								)}
+							<div key={index} id="eventImage">
+								<img src={eventImage} alt={event.name} />
+								<div id="eventInfo">
+									<p className="allEvents-date">{event.startDate}</p>
+									<h4 className="allEvents-name">{event.name}</h4>
+									{event.Venue ? (
+										<p className="allEvents-venue">{`${event.Venue.city}, ${event.Venue.state}`}</p>
+									) : (
+										<p className="allEvents-venue">Online</p>
+									)}
+								</div>
 							</div>
-							<div id="event-desc">{event.description}</div>
+								<div id="event-desc">{event.description}</div>
 						</div>
-						<hr width={2000} />
-					</div>
+						<hr id="event-separator" />
+					</>
 				))}
 			<Outlet />
 		</div>

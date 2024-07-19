@@ -32,38 +32,41 @@ const Groups = () => {
 
 	return (
 		<div id="view-group">
-			<h1>Groups in Meetup</h1>
+			<h2 id="groups-in-meetup">Groups in Meetup</h2>
+			<hr />
 			{allGroups &&
 				allGroups.map((group, index) => (
-					<div
-						key={group.id}
-						className="groupDetail"
-						onClick={() => navigate(`/groups/${group.id}`)}
-						style={{ cursor: "pointer" }}
-					>
-						<div id="groupImage">
-							<img src={images[index % images.length]} alt={group.name} />
-						</div>
-						<div id="groupInfo">
-							<h2>{group.name}</h2>
-							<h4>{`${group.city}, ${group.state}`}</h4>
-							<p>{group.about}</p>
-							<div className="privacy">
-								{group.numEvents > 1 ? (
-									<p>
-										{`${group.numEvents} events • `}{" "}
-										{group.private ? "Private" : "Public"}
-									</p>
-								) : (
-									<p>
-										{`${group.numEvents} event • `}{" "}
-										{group.private ? "Private" : "Public"}
-									</p>
-								)}
+					<>
+						<div
+							key={group.id}
+							className="groupDetail"
+							onClick={() => navigate(`/groups/${group.id}`)}
+							style={{ cursor: "pointer" }}
+						>
+							<div id="groupImage">
+								<img src={images[index % images.length]} alt={group.name} />
+							</div>
+							<div id="groupInfo">
+								<h2 id="all-group-name">{group.name}</h2>
+								<h4 id="all-group-location">{`${group.city}, ${group.state}`}</h4>
+								<p id="all-group-about">{group.about}</p>
+								<div id="privacy">
+									{group.numEvents > 1 ? (
+										<p className="group-count">
+											{`${group.numEvents} events • `}{" "}
+											{group.private ? "Private" : "Public"}
+										</p>
+									) : (
+										<p className="group-count">
+											{`${group.numEvents} event • `}{" "}
+											{group.private ? "Private" : "Public"}
+										</p>
+									)}
+								</div>
 							</div>
 						</div>
-						<hr width={2000} />
-					</div>
+                                    <hr id="group-separator" />
+					</>
 				))}
 			<Outlet />
 		</div>

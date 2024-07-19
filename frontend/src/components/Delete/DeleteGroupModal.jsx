@@ -34,7 +34,6 @@ const DeleteGroupModal = ({ groupDetail, navigate }) => {
 			<h1>Confirm Delete</h1>
 			<h3>Are you sure you want to remove this group?</h3>
 			<div>
-				{/* <Form method="delete" action={`/groups/${groupDetail.id}`}> */}
 				<button
 					style={{ backgroundColor: "red" }}
 					value="delete"
@@ -43,7 +42,6 @@ const DeleteGroupModal = ({ groupDetail, navigate }) => {
 				>
 					Yes (Delete Group)
 				</button>
-				{/* </Form> */}
 				<button style={{ backgroundColor: "darkgray" }} onClick={noDelete}>
 					No (Keep Group)
 				</button>
