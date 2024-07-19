@@ -12,6 +12,8 @@ import techTalk from "../../assets/meetup-5.png";
 import sweTalk from "../../assets/swe-talk.png";
 import sweStudy from "../../assets/swe-study.png";
 import eventImage from "../../assets/event-1.png";
+import OpenModalButton from "../OpenModalButton";
+import DeleteGroupModal from "../Delete";
 import "./GroupDetail.css";
 
 const GroupDetail = () => {
@@ -31,11 +33,11 @@ const GroupDetail = () => {
 		sweTalk,
 		affluent,
 		sweStudy,
-      ];
-      
-      // console.log("log", groupEvents);
+	];
 
-      const groupImage = groupImages[(groupDetail.id - 1) % groupImages.length];
+	// console.log("log", groupDetail);
+
+	const groupImage = groupImages[(groupDetail.id - 1) % groupImages.length];
 	const firstName = groupDetail.Organizer.firstName;
 	const lastName = groupDetail.Organizer.lastName;
 
@@ -52,8 +54,12 @@ const GroupDetail = () => {
 		return `${year}-${month}-${day} • ${hours}:${minutes}`;
 	};
 
-	const upcomingEvents = groupEvents.Events.filter((event) => new Date(event.startDate) >= today);
-	const pastEvents = groupEvents.Events.filter((event) => new Date(event.startDate) < today);
+	const upcomingEvents = groupEvents.Events.filter(
+		(event) => new Date(event.startDate) >= today
+	);
+	const pastEvents = groupEvents.Events.filter(
+		(event) => new Date(event.startDate) < today
+	);
 
 	upcomingEvents.sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
 	pastEvents.sort((a, b) => new Date(b.startDate) - new Date(a.startDate));
@@ -95,7 +101,7 @@ const GroupDetail = () => {
 								{groupDetail.private ? "Private" : "Public"}
 							</p>
 						)}
-						<p>Organized by {`${firstName}, ${lastName}`}</p>
+						<p>Organized by {`${firstName} ${lastName}`}</p>
 						{!sessionUser ||
 						sessionUser.id === groupDetail.Organizer.id ? null : (
 							<div id="join">
@@ -111,7 +117,7 @@ const GroupDetail = () => {
 								</button>
 							</div>
 						)}
-						{sessionUser.id === groupDetail.Organizer.id ? (
+						{sessionUser && sessionUser.id === groupDetail.Organizer.id ? (
 							<div id="crud-buttons">
 								<button
 									onClick={() =>
@@ -121,19 +127,25 @@ const GroupDetail = () => {
 								>
 									Create event
 								</button>
-                                                <button
-                                                      onClick={() =>
-										navigate(`/groups/${groupDetail.id}/edit`)
-									}
+								<button
+									onClick={() => navigate(`/groups/${groupDetail.id}/edit`)}
 									style={{ backgroundColor: `darkgray`, color: `#FAF5E4` }}
 								>
 									Update
 								</button>
-								<button
-									style={{ backgroundColor: `darkgray`, color: `#FAF5E4` }}
-								>
-									Delete
-								</button>
+								<OpenModalButton
+									groupDetail={groupDetail}
+									navigate={navigate}
+									className="delete-button"
+									id="delete-group"
+									buttonText="Delete"
+									modalComponent={
+										<DeleteGroupModal
+											groupDetail={groupDetail}
+											navigate={navigate}
+										/>
+									}
+								/>
 							</div>
 						) : null}
 					</div>
@@ -152,33 +164,13 @@ const GroupDetail = () => {
 								{!upcomingEvents.length ? (
 									<p>No Upcoming Events</p>
 								) : (
-									<div id="event-list">
+									<div id="event-list-upcoming">
 										{formattedUpcomingEvents.map((event, index) => (
-											<div key={index} className="event-item" onClick={() => navigate(`/events/${event.id}`)}>
-												<img src={eventImage} alt={event.name} />
-												<div>
-													<p>{event.startDate}</p>
-													<h4>{event.name}</h4>
-													{event.Venue ? (
-														<p>{`${event.Venue.city}, ${event.Venue.state}`}</p>
-													) : (
-														<p>Online</p>
-													)}
-                                                                        </div>
-                                                                        <div id="event-desc">{event.description}</div>
-											</div>
-										))}
-									</div>
-								)}
-							</div>
-							<div id="past-events">
-								<h3>Past Events ({pastEvents.length})</h3>
-								{!pastEvents.length ? (
-									<p>No Past Events</p>
-								) : (
-									<div id="event-list">
-										{formattedPastEvents.map((event, index) => (
-											<div key={index} className="event-item" onClick={() => navigate(`/events/${event.id}`)}>
+											<div
+												key={index}
+												className="event-item"
+												onClick={() => navigate(`/events/${event.id}`)}
+											>
 												<img src={eventImage} alt={event.name} />
 												<div>
 													<p>{event.startDate}</p>
@@ -189,8 +181,36 @@ const GroupDetail = () => {
 														<p>Online</p>
 													)}
 												</div>
-                                                                        <div id="event-desc">{event.description}</div>
-                                                                  </div>
+												<div id="event-desc">{event.description}</div>
+											</div>
+										))}
+									</div>
+								)}
+							</div>
+							<div id="past-events">
+								<h3>Past Events ({pastEvents.length})</h3>
+								{!pastEvents.length ? (
+									<p>No Past Events</p>
+								) : (
+									<div id="event-list-past">
+										{formattedPastEvents.map((event, index) => (
+											<div
+												key={index}
+												className="event-item"
+												onClick={() => navigate(`/events/${event.id}`)}
+											>
+												<img src={eventImage} alt={event.name} />
+												<div>
+													<p>{event.startDate}</p>
+													<h4>{event.name}</h4>
+													{event.Venue ? (
+														<p>{`${event.Venue.city}, ${event.Venue.state}`}</p>
+													) : (
+														<p>Online</p>
+													)}
+												</div>
+												<div id="event-desc">{event.description}</div>
+											</div>
 										))}
 									</div>
 								)}
@@ -204,7 +224,6 @@ const GroupDetail = () => {
 };
 
 export default GroupDetail;
-
 
 // import { useLoaderData, Link, useNavigate } from "react-router-dom";
 // import { useSelector } from "react-redux";
@@ -374,7 +393,7 @@ export default GroupDetail;
 // 														</div>
 // 													</div>
 
-													// <div id="event-desc">{event.description}</div>
+// <div id="event-desc">{event.description}</div>
 // 												</>
 // 											))}
 // 										</div>

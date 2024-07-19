@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import eventImage from "../../assets/event-1.png";
 import affluent from "../../assets/collageGroup-2.png";
@@ -16,13 +16,15 @@ import sweStudy from "../../assets/swe-study.png";
 import { FaRegClock } from "react-icons/fa";
 import { MdOutlineAttachMoney } from "react-icons/md";
 import { GrLocationPin } from "react-icons/gr";
+import OpenModalButton from "../OpenModalButton";
+import DeleteEventModal from "../Delete/DeleteEventModal";
 import "./EventDetail.css";
 
 const EventDetail = () => {
 	let eventDetail = useLoaderData();
 	// console.log("EVENT DETAILS", eventDetail);
 	const sessionUser = useSelector((state) => state.session.user);
-
+	const navigate = useNavigate();
 	const groupImages = [
 		appAcademy,
 		googleLovers,
@@ -122,11 +124,19 @@ const EventDetail = () => {
 										</button>
 									</div>
 									<div id="delete-button">
-										<button
-											style={{ backgroundColor: "darkgray", color: `#FAF5E4` }}
-										>
-											Delete
-										</button>
+										<OpenModalButton
+											eventDetail={eventDetail}
+											navigate={navigate}
+											className="delete-button"
+											id="delete-event"
+											buttonText="Delete"
+											modalComponent={
+												<DeleteEventModal
+													eventDetail={eventDetail}
+													navigate={navigate}
+												/>
+											}
+										/>
 									</div>
 								</>
 							) : null}

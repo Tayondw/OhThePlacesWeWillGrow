@@ -1,0 +1,55 @@
+import { useModal } from "../../context/Modal";
+import { csrfFetch } from "../../store/csrf";
+import "./DeleteGroupModal.css";
+
+const DeleteGroupModal = ({ groupDetail, navigate }) => {
+	const { closeModal } = useModal();
+
+	const yesDelete = async (event) => {
+		event.preventDefault();
+		try {
+			const response = await csrfFetch(`/api/groups/${groupDetail.id}`, {
+				method: "DELETE",
+			});
+
+			if (response.ok) {
+				console.log("Group deleted successfully");
+				closeModal();
+				navigate("/groups");
+			} else {
+				console.error("Failed to delete the group");
+			}
+		} catch (error) {
+			console.error("Error:", error);
+		}
+	};
+
+	const noDelete = async (event) => {
+		event.preventDefault();
+		closeModal();
+	};
+
+	return (
+		<div id="deleteMenu">
+			<h1>Confirm Delete</h1>
+			<h3>Are you sure you want to remove this group?</h3>
+			<div>
+				{/* <Form method="delete" action={`/groups/${groupDetail.id}`}> */}
+				<button
+					style={{ backgroundColor: "red" }}
+					value="delete"
+					type="submit"
+					onClick={yesDelete}
+				>
+					Yes (Delete Group)
+				</button>
+				{/* </Form> */}
+				<button style={{ backgroundColor: "darkgray" }} onClick={noDelete}>
+					No (Keep Group)
+				</button>
+			</div>
+		</div>
+	);
+};
+
+export default DeleteGroupModal;

@@ -7,3 +7,11 @@
 	cursor: pointer;
 	box-shadow: 2px 2px #FF6464;
 }
+
+#event-list-past {
+      cursor: pointer;
+}
+
+#event-list-upcoming {
+      cursor: pointer;
+}

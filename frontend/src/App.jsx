@@ -3,10 +3,11 @@ import { useDispatch } from "react-redux";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import Navigation from "./components/Navigation/Navigation-bonus";
 import * as sessionActions from "./store/session";
+import { Modal } from "./context/Modal";
 import HomePage from "./components/HomePage";
 import {
 	loaderGroup,
-	loaderGroupDetails,
+	// loaderGroupDetails,
 } from "./components/Groups/loaderGroup";
 import {
 	loaderEvent,
@@ -22,6 +23,10 @@ import {
 	updateGroupLoader,
 	updateGroupAction,
 } from "./components/Update/updateLoaderAction";
+import {
+	deleteGroupDetailsLoader,
+	deleteEventAction,
+} from "./components/Delete/deleteLoaderAction";
 import Toggle from "./components/Toggle";
 import GroupDetail from "./components/Groups/GroupDetail";
 import EventDetail from "./components/Events/EventDetail";
@@ -41,6 +46,7 @@ const Layout = () => {
 
 	return (
 		<>
+			<Modal />
 			<Navigation isLoaded={isLoaded} />
 			{isLoaded && <Outlet />}
 		</>
@@ -63,9 +69,9 @@ const router = createBrowserRouter([
 			},
 			{
 				path: "/groups/:groupId",
-				loader: loaderGroupDetails,
-                        element: <GroupDetail />,
-                        action: updateGroupAction
+				loader: deleteGroupDetailsLoader,
+				element: <GroupDetail />,
+				action: updateGroupAction,
 			},
 			{
 				path: "/groups/new",
@@ -89,6 +95,7 @@ const router = createBrowserRouter([
 				path: "/events/:eventId",
 				loader: loaderEventDetails,
 				element: <EventDetail />,
+				action: deleteEventAction,
 			},
 			{
 				path: "/groups/:groupId/events/new",
