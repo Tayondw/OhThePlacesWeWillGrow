@@ -30,14 +30,14 @@
 }
 
 #options .options-link {
-      text-decoration: none;
-      color: #135c51;
-      font-family: "Quicksand", sans-serif;
-      font-size: 1em;
-      font-weight: 1000;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+	text-decoration: none;
+	color: #135c51;
+	font-family: "Quicksand", sans-serif;
+	font-size: 1em;
+	font-weight: 1000;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 #options-button > button {
@@ -78,16 +78,24 @@
 	padding: 5px;
 	text-align: start;
 	color: #ff6464;
-      font-size: 1.3em;
-      font-weight: bolder;
+	font-size: 1.3em;
+	font-weight: bolder;
 }
 
 #authentication {
 	display: flex;
 	align-content: center;
 	column-gap: 50px;
-      color: #ff6464;
-      font-size: 1.5em;
-      font-family: "Quicksand", sans-serif;
-      font-weight: 600;
+	color: #ff6464;
+	font-size: 1.5em;
+	font-family: "Quicksand", sans-serif;
+	font-weight: 600;
+}
+
+#authentication .auth-login {
+	cursor: pointer;
+}
+
+#authentication .auth-signup {
+	cursor: pointer;
 }

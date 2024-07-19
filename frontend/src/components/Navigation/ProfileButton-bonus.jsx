@@ -112,12 +112,14 @@ const ProfileButton = ({ user, navigate }) => {
 				<div id="authentication">
 					<OpenModalMenuItem
 						itemText="Log In"
-						onItemClick={closeMenu}
+                                          onItemClick={closeMenu}
+                                          className="auth-login"
 						modalComponent={<LoginFormModal navigate={navigate} />}
 					/>
 					<OpenModalMenuItem
 						itemText="Sign Up"
-						onItemClick={closeMenu}
+                                          onItemClick={closeMenu}
+                                          className="auth-signup"
 						modalComponent={<SignupFormModal navigate={navigate} />}
 					/>
 				</div>

@@ -16,14 +16,18 @@ import {
 	createGroupLoader,
 	createGroupDetailsLoader,
 	createGroupAction,
-	// createEventLoader,
 	createEventAction,
 } from "./components/Create/createLoaderAction";
+import {
+	updateGroupLoader,
+	updateGroupAction,
+} from "./components/Update/updateLoaderAction";
 import Toggle from "./components/Toggle";
 import GroupDetail from "./components/Groups/GroupDetail";
 import EventDetail from "./components/Events/EventDetail";
 import CreateGroup from "./components/Create/CreateGroup";
 import CreateEvent from "./components/Create/CreateEvent";
+import UpdateGroup from "./components/Update";
 
 const Layout = () => {
 	const dispatch = useDispatch();
@@ -60,7 +64,8 @@ const router = createBrowserRouter([
 			{
 				path: "/groups/:groupId",
 				loader: loaderGroupDetails,
-				element: <GroupDetail />,
+                        element: <GroupDetail />,
+                        action: updateGroupAction
 			},
 			{
 				path: "/groups/new",
@@ -70,6 +75,9 @@ const router = createBrowserRouter([
 			},
 			{
 				path: "/groups/:groupId/edit",
+				loader: updateGroupLoader,
+				element: <UpdateGroup />,
+				action: updateGroupAction,
 			},
 			{
 				path: "/events",
