@@ -53,8 +53,9 @@ const UpdateGroup = () => {
 	const onSubmit = async (event) => {
 		event.preventDefault();
 		const errs = {};
-		if (!location.length) errs.location = "Location is required.";
-		const [city, state] = location.split(", ");
+            if (!location.length) errs.location = "Location is required.";
+            const [city, state] = location.split(", ").map(item => item.trim());
+		// const [city, state] = location.split(", ");
 		if (!city || !state)
 			errs.location =
 				"Please enter a city and state, separated by a comma and a space.";
@@ -77,19 +78,23 @@ const UpdateGroup = () => {
 		} else {
 			setErrors({});
 			// Continue with form submission
-			console.log("Form submitted successfully with data:", {
-				location,
-				name,
-				about,
-				type,
-				privacy,
-				previewImage,
-				groupUrl,
-			});
-			fetcher.submit(
-				{ location, name, about, type, privacy, previewImage, groupUrl },
-				{ method: "put", action: `/groups/${groupUrl}` }
-			);
+			// console.log("Form submitted successfully with data:", {
+			// 	location,
+			// 	name,
+			// 	about,
+			// 	type,
+			// 	privacy,
+			// 	previewImage,
+			// 	groupUrl,
+                  // });
+                  fetcher.submit(
+                        { city, state, name, about, type, privacy, previewImage, groupUrl, location },
+                        { method: "put", action: `/groups/${groupUrl}` }
+                    );
+			// fetcher.submit(
+			// 	{ location, name, about, type, privacy, previewImage, groupUrl },
+			// 	{ method: "put", action: `/groups/${groupUrl}` }
+			// );
 		}
 	};
 
@@ -123,7 +128,7 @@ const UpdateGroup = () => {
 								<input
 									type="text"
 									placeholder="City, STATE"
-									name="location"
+                                                      name="location"
 									required
 									value={location}
 									onChange={(event) => setLocation(event.target.value)}

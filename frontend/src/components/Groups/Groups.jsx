@@ -10,7 +10,6 @@ import menCryToo from "../../assets/mencrytoo.png";
 import techTalk from "../../assets/meetup-5.png";
 import sweTalk from "../../assets/swe-talk.png";
 import sweStudy from "../../assets/swe-study.png";
-// import { LuDot } from "react-icons/lu";
 import "./Groups.css";
 
 const Groups = () => {
@@ -36,7 +35,7 @@ const Groups = () => {
 			<hr />
 			{allGroups &&
 				allGroups.map((group, index) => (
-					<>
+					<div key={index}>
 						<div
 							key={group.id}
 							className="groupDetail"
@@ -66,7 +65,7 @@ const Groups = () => {
 							</div>
 						</div>
                                     <hr id="group-separator" />
-					</>
+					</div>
 				))}
 			<Outlet />
 		</div>
