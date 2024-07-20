@@ -981,17 +981,17 @@ router.put("/:groupId", requireAuth, async (req, res) => {
 	let group = await Group.findByPk(groupId);
 	if (group && group.organizerId === user.id) {
 		try {
-			if (name) group.name = name;
-			if (about) group.about = about;
-			if (type) group.type = type;
+			if (!!name) group.name = name;
+			if (!!about) group.about = about;
+			if (!!type) group.type = type;
 			if (private !== undefined) group.private = private;
-			if (!city) group.city = city;
-			if (!state) group.state = state;
+			if (!!city) group.city = city;
+			if (!!state) group.state = state;
 
 			await group.validate();
 			await group.save();
 
-			res.json(group);
+			res.json({...group.toJSON()});
 		} catch (error) {
 			let errorObj = {
 				message: "Bad Request",
