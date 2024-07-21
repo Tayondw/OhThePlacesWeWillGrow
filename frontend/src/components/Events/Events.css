@@ -28,6 +28,14 @@
       /* column-gap: 10px; */
 }
 
+#allEvents-event-image {
+      display: block;
+      margin: 0;
+      padding: 0;
+      font-size: 0;
+      line-height: 0%;
+}
+
 #eventImage img{
       height: 200px;
       width: 300px;
@@ -36,6 +44,7 @@
       align-items: flex-start;
       padding: 0;
       padding-bottom: 15px;
+      /* position: relative; */
 }
 
 #eventImage #eventInfo {

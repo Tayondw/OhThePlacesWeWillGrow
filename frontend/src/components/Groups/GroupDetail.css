@@ -75,6 +75,11 @@
 
 #crud-buttons {
       padding-top: 200px;
+      display: flex;
+}
+
+#crud-buttons div {
+      padding-right: 10px;
 }
 
 #crud-buttons button:hover {

@@ -127,34 +127,40 @@ const GroupDetail = () => {
 							)}
 							{sessionUser && sessionUser.id === groupDetail.Organizer.id ? (
 								<div id="crud-buttons">
-									<button
-										onClick={() =>
-											navigate(`/groups/${groupDetail.id}/events/new`)
-										}
-										style={{ backgroundColor: `gray`, color: `#FAF5E4` }}
-									>
-										Create event
-									</button>
-									<button
-										onClick={() => navigate(`/groups/${groupDetail.id}/edit`)}
-										style={{ backgroundColor: `gray`, color: `#FAF5E4` }}
-									>
-										Update
-									</button>
-									<OpenModalButton
-										groupDetail={groupDetail}
-										navigate={navigate}
-										className="delete-button"
-										id="delete-group"
-										buttonText="Delete"
-										style={{ backgroundColor: "gray", color: `#FAF5E4` }}
-										modalComponent={
-											<DeleteGroupModal
-												groupDetail={groupDetail}
-												navigate={navigate}
-											/>
-										}
-									/>
+									<div id="crud-buttons-create">
+										<button
+											onClick={() =>
+												navigate(`/groups/${groupDetail.id}/events/new`)
+											}
+											style={{ backgroundColor: `gray`, color: `#FAF5E4` }}
+										>
+											Create event
+										</button>
+									</div>
+									<div id="crud-buttons-update">
+										<button
+											onClick={() => navigate(`/groups/${groupDetail.id}/edit`)}
+											style={{ backgroundColor: `gray`, color: `#FAF5E4` }}
+										>
+											Update
+										</button>
+									</div>
+									<div id="crud-buttons-delete">
+										<OpenModalButton
+											groupDetail={groupDetail}
+											navigate={navigate}
+											className="group-delete-button"
+											id="delete-group"
+											buttonText="Delete"
+											style={{ backgroundColor: "gray", color: `#FAF5E4` }}
+											modalComponent={
+												<DeleteGroupModal
+													groupDetail={groupDetail}
+													navigate={navigate}
+												/>
+											}
+										/>
+									</div>
 								</div>
 							) : null}
 						</div>
@@ -185,7 +191,9 @@ const GroupDetail = () => {
 												>
 													<img src={eventImage} alt={event.name} />
 													<div className="event-item-dates">
-														<p className="event-item-dates-p">{event.startDate}</p>
+														<p className="event-item-dates-p">
+															{event.startDate}
+														</p>
 														<h4 className="event-item-name-h4">{event.name}</h4>
 														{event.Venue ? (
 															<p className="event-item-dates-venue">{`${event.Venue.city}, ${event.Venue.state}`}</p>
@@ -194,9 +202,11 @@ const GroupDetail = () => {
 														)}
 													</div>
 												</div>
-												<div className="event-desc-group">{event.description}</div>
+												<div className="event-desc-group">
+													{event.description}
+												</div>
 											</div>
-                                                            ))}
+										))}
 									</div>
 								)}
 							</div>
@@ -217,7 +227,9 @@ const GroupDetail = () => {
 												>
 													<img src={eventImage} alt={event.name} />
 													<div className="event-item-dates">
-														<p className="event-item-dates-p">{event.startDate}</p>
+														<p className="event-item-dates-p">
+															{event.startDate}
+														</p>
 														<h4 className="event-item-name-h4">{event.name}</h4>
 														{event.Venue ? (
 															<p className="event-item-dates-venue">{`${event.Venue.city}, ${event.Venue.state}`}</p>
@@ -226,7 +238,9 @@ const GroupDetail = () => {
 														)}
 													</div>
 												</div>
-                                                                        <div className="event-desc-group">{event.description}</div>
+												<div className="event-desc-group">
+													{event.description}
+												</div>
 											</>
 										))}
 									</div>
