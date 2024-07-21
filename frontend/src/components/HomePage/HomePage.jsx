@@ -116,6 +116,7 @@ const HomePage = () => {
 							borderRadius: `40px`,
 							padding: `12px 25px`,
 							fontSize: `1em`,
+							color: `#FFC3C3`,
 						}}
 						modalComponent={<SignupFormModal />}
 					/>

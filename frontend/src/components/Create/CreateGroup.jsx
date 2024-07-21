@@ -2,6 +2,7 @@ import { useFetcher, Outlet } from "react-router-dom";
 // import { useLoaderData } from "react-router-dom";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import "./CreateGroup.css";
 
 const CreateGroup = () => {
 	let fetcher = useFetcher();
@@ -44,8 +45,18 @@ const CreateGroup = () => {
 		} else {
 			setErrors({});
 			// Continue with form submission
-                  console.log("Form submitted successfully with data:", { location, name, about, type, privacy, url });
-			fetcher.submit({ location, name, about, type, privacy, url }, { method: "post", action: "/groups" });
+			console.log("Form submitted successfully with data:", {
+				location,
+				name,
+				about,
+				type,
+				privacy,
+				url,
+			});
+			fetcher.submit(
+				{ location, name, about, type, privacy, url },
+				{ method: "post", action: "/groups" }
+			);
 		}
 	};
 
@@ -68,7 +79,7 @@ const CreateGroup = () => {
 					</div>
 					<div id="section-1-create">
 						<div id="set-location">
-							<h2>First, set your group&apos;s location</h2>
+							<h2>First, set your group&apos;s location.</h2>
 							<div className="caption">
 								<p>
 									Meetup groups meet locally, in person, and online. We&apos;ll
@@ -77,6 +88,7 @@ const CreateGroup = () => {
 							</div>
 							<div id="location-input">
 								<input
+									id="location-input-text"
 									type="text"
 									placeholder="City, STATE"
 									name="location"
@@ -90,8 +102,8 @@ const CreateGroup = () => {
 								{errors.location}
 							</p>
 						)}
-						<hr />
 					</div>
+					<hr />
 					<div id="section-2-create">
 						<div id="set-name">
 							<h2>What will your group&apos;s name be?</h2>
@@ -106,6 +118,7 @@ const CreateGroup = () => {
 							</div>
 							<div id="name-input">
 								<input
+									id="name-input-text"
 									type="text"
 									placeholder="What is your group name?"
 									name="name"
@@ -119,8 +132,8 @@ const CreateGroup = () => {
 								{errors.name}
 							</p>
 						)}
-						<hr />
 					</div>
+					<hr />
 					<div id="section-3-create">
 						<div id="set-description">
 							<h2>Describe the purpose of your group.</h2>
@@ -152,8 +165,8 @@ const CreateGroup = () => {
 								{errors.about}
 							</p>
 						)}
-						<hr />
 					</div>
+					<hr />
 					<div id="section-4-create">
 						<div id="set-privacy">
 							<h2>Final steps...</h2>
@@ -166,9 +179,15 @@ const CreateGroup = () => {
 										value={type}
 										onChange={(event) => setType(event.target.value)}
 									>
-										<option value="">(select one)</option>
-										<option value="In person">In Person</option>
-										<option value="Online">Online</option>
+										<option className="group-option-text" value="">
+											(select one)
+										</option>
+										<option className="group-option-text" value="In person">
+											In Person
+										</option>
+										<option className="group-option-text" value="Online">
+											Online
+										</option>
 									</select>
 								</label>
 								{errors.type && (
@@ -186,9 +205,15 @@ const CreateGroup = () => {
 										value={privacy}
 										onChange={(event) => setPrivacy(event.target.value)}
 									>
-										<option value="">(select one)</option>
-										<option value={true}>Private</option>
-										<option value={false}>Public</option>
+										<option className="group-option-text" value="">
+											(select one)
+										</option>
+										<option className="group-option-text" value={true}>
+											Private
+										</option>
+										<option className="group-option-text" value={false}>
+											Public
+										</option>
 									</select>
 								</label>
 								{errors.privacy && (
@@ -216,16 +241,18 @@ const CreateGroup = () => {
 								)}
 							</div>
 						</div>
-						<hr />
 					</div>
+					<hr />
 					<div id="section-5-create">
-						<button id="submit" type="submit">Create group</button>
+						<button id="create-group-submit" type="submit">
+							Create group
+						</button>
 					</div>
 				</fetcher.Form>
 			) : (
 				<h1>Please log in to make a group!</h1>
-                  )}
-                  <Outlet />
+			)}
+			<Outlet />
 		</div>
 	);
 };

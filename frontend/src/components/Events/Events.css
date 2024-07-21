@@ -1,4 +1,79 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sacramento&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sacramento&family=Shadows+Into+Light&display=swap');
+
+#events-in-meetup {
+    font-family: "Shadows Into Light";
+    color: gray;
+    font-size: 24px;
+}
+
+.eventDetail {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+#eventImage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+#allEvents-event-image {
+    flex: 0 0 300px; /* Fixed width for image container */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#eventImage img {
+    height: 200px;
+    width: 100%;
+}
+
+#eventInfo {
+    flex: 1; /* Flexible width for text container */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding-left: 20px;
+}
+
+#eventInfo .allEvents-date {
+    font-family: "Quicksand", sans-serif;
+    font-weight: 500;
+    color: teal;
+}
+
+#eventInfo .allEvents-name {
+    margin: 0;
+    font-family: "Shadows Into Light";
+    font-size: 1.5em;
+}
+
+.allEvents-venue {
+    font-family: "Quicksand", sans-serif;
+    color: gray;
+    font-weight: 500;
+}
+
+#event-desc {
+    font-family: "Quicksand", sans-serif;
+    font-weight: 500;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 10px;
+    width: 100%;
+}
+
+
+/* @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
 
 @import url('https://fonts.googleapis.com/css2?family=Sacramento&display=swap');
 
@@ -15,17 +90,13 @@
       flex-direction: column;
       justify-content: flex-start;
       align-items: center;
-      /* column-gap: 30px; */
-      /* margin: 0 15px; */
 }
 
 #eventImage {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      /* grid-template-rows: repeat(2, 1fr); */
       justify-content: center;
       align-items: center;
-      /* column-gap: 10px; */
 }
 
 #allEvents-event-image {
@@ -44,10 +115,9 @@
       align-items: flex-start;
       padding: 0;
       padding-bottom: 15px;
-      /* position: relative; */
 }
 
-#eventImage #eventInfo {
+#eventInfo {
       display: flex;
       justify-content: flex-start;
       align-items: flex-start;
@@ -82,4 +152,4 @@
       display: flex;
       justify-content: center;
       align-items: flex-start;
-}
+} */
