@@ -36,7 +36,7 @@
 }
 
 #eventInfo {
-    flex: 1; /* Flexible width for text container */
+    flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -71,85 +71,3 @@
     padding-top: 10px;
     width: 100%;
 }
-
-
-/* @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
-
-@import url('https://fonts.googleapis.com/css2?family=Sacramento&display=swap');
-
-@import url('https://fonts.googleapis.com/css2?family=Sacramento&family=Shadows+Into+Light&display=swap');
-
-#events-in-meetup {
-      font-family: "Shadows Into Light";
-      color: gray;
-      font-size: 24px;
-}
-
-.eventDetail {
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: center;
-}
-
-#eventImage {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      justify-content: center;
-      align-items: center;
-}
-
-#allEvents-event-image {
-      display: block;
-      margin: 0;
-      padding: 0;
-      font-size: 0;
-      line-height: 0%;
-}
-
-#eventImage img{
-      height: 200px;
-      width: 300px;
-      display: flex;
-      justify-content: flex-start;
-      align-items: flex-start;
-      padding: 0;
-      padding-bottom: 15px;
-}
-
-#eventInfo {
-      display: flex;
-      justify-content: flex-start;
-      align-items: flex-start;
-      flex-direction: column;
-}
-
-#eventImage #eventInfo .allEvents-date {
-      font-family: "Quicksand", sans-serif;
-      font-weight: 500;
-      color: teal;
-}
-
-#eventImage .allEvents-venue {
-      font-family: "Quicksand", sans-serif;
-      color: gray;
-      font-weight: 500;
-}
-
-#event-desc {
-      font-family: "Quicksand", sans-serif;
-      font-weight: 500;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-}
-
-#eventImage #eventInfo .allEvents-name {
-      margin: 0;
-      font-family: "Shadows Into Light";
-      font-size: 1.5em;
-      text-wrap: balance;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-} */

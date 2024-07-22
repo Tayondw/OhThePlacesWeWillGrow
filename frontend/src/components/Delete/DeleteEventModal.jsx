@@ -14,7 +14,7 @@ const DeleteEventModal = ({ eventDetail, navigate }) => {
 		if (response.ok) {
 			console.log("Event deleted successfully");
 			closeModal();
-			navigate("/events");
+			navigate(`/groups/${eventDetail.groupId}`);
 		}
 	};
 
@@ -23,7 +23,7 @@ const DeleteEventModal = ({ eventDetail, navigate }) => {
 		closeModal();
 	};
 
-	console.log("THIS IS THE EVENT", eventDetail);
+	// console.log("THIS IS THE EVENT", eventDetail);
 
 	return (
 		<div id="deleteMenu">

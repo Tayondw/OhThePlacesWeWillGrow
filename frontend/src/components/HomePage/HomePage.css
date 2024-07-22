@@ -19,19 +19,11 @@
       justify-content: center;
       align-items: center;
       padding: 0px 50px;
-      margin: 0px 20% 30px
-      /* display: flex;
-      justify-content: center;
-      align-content: center; */
-      /* border: 2px solid red; */
-      /* gap: 100px;
-      padding: 35px 35px;
-      margin: 0px 20%; */
+      margin: 0px 20% 30px;
 }
 
 #section-1 > .intro {
       display: flex;
-      /* border: 2px solid red; */
       justify-content: center;
       align-items: center;
       flex-direction: column;
@@ -59,7 +51,6 @@
 }
 
 #section-2 {
-      /* border: 2px solid blue; */
       display: flex;
       justify-content: center;
       align-content: center;
@@ -71,7 +62,6 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      /* margin-top: 10px; */
 }
 
 #section-2 .meetup-text h2{
@@ -87,11 +77,9 @@
       justify-content: center;
       align-items: center;
       padding: 0px 15px 25px;
-      /* margin-bottom: 10px; */
 }
 
 #section-3 {
-      /* border: 2px solid green; */
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       grid-gap: 25px;
@@ -102,16 +90,10 @@
 }
 
 #section-3 .meetup-links {
-      /* border: 2px solid red; */
       display: flex;
       justify-content: center;
       align-items: center;
       flex-direction: column;
-      /* display: grid;
-      grid-template-rows: repeat(3, 10vw);
-      justify-content: center;
-      align-items: center; */
-
 }
 
 #section-3 .meetup-links img {
@@ -122,7 +104,6 @@
 }
 
 #section-3 .meetup-links .nav-link {
-      /* border: 2px solid orange; */
       font-size: 1.3em;
       text-decoration: none;
       font-weight: 800;
@@ -142,7 +123,6 @@
 }
 
 #section-4 {
-      /* border: 2px solid purple; */
       display: grid;
       justify-content: center;
       align-items: center;

@@ -1,13 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
-
 @import url('https://fonts.googleapis.com/css2?family=Sacramento&display=swap');
-
 @import url('https://fonts.googleapis.com/css2?family=Sacramento&family=Shadows+Into+Light&display=swap');
-
-/* #root #toggle {
-      margin: 0 22%;
-      padding: 0;
-} */
 
 #toggle {
 	padding: 0%;
@@ -57,9 +50,4 @@
 .neutral:hover {
 	cursor: default;
       margin-bottom: 0;
-}
-
-#which {
-      /* margin-top: 0px;
-      padding-top: 0; */
 }

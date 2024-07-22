@@ -6,7 +6,6 @@ div #modal-content {
 	box-sizing: border-box;
 	border-radius: 125px;
 	font-family: "Quicksand", sans-serif;
-      /* width: fit-content; */
 }
 
 .body {
@@ -16,10 +15,8 @@ div #modal-content {
 	height: 700px;
 	background: #faf5e4;
 	width: 700px;
-	/* change width to 100% if want modal directly centered */
 	overflow: hidden;
       border-radius: 25px;
-      /* border: 2px solid red; */
 }
 
 .ring {
@@ -29,7 +26,6 @@ div #modal-content {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-      /* border: 2px solid red; */
 }
 
 .ring i {
@@ -37,7 +33,6 @@ div #modal-content {
 	inset: 0;
 	border: 2px solid #fff;
 	transition: 0.5s;
-      /* padding: 25px; */
 }
 
 .ring i:nth-child(1) {
@@ -88,7 +83,6 @@ div #modal-content {
 	flex-direction: column;
 	gap: 20px;
       padding: 25px;
-      /* border: 2px solid red; */
 }
 
 .login .image{
@@ -132,13 +126,10 @@ form h1 {
       flex-direction: column;
       padding-top: 115px;
       padding-bottom: 150px;
-      /* border: 2px solid red; */
-      /* width: 100px; */
 }
 
 form div {
 	padding-bottom: 15px;
-      /* border: 2px solid red; */
 }
 
 .login form div .login-button {
@@ -147,10 +138,7 @@ form div {
 	background: linear-gradient(45deg, #ff5e5e, #135c51);
 	border: none;
 	cursor: pointer;
-	/* margin-top: 15px; */
 	border-radius: 40px;
-	/* padding-top: 10px;
-      padding-bottom: 10px; */
 	padding: 12px 25px;
 	font-size: 1em;
 }

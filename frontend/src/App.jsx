@@ -7,7 +7,6 @@ import { Modal } from "./context/Modal";
 import HomePage from "./components/HomePage";
 import {
 	loaderGroup,
-	// loaderGroupDetails,
 } from "./components/Groups/loaderGroup";
 import {
 	loaderEvent,

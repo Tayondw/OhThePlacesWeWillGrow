@@ -4,9 +4,9 @@ import { useSelector } from "react-redux";
 import "./CreateEvent.css";
 
 const CreateEvent = () => {
-      const sessionUser = useSelector((state) => state.session.user);
+	const sessionUser = useSelector((state) => state.session.user);
 	const { groupDetail } = useLoaderData();
-      let fetcher = useFetcher();
+	let fetcher = useFetcher();
 
 	const [name, setName] = useState("");
 	const [description, setDescription] = useState("");
@@ -14,17 +14,17 @@ const CreateEvent = () => {
 	const [endDate, setEndDate] = useState("");
 	const [price, setPrice] = useState("");
 	const [previewImage, setPreviewImage] = useState("");
-      const [type, setType] = useState("");
-      const [errors, setErrors] = useState({});
-      
-      const id = groupDetail.id;
-      const capacity = 10;
-      const venueId = 1;
+	const [type, setType] = useState("");
+	const [errors, setErrors] = useState({});
+
+	const id = groupDetail.id;
+	const capacity = 10;
+	const venueId = 1;
 
 	const onSubmit = async (event) => {
 		event.preventDefault();
 		const today = new Date();
-            const errs = {};
+		const errs = {};
 		if (!name.length) errs.name = "Name is required";
 		if (name.length < 5) errs.name = "Name must be at least 5 characters";
 		if (description.length < 30)
@@ -33,15 +33,34 @@ const CreateEvent = () => {
 			errs.type =
 				"Event Type is required: Event Type must be Online or In person";
 		if (!price) errs.price = "Price is required";
-		if (startDate === "") errs.startDate = "Event start is required";
-		if (endDate === "") errs.endDate = "Event end is required";
-		if (startDate < today)
-			errs.startDate = "Start date must be after or on the current date";
-		if (endDate < today)
-			errs.endDate = "End date must be after or on the current date";
-		if (startDate > endDate)
-			errs.startDate =
-				"Event start date/ time must be before the end date/ time";
+		if (!startDate) {
+			errs.startDate = "Event start is required";
+		} else {
+			const start = new Date(startDate);
+			if (isNaN(start.getTime())) {
+				errs.startDate = "Invalid start date";
+			} else if (start < today) {
+				errs.startDate = "Start date must be after or on the current date";
+			}
+		}
+		if (!endDate) {
+			errs.endDate = "Event end is required";
+		} else {
+			const end = new Date(endDate);
+			if (isNaN(end.getTime())) {
+				errs.endDate = "Invalid end date";
+			} else if (end < today) {
+				errs.endDate = "End date must be after or on the current date";
+			}
+		}
+		if (startDate && endDate) {
+			const start = new Date(startDate);
+			const end = new Date(endDate);
+			if (start > end) {
+				errs.startDate =
+					"Event start date/ time must be before the end date/ time";
+			}
+		}
 		if (
 			!previewImage ||
 			(!previewImage.endsWith(".png") &&
@@ -55,20 +74,19 @@ const CreateEvent = () => {
 			return;
 		} else {
 			setErrors({});
-			console.log("Form submitted successfully with data:", {
-				name,
-				description,
-				type,
-				price,
-				startDate,
-				endDate,
-                        previewImage,
-                        id,
-                        capacity,
-                        venueId,
-			});
 			fetcher.submit(
-				{ name, description, type, price, startDate, endDate, previewImage, id, capacity, venueId },
+				{
+					name,
+					description,
+					type,
+					price,
+					startDate,
+					endDate,
+					previewImage,
+					id,
+					capacity,
+					venueId,
+				},
 				{ method: "post", action: "/events" }
 			);
 		}
@@ -103,8 +121,8 @@ const CreateEvent = () => {
 						<div id="name-input">
 							<label>
 								What is the name of your event?
-                                                <input
-                                                      id="event-name-input"
+								<input
+									id="event-name-input"
 									type="text"
 									name="name"
 									placeholder="Event Name"
@@ -140,28 +158,32 @@ const CreateEvent = () => {
 							)}
 							<label>
 								What is the price of your event?
-                                                <input
-                                                      id="event-price-select"
-                                                      type="number"
-                                                      min="1"
-                                                      step="any"
+								<input
+									id="event-price-select"
+									type="number"
+									min="1"
+									step="any"
 									name="price"
 									placeholder="0"
 									value={price}
 									onChange={(event) => setPrice(event.target.value)}
 								/>
 							</label>
+							{errors.price && (
+								<p style={{ color: "red" }} className="errors">
+									{errors.price}
+								</p>
+							)}
 						</div>
 						<hr />
 						<div id="event-date-time">
 							<label>
 								When does your event start?
-								
-                                                <input
-                                                      id="event-startDate-select"
+								<input
+									id="event-startDate-select"
 									type="datetime-local"
 									name="startDate"
-									value={formatDate(startDate)}
+									value={startDate ? formatDate(new Date(startDate)) : ""}
 									onChange={(event) =>
 										setStartDate(new Date(event.target.value))
 									}
@@ -174,11 +196,11 @@ const CreateEvent = () => {
 							)}
 							<label>
 								When does your event end?
-                                                <input
-                                                      id="event-endDate-select"
+								<input
+									id="event-endDate-select"
 									type="datetime-local"
 									name="endDate"
-									value={formatDate(endDate)}
+									value={endDate ? formatDate(new Date(endDate)) : ""}
 									onChange={(event) => setEndDate(new Date(event.target.value))}
 								/>
 							</label>

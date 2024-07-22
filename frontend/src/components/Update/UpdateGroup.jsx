@@ -30,7 +30,6 @@ const UpdateGroup = () => {
 		}
 	}, [groupToUpdate, sessionUser, navigate]);
 
-	// Initialize state with group data
 	const [location, setLocation] = useState("");
 	const [name, setName] = useState("");
 	const [about, setAbout] = useState("");
@@ -51,11 +50,12 @@ const UpdateGroup = () => {
 	}, [groupToUpdate]);
 
 	const onSubmit = async (event) => {
-		event.preventDefault();
-		const errs = {};
+            event.preventDefault();
+            
+            const errs = {};
+            
             if (!location.length) errs.location = "Location is required.";
             const [city, state] = location.split(", ").map(item => item.trim());
-		// const [city, state] = location.split(", ");
 		if (!city || !state)
 			errs.location =
 				"Please enter a city and state, separated by a comma and a space.";

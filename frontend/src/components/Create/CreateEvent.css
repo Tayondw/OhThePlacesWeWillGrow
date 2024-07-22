@@ -88,3 +88,8 @@ label {
       padding-bottom: 15px;
       width: 100%;
 }
+
+.errors {
+      color: red;
+      margin-top: 5px;
+  }

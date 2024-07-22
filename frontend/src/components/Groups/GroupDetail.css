@@ -1,7 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
-
 @import url('https://fonts.googleapis.com/css2?family=Sacramento&display=swap');
-
 @import url('https://fonts.googleapis.com/css2?family=Sacramento&family=Shadows+Into+Light&display=swap');
 
 #groups-details {
@@ -11,26 +9,23 @@
       margin: 5% 10%;
       flex-direction: column;
 }
+
 #groups-link-holder #group-link {
       color: teal;
       font-family: "Quicksand", sans-serif;
       font-weight: 500;
 }
 
-#groups-details #each-groupDetail {
-
-}
-
 #top-each-groupDetail {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: 0.4fr 2fr;
       justify-content: center;
       align-items: center;
       column-gap: 55px;
 }
 
 #top-each-groupDetail #groupDetailImage img {
-      width: 400px;
+      width: 500px;
       height: 400px;
 }
 
@@ -39,10 +34,6 @@
       justify-content: space-evenly;
       flex-direction: column;
       align-items: flex-start;
-}
-
-#groupDetailInfo {
-
 }
 
 #groupDetailInfo #groupDetailName {
@@ -70,7 +61,6 @@
       font-weight: 500;
       color: gray;
       margin-bottom: 10px;
-      /* padding-bottom: 15px; */
 }
 
 #crud-buttons {
@@ -128,21 +118,17 @@
       font-weight: 500;
 }
 
-#upcoming-events {
-      /* margin: 10; */
-
-}
-
 .event-item-dates {
       display: flex;
       justify-content: flex-start;
       flex-direction: column;
       align-items: flex-start;
+      width: 400px;
 }
 
 .event-item {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: 0.4fr 2fr;
       justify-content: center;
       align-items: flex-start;
       flex-direction: column;
@@ -174,6 +160,4 @@
       font-family: "Shadows Into Light";
       font-size: 2em;
       margin: 0;
-      /* margin-top: 25px; */
-      /* margin-bottom: 0px; */
 }

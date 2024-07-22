@@ -18,7 +18,6 @@
       margin: 0;
 	font-family: "Shadows Into Light";
 	font-size: 2.5em;
-	/* padding-bottom: 10px; */
 }
 
 #button-div {
@@ -29,4 +28,8 @@
 #button-text {
       font-family: "Quicksand", sans-serif;
 	font-weight: 600;
+}
+
+#button-text:hover {
+      cursor: pointer;
 }

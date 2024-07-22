@@ -104,7 +104,7 @@ export const createEventAction = async ({ request }) => {
 
 	if (response.ok) {
 		const event = await response.json();
-		console.log("THIS IS THE EVENT", event);
+		// console.log("THIS IS THE EVENT", event);
 		await csrfFetch(`/api/events/${event.id}/images`, {
 			method: "POST",
 			headers: {

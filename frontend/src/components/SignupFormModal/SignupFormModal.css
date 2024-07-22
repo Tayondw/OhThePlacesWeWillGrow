@@ -24,7 +24,6 @@
 	inset: 0;
 	border: 2px solid #fff;
 	transition: 0.5s;
-	/* padding: 25px; */
 }
 
 .ring i:nth-child(1) {
@@ -75,8 +74,6 @@
 	flex-direction: column;
 	gap: 20px;
       padding: 25px;
-      /* border: 2px solid red;
-      margin: 500px; */
 }
 
 .form-signup .signup-img {
@@ -120,12 +117,10 @@ form h1 {
       flex-direction: column;
       padding-top: 70px;
       padding-bottom: 50px;
-      /* border: 2px solid red; */
 }
 
 form div {
 	padding-bottom: 15px;
-      /* border: 2px solid red; */
 }
 
 .login form div .signup {
@@ -134,10 +129,7 @@ form div {
 	background: linear-gradient(45deg, #ff5e5e, #135c51);
 	border: none;
 	cursor: pointer;
-	/* margin-top: 15px; */
 	border-radius: 40px;
-	/* padding-top: 10px;
-      padding-bottom: 10px; */
 	padding: 12px 25px;
 	font-size: 0.9em;
       margin-bottom: 20px;

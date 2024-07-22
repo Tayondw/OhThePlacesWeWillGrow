@@ -1,4 +1,3 @@
-// import { json } from "react-router-dom";
 import { csrfFetch } from "../../store/csrf";
 
 export const loaderEvent = async () => {
@@ -17,16 +16,4 @@ export const loaderEventDetails = async ({ params }) => {
 		const eventDetail = await response.json();
 		return eventDetail;
 	}
-
-	// const urls = [
-	// 	`/api/events/${params.eventId}`,
-	// ];
-
-	// const fetchPromises = urls.map((url) =>
-	// 	csrfFetch(url).then((response) => response.json())
-	// );
-
-	// const [eventDetail] = await Promise.all(fetchPromises);
-
-	// return json({ eventDetail});
 };
