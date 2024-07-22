@@ -33,18 +33,27 @@ const DeleteGroupModal = ({ groupDetail, navigate }) => {
 		<div id="deleteMenu">
 			<h1>Confirm Delete</h1>
 			<h3>Are you sure you want to remove this group?</h3>
-			<div>
-				<button
-					style={{ backgroundColor: "red" }}
-					value="delete"
-					type="submit"
-					onClick={yesDelete}
-				>
-					Yes (Delete Group)
-				</button>
-				<button style={{ backgroundColor: "darkgray" }} onClick={noDelete}>
-					No (Keep Group)
-				</button>
+			<div id="button-div">
+				<div>
+					<button
+						id="button-text"
+						style={{ backgroundColor: "red" }}
+						value="delete"
+						type="submit"
+						onClick={yesDelete}
+					>
+						Yes (Delete Group)
+					</button>
+				</div>
+				<div>
+					<button
+						id="button-text"
+						style={{ backgroundColor: "darkgray" }}
+						onClick={noDelete}
+					>
+						No (Keep Group)
+					</button>
+				</div>
 			</div>
 		</div>
 	);

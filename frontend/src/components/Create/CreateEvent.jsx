@@ -2,7 +2,6 @@ import { useLoaderData, useFetcher } from "react-router-dom";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import "./CreateEvent.css";
-import { FaCalendarAlt } from "react-icons/fa";
 
 const CreateEvent = () => {
       const sessionUser = useSelector((state) => state.session.user);
@@ -92,9 +91,9 @@ const CreateEvent = () => {
 
 	return (
 		<div id="new-event">
-			{sessionUser ? (
-				<div id="event-section-1">
-					<h1>Create an event for {}</h1>
+			{sessionUser && groupDetail ? (
+				<div id="events-section-1">
+					<h1>Create an event for {groupDetail.name}</h1>
 					<fetcher.Form
 						method="post"
 						action="/events"
@@ -104,7 +103,8 @@ const CreateEvent = () => {
 						<div id="name-input">
 							<label>
 								What is the name of your event?
-								<input
+                                                <input
+                                                      id="event-name-input"
 									type="text"
 									name="name"
 									placeholder="Event Name"
@@ -140,7 +140,8 @@ const CreateEvent = () => {
 							)}
 							<label>
 								What is the price of your event?
-								<input
+                                                <input
+                                                      id="event-price-select"
                                                       type="number"
                                                       min="1"
                                                       step="any"
@@ -156,7 +157,8 @@ const CreateEvent = () => {
 							<label>
 								When does your event start?
 								
-								<input
+                                                <input
+                                                      id="event-startDate-select"
 									type="datetime-local"
 									name="startDate"
 									value={formatDate(startDate)}
@@ -164,7 +166,6 @@ const CreateEvent = () => {
 										setStartDate(new Date(event.target.value))
 									}
 								/>
-								<FaCalendarAlt />
 							</label>
 							{errors.startDate && (
 								<p style={{ color: "red" }} className="errors">
@@ -173,13 +174,13 @@ const CreateEvent = () => {
 							)}
 							<label>
 								When does your event end?
-								<input
+                                                <input
+                                                      id="event-endDate-select"
 									type="datetime-local"
 									name="endDate"
 									value={formatDate(endDate)}
 									onChange={(event) => setEndDate(new Date(event.target.value))}
 								/>
-								<FaCalendarAlt />
 							</label>
 							{errors.endDate && (
 								<p style={{ color: "red" }} className="errors">
@@ -209,10 +210,10 @@ const CreateEvent = () => {
 						<hr />
 						<div id="event-description">
 							<label>
-								Please describe your event
+								Please describe your event:
 								<textarea
 									name="description"
-									id="description"
+									id="event-description-textarea"
 									placeholder="Please include at least 30 characters."
 									value={description}
 									onChange={(event) => setDescription(event.target.value)}
@@ -225,7 +226,7 @@ const CreateEvent = () => {
 							)}
 						</div>
 						<div id="create-event">
-							<button type="submit" id="submit-event">
+							<button type="submit" id="create-group-submit">
 								Create Event
 							</button>
 						</div>

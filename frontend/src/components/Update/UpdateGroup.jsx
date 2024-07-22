@@ -99,7 +99,7 @@ const UpdateGroup = () => {
 	};
 
 	return (
-		<div id="update-group">
+		<div id="new-group">
 			<div id="update-form">
 				<fetcher.Form
 					method="put"
@@ -113,8 +113,8 @@ const UpdateGroup = () => {
 							We&apos;ll walk you through a few steps to update your
 							group&apos;s information
 						</h2>
-						<hr />
 					</div>
+						<hr />
 					<div id="section-1-create">
 						<div id="set-location">
 							<h2>First, set your group&apos;s location</h2>
@@ -140,8 +140,8 @@ const UpdateGroup = () => {
 								{errors.location}
 							</p>
 						)}
-						<hr />
 					</div>
+						<hr />
 					<div id="section-2-create">
 						<div id="set-name">
 							<h2>What will your group&apos;s name be?</h2>
@@ -169,8 +169,8 @@ const UpdateGroup = () => {
 								{errors.name}
 							</p>
 						)}
-						<hr />
 					</div>
+						<hr />
 					<div id="section-3-create">
 						<div id="set-description">
 							<h2>Describe the purpose of your group.</h2>
@@ -202,8 +202,8 @@ const UpdateGroup = () => {
 								{errors.about}
 							</p>
 						)}
-						<hr />
 					</div>
+						<hr />
 					<div id="section-4-create">
 						<div id="set-privacy">
 							<h2>Final steps...</h2>
@@ -266,10 +266,10 @@ const UpdateGroup = () => {
 								)}
 							</div>
 						</div>
-						<hr />
 					</div>
+						<hr />
 					<div id="section-5-create">
-						<button id="submit" type="submit">
+						<button id="create-group-submit" type="submit">
 							Update group
 						</button>
 					</div>

@@ -86,7 +86,6 @@ select {
 	border: 2px solid black;
 }
 
-
 #create-group-submit {
 	border: 0;
 	width: 250px;
@@ -94,7 +93,7 @@ select {
 	border-radius: 40px;
 	padding: 12px 25px;
 	font-size: 1em;
-	color: #ffc3c3;
+	color: #faf5e4;
 	font-family: "Quicksand", sans-serif;
 	background: linear-gradient(45deg, #ff5e5e, #135c51);
 }

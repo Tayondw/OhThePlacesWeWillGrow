@@ -11,6 +11,7 @@
 	margin: 5% 10%;
 	flex-direction: column;
 }
+
 #events-link-holder #event-link {
 	color: teal;
 	font-family: "Quicksand", sans-serif;

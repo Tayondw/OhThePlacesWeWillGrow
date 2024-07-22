@@ -119,7 +119,14 @@ const GroupDetail = () => {
 											event.preventDefault();
 											alert("Feature Coming Soon...");
 										}}
-										style={{ backgroundColor: "red" }}
+										style={{
+											backgroundColor: "red",
+											width: `250px`,
+											cursor: `pointer`,
+											borderRadius: `40px`,
+											padding: `12px 25px`,
+											fontSize: `1em`,
+										}}
 									>
 										Join this group
 									</button>

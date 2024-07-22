@@ -1,0 +1,90 @@
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Sacramento&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Sacramento&family=Shadows+Into+Light&display=swap");
+
+#new-event {
+	display: flex;
+	flex-direction: column;
+      justify-content: center;
+      align-items: center;
+	margin: 0 22%;
+}
+
+#events-section-1 {
+      display: flex;
+	flex-direction: column;
+	padding: 0;
+}
+
+#events-section-1 h1 {
+      margin: 0;
+	font-family: "Shadows Into Light";
+	font-size: 2.3em;
+	padding-bottom: 10px;
+}
+
+p,
+label {
+	font-family: "Quicksand", sans-serif;
+	font-weight: 500;
+}
+
+#name-input label, #event-status label, #event-date-time label, #event-image label, #event-description label {
+      display: flex;
+      flex-direction: column;
+      padding-bottom: 10px;
+      width: 100%;
+}  
+
+#name-input, #event-status, #event-date-time, #event-image, #event-description {
+      display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: flex-start;
+	max-width: 500px;
+	width: 100%;
+	padding: 0;
+}
+
+#event-name-input, #event-url {
+      border: 2px solid black;
+	font-family: "Quicksand", sans-serif;
+	width: 60%;
+	box-sizing: border-box;
+}
+
+#event-privacy-select {
+      border: 2px solid black;
+	font-family: "Quicksand", sans-serif;
+	width: 30%;
+	box-sizing: border-box;
+}
+
+#event-price-select {
+      border: 2px solid black;
+	font-family: "Quicksand", sans-serif;
+	width: 20%;
+	box-sizing: border-box;
+}
+
+#event-startDate-select, #event-endDate-select {
+      border: 2px solid black;
+	font-family: "Quicksand", sans-serif;
+	width: 40%;
+	box-sizing: border-box;
+}
+
+#event-description-textarea {
+      border: 2px solid black;
+	font-family: "Quicksand", sans-serif;
+	width: 100%;
+	box-sizing: border-box;
+	height: 200px;
+}
+
+#event-description {
+      display: flex;
+      flex-direction: column;
+      padding-bottom: 15px;
+      width: 100%;
+}
